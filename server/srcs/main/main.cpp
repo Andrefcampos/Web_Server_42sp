@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:06:57 by andrefil          #+#    #+#             */
-/*   Updated: 2024/10/02 17:52:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:32:03 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,17 @@ int	main (void) {
 	ev.data.fd = fdsocket;
 	ev.events = EPOLLIN;
 	epoll_ctl(epoolFd, EPOLL_CTL_ADD, fdsocket, &ev);
-	int nbFds, fdClient;	
 	while (1) {
-		nbFds = epoll_wait(epoolFd, epollEvent, 50,-1);
-		std::cout << "Deu merda no accept: " << nbFds << std::endl;
+		int nbFds = epoll_wait(epoolFd, epollEvent, 50,-1);
 		for (int i = 0; i < nbFds; ++i) {
 			if (epollEvent[i].data.fd == fdsocket) {
-				fdClient = accept(fdsocket, NULL, 0);
+				int fdClient = accept(fdsocket, NULL, 0);
 				ev.events = EPOLLIN;
 				ev.data.fd = fdClient;
 				epoll_ctl(epoolFd, EPOLL_CTL_ADD, fdClient, &ev);
 			} else {
 				char	buffer[1000];
 				recv(epollEvent[i].data.fd, buffer, 1000, 0);
-				std::cout << buffer << std::endl;
 			}
 		}
 	}
