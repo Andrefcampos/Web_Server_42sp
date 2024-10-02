@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:06:57 by andrefil          #+#    #+#             */
-/*   Updated: 2024/10/02 17:04:28 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:52:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,16 @@
 
 int	main (void) {
 
-	Socket	socketOne(8398);
+	Socket	socketOne(8080);
 
 	int fdsocket = socketOne.createSocket();
-	std::cout << fdsocket << '\n';
 	int	epoolFd = epoll_create1(EPOLL_CLOEXEC);
 
 	struct epoll_event	epollEvent[50], ev;
-
 	ev.data.fd = fdsocket;
 	ev.events = EPOLLIN;
-
 	epoll_ctl(epoolFd, EPOLL_CTL_ADD, fdsocket, &ev);
 	int nbFds, fdClient;	
-
 	while (1) {
 		nbFds = epoll_wait(epoolFd, epollEvent, 50,-1);
 		std::cout << "Deu merda no accept: " << nbFds << std::endl;

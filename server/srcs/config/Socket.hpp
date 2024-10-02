@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:03:49 by andrefil          #+#    #+#             */
-/*   Updated: 2024/10/02 17:03:22 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:56:46 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ public:
 		_protocol (IPPROTO_TCP) {
 		std::memset(&_peer_addr, 0, sizeof(_peer_addr));
 		_peer_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-		_peer_addr.sin_port = _port;
+		_peer_addr.sin_port = htons(_port);
 		_peer_addr.sin_family = _domain;
+		std::cout << _peer_addr.sin_addr.s_addr << '\n' << _peer_addr.sin_port << '\n' << _peer_addr.sin_family << '\n';
 		_fd = socket(_domain, _type, _protocol);
 	};
 	// Socket	&operator=(Socket const &param);
