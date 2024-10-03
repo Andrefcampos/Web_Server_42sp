@@ -14,21 +14,26 @@ CMD_CLEAN	:= rm -Rf
 
 #-----------------------------------------------------------------------------------------
 # DIRECTORY
+INCLUDE				:= server/include/
 MAIN				:= server/srcs/main/
 CONFIG				:= server/srcs/config_socket/
+EPOLL				:= server/srcs/config_epoll/
 
 #-----------------------------------------------------------------------------------------
 # Header file
-INCLUDES			:= -I $(MAIN) -I $(CONFIG)
+INCLUDES			:= -I $(MAIN) -I $(CONFIG) -I $(EPOLL)\
+						-I $(INCLUDE)
 
 #-----------------------------------------------------------------------------------------
 # Source files
 FILE_MAIN				:= main.cpp
 FILE_SOCKET				:= Socket.cpp
+FILE_EPOLL				:= CreateEpoll.cpp
 
 #-----------------------------------------------------------------------------------------
 # Source files
 SRC_FILES	:=  $(addprefix $(CONFIG), $(FILE_SOCKET))\
+				$(addprefix $(EPOLL), $(FILE_EPOLL))\
 				$(addprefix $(MAIN), $(FILE_MAIN))\
 
 #-----------------------------------------------------------------------------------------
