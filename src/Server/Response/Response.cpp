@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 17:57:55 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/10/23 18:21:51 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,4 @@ void	Response::sendResponseImage(int fd, Response http, std::string image)
 	send(fd, http.getHttp().c_str(),http.getHttp().length(), 0);
 	send(fd, bImage.str().c_str(), bImage.str().length(), 0);
 } */
+
