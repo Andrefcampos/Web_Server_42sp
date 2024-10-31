@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 16:17:33 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/10/31 16:04:52 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Response
 		std::string	_connection[3];
 		std::string	_length[3];
 		std::string	_body;
+		void 		clean();
 
 	public:
 		Response();
@@ -38,8 +39,8 @@ class Response
 		void setBody(std::string body);
 		std::string	getHttp();
 
-		void	sendResponseHTML(int fd, Response http, std::string indexHTML);
-		void	sendResponseImage(int fd, Response http, std::string image);		
+		void	sendResponseHTML(int fd, std::string indexHTML);
+		void	sendResponseImage(int fd, std::string image);		
 };
 
 enum e_response

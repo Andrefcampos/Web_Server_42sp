@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:19:25 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 18:13:34 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/10/31 12:29:34 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ class WebService{
 		int				_nfds, _epollfd, _maxEvents;
 		char			_buffer[8000];
 		epoll_event		_ev, _events[80];
+		int				isNewClient(int index);
+		int				responseClient(int index);
 		void			createEpoll();
 		void			initEvents();
 		void			initServicesAddSocket();

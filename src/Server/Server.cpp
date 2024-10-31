@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 18:09:38 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/10/31 11:16:47 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ Server::Server(int port, int events, std::string hostName, std::string ip)
 :Socket(), _port(port), _maxEvents(events), _ip(ip){
 	if (hostName.empty())
 		_hostName = "";
+	else
+		_hostName = hostName;
 	initTCP(_socketFd, _port, _maxEvents, _ip.c_str());
 };
 
@@ -30,5 +32,5 @@ std::string Server::getHostName() const{
 }
 
 int			Server::getMaxEvent() const{
-	return _maxEvent;
+	return _maxEvents;
 }
