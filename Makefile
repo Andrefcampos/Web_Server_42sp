@@ -19,11 +19,13 @@ DIR_SERVER			:= src/Server/
 DIR_SOCKET			:= src/Server/Socket/
 DIR_RESPONSE		:= src/Server/Response/
 DIR_WEBSERVER		:= src/WebServer/
+DIR_PARSERREQUEST	:= src/ParserRequest/
 
 #-----------------------------------------------------------------------------------------
 # Header file
 INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
+					-I $(DIR_PARSERREQUEST)\
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -32,6 +34,7 @@ FILE_SERVER				:= Server.cpp
 FILE_SOCKET				:= Socket.cpp
 FILE_RESPONSE			:= Response.cpp
 FILE_WEBSERVER			:= WebServer.cpp
+FILE_PARSERREQUEST		:= ParserRequest.cpp
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -40,6 +43,7 @@ SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
 				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
 				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
 				$(addprefix $(DIR_WEBSERVER), $(FILE_WEBSERVER))\
+				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files

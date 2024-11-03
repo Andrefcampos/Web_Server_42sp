@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/31 16:06:04 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/01 16:37:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void	Response::sendResponseHTML(int fd, std::string indexHTML)
 
 void	Response::sendResponseImage(int fd, std::string image)
 {
-	std::string	response;
 	std::ifstream		file(image.c_str());
 	std::stringstream	bImage, status, lengh;
 
