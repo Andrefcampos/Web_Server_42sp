@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:06:43 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/01 15:40:45 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/03 15:15:49 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <cstring>
 #include <sys/epoll.h>
 
-#define	BUFFERSIZE 1000
+#define	BUFFERSIZE 4024
 
 class ParserRequest{
 	protected:
@@ -29,6 +29,7 @@ class ParserRequest{
 	public:
 		ParserRequest();
 		virtual int	responseClient(int fd, std::string resp) = 0;
+		std::map<std::string, std::string>	parseHttpClient(std::string protocolHtpp);
 		~ParserRequest();
 
 };
