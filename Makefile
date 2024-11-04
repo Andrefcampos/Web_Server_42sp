@@ -14,27 +14,37 @@ CMD_CLEAN	:= rm -Rf
 
 #-----------------------------------------------------------------------------------------
 # DIRECTORY
-INCLUDE				:= server/include/
-MAIN				:= server/srcs/main/
-CONFIG				:= server/srcs/config_socket/
-EPOLL				:= server/srcs/config_epoll/
+DIR_MAIN 			:= src/
+DIR_UTILS			:= src/utils/
+DIR_SERVER			:= src/Server/
+DIR_SOCKET			:= src/Server/Socket/
+DIR_RESPONSE		:= src/Server/Response/
+DIR_WEBSERVER		:= src/WebServer/
+DIR_PARSERREQUEST	:= src/ParserRequest/
 
 #-----------------------------------------------------------------------------------------
 # Header file
-INCLUDES			:= -I $(MAIN) -I $(CONFIG) -I $(EPOLL)\
-						-I $(INCLUDE)
+INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
+					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
+					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
 
 #-----------------------------------------------------------------------------------------
 # Source files
 FILE_MAIN				:= main.cpp
+FILE_SERVER				:= Server.cpp
 FILE_SOCKET				:= Socket.cpp
-FILE_EPOLL				:= CreateEpoll.cpp
+FILE_RESPONSE			:= Response.cpp
+FILE_WEBSERVER			:= WebServer.cpp
+FILE_PARSERREQUEST		:= ParserRequest.cpp
 
 #-----------------------------------------------------------------------------------------
 # Source files
-SRC_FILES	:=  $(addprefix $(CONFIG), $(FILE_SOCKET))\
-				$(addprefix $(EPOLL), $(FILE_EPOLL))\
-				$(addprefix $(MAIN), $(FILE_MAIN))\
+SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
+				$(addprefix $(DIR_SERVER), $(FILE_SERVER))\
+				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
+				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
+				$(addprefix $(DIR_WEBSERVER), $(FILE_WEBSERVER))\
+				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files
@@ -48,13 +58,13 @@ all: $(NAME)
 #-----------------------------------------------------------------------------------------
 # Rule to create the static library
 $(NAME): $(O_FILE)
-	@$(CPP) $(O_FILE) $(INCLUDES) -o $(NAME)
+	@$(CPP) $(O_FILE) -o $(NAME)
 
 #-----------------------------------------------------------------------------------------
 # Rule to compile source files into object files
 $(OBJS)/%.o: %.cpp
 	@mkdir -p $(dir $@)
-	@$(CPP) $(INCLUDES) $(O_FLAGS) $(CFLAGS) $< -o $@
+	@$(CPP) $(O_FLAGS) $(INCLUDE) $(CFLAGS) $< -o $@
 
 #-----------------------------------------------------------------------------------------
 # Rule to clean
