@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   RequestLine.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:51:38 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/06 10:24:56 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/06 12:44:12 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Socket.hpp"
-#include "Response.hpp"
 #include <string>
+#include <map>
+#include <list>
 
-class Server : public Socket, public Response{
+class RequestLine{
 	private:
-		int			_socketFd;
-		int 		_port;
-		int 		_maxEvents;
-		std::string	_ip;
-		std::string _hostName;
+		static const std::string			_keyLine[3];
+		static const std::string			_delimit;
+		std::list<std::string>				_tokens;
+		std::map<std::string, std::string>	_requestLine;
 
-	public:
-		~Server();
-		Server():_hostName(""){};
-		Server(int port, int events, std::string hostName, std::string ip);
-		int			getSocketFd() const;
-		int			getMaxEvent() const;
-		std::string	getHostName() const;
+	protected:
+		RequestLine(){};
+		~RequestLine(){};
+		std::map<std::string, std::string>	setRequestLine(std::string line);
+		
 };

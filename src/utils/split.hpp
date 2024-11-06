@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/03 17:20:53 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 09:32:36 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,3 +34,11 @@ std::list<std::string>	split(T &s, C c){
 	return (listToken);	
 }
 
+template<typename T>
+void putMap(T _request){
+	typename T::iterator it;
+
+	for(it = _request.begin(); it != _request.end(); it++){
+		std::cout << it->first << " " << it->second << "\n";
+	}
+}

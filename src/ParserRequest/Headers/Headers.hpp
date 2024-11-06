@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   Headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:51:38 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/06 10:25:42 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/06 12:44:53 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#include "Socket.hpp"
-#include "Response.hpp"
+#include <list>
+#include <map>
 #include <string>
 
-class Server : public Socket, public Response{
-	private:
-		int			_socketFd;
-		int 		_port;
-		int 		_maxEvents;
-		std::string	_ip;
-		std::string _hostName;
+typedef std::map<std::string, std::string> mapHeader;
 
-	public:
-		~Server();
-		Server():_hostName(""){};
-		Server(int port, int events, std::string hostName, std::string ip);
-		int			getSocketFd() const;
-		int			getMaxEvent() const;
-		std::string	getHostName() const;
+class Headers{
+	private:
+		static const std::string			_delimit;
+		std::list<std::string>				_requestHeaders;
+		std::map<std::string, std::string>	_headers;
+		std::list<std::string>::iterator	_it;
+		void	setRequestHeaders(std::string header);
+
+	protected:
+		Headers(){};
+		~Headers(){};
+		mapHeader	setHeaders(std::list<std::string> tokens);
 };

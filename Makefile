@@ -21,12 +21,15 @@ DIR_SOCKET			:= src/Server/Socket/
 DIR_RESPONSE		:= src/Server/Response/
 DIR_WEBSERVER		:= src/WebServer/
 DIR_PARSERREQUEST	:= src/ParserRequest/
+DIR_REQUESTLINE		:= src/ParserRequest/RequestLine/
+DIR_HEADERS			:= src/ParserRequest/Headers/
 
 #-----------------------------------------------------------------------------------------
 # Header file
 INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
 					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
+					-I $(DIR_REQUESTLINE) -I $(DIR_HEADERS)\
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -36,6 +39,8 @@ FILE_SOCKET				:= Socket.cpp
 FILE_RESPONSE			:= Response.cpp
 FILE_WEBSERVER			:= WebServer.cpp
 FILE_PARSERREQUEST		:= ParserRequest.cpp
+FILE_REQUESTLINE		:= RequestLine.cpp
+FILE_HEADERS			:= Headers.cpp
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -44,6 +49,8 @@ SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
 				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
 				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
 				$(addprefix $(DIR_WEBSERVER), $(FILE_WEBSERVER))\
+				$(addprefix $(DIR_REQUESTLINE), $(FILE_REQUESTLINE))\
+				$(addprefix $(DIR_HEADERS), $(FILE_HEADERS))\
 				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
 
 #-----------------------------------------------------------------------------------------
