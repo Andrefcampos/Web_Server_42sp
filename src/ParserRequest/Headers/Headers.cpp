@@ -6,11 +6,12 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:25:37 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:20:42 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:35:56 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Headers.hpp"
+#include <algorithm>
 
 const std::string	Headers::_delimit = ": ";
 void Headers::setRequestHeaders(std::string header){
@@ -23,6 +24,7 @@ void Headers::setRequestHeaders(std::string header){
 	if (pos != std::string::npos){
 		key = header.substr(0, pos);
 		value = header.substr(pos + _delimit.size());
+		value.erase(std::remove(value.begin(), value.end(), '\r'), value.end());
 		_headers[key] = value;
 	}else
 		_headers[key] = value;

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:37:18 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:38:15 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,31 +75,36 @@ int	WebService::isNewClient(int index){
 	return (0);
 }
 
-int	WebService::responseClient(int fd, std::string resp){
-	_it = _services.begin();
-	_ite = _services.end();
-	while(_it != _ite){
-		if (resp.find("Host: localhost:8080") != std::string::npos)
-		{
-			if (resp.find("Accept: text/html") != std::string::npos)
-				_it->second.sendResponseHTML(fd, "index/index.html");
-			else if (resp.find("Accept: image/avif") != std::string::npos)
-				_it->second.sendResponseImage(fd, "image/images.png");
-			break ;
-		}
-		else{
-			if (resp.find("Accept: text/html") != std::string::npos)
-				_it->second.sendResponseHTML(fd, "index/index2.html");
-			else if (resp.find("Accept: image/avif") != std::string::npos)
-				_it->second.sendResponseImage(fd, "image/img.png");
-			break ;
-		}
-		_it++;
-	}
-	resp = "";
+int	WebService::responseClient(int fd){
+	std::string	server = _httpRequest["Headers"]["Host"];
+	_services[server].sendResponse(fd, _httpRequest);
 	return (0);
 }
 
 WebService::~WebService(){}
 
 WebService::WebService(){}
+
+
+
+/* 	_it = _services.begin();
+_ite = _services.end();
+while(_it != _ite){
+if (resp.find("Host: localhost:8080") != std::string::npos)
+{
+	if (resp.find("Accept: text/html") != std::string::npos)
+		_it->second.sendResponse(fd, "index/index.html");
+	else if (resp.find("Accept: image/avif") != std::string::npos)
+		_it->second.sendImage(fd, "image/images.png");
+	break ;
+}
+else{
+	if (resp.find("Accept: text/html") != std::string::npos)
+		_it->second.sendResponse(fd, "index/index2.html");
+	else if (resp.find("Accept: image/avif") != std::string::npos)
+		_it->second.sendImage(fd, "image/img.png");
+	break ;
+}
+_it++;
+}
+resp = ""; */

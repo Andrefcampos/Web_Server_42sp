@@ -15,6 +15,7 @@ CMD_CLEAN	:= rm -Rf
 #-----------------------------------------------------------------------------------------
 # DIRECTORY
 DIR_MAIN 			:= src/
+DIR_INCLUDE			:= include/
 DIR_UTILS			:= src/utils/
 DIR_SERVER			:= src/Server/
 DIR_SOCKET			:= src/Server/Socket/
@@ -30,6 +31,7 @@ INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
 					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
 					-I $(DIR_REQUESTLINE) -I $(DIR_HEADERS)\
+					-I $(DIR_INCLUDE)\
 
 #-----------------------------------------------------------------------------------------
 # Source files

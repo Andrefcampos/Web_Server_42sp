@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:16:45 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:39:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:39:05 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void	ParserRequest::readFdClient(epoll_event &events, epoll_event &ev, int &epol
 		std::runtime_error("error: recv()");
 	if (_oneRequest[events.data.fd].find("\r\n\r\n") != std::string::npos){
 		parseHttpClient(_oneRequest[events.data.fd]);
-		
-		responseClient(events.data.fd, _oneRequest[events.data.fd]);
+		responseClient(events.data.fd);
 		_oneRequest.erase(events.data.fd);
 		if (epoll_ctl(epollfd, EPOLL_CTL_DEL, ev.data.fd, &ev) == -1)
 			throw std::runtime_error("error: epoll_ctl()");

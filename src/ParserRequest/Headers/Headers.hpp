@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:25:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:44:53 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:40:19 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include <list>
 #include <map>
 #include <string>
-
-typedef std::map<std::string, std::string> mapHeader;
+#include "include.hpp"
 
 class Headers{
 	private:

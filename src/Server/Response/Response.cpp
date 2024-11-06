@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/01 16:37:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:22:30 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ std::string	Response::getHttp(){
 	return (this->_htpp);
 }
 
-void	Response::sendResponseHTML(int fd, std::string indexHTML)
-{
+void	Response::sendIndex(int fd, std::string indexHTML){
 	std::ifstream		file(indexHTML.c_str());
 	std::stringstream	status, lengh;
 	std::string			html;
@@ -86,9 +85,10 @@ void	Response::sendResponseHTML(int fd, std::string indexHTML)
 	this->setBody(html);
 	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
 	clean();
+
 }
 
-void	Response::sendResponseImage(int fd, std::string image)
+void	Response::sendImage(int fd, std::string image)
 {
 	std::ifstream		file(image.c_str());
 	std::stringstream	bImage, status, lengh;
@@ -125,4 +125,17 @@ void Response::clean(){
 	this->_fillHttp[LENGTH][ENDL] = "\r\n\r\n";
 	this->_body = "";
 	this->_htpp = "";
+}
+
+std::string Response::getPathImage() const{
+	return _pathImage;
+}
+std::string Response::getPathIndex() const{
+	return _pathIndex;
+}
+void Response::setPathImage(std::string pathImage){
+	_pathImage = pathImage;
+}
+void Response::setPathIndex(std::string pathIndex){
+	_pathIndex = pathIndex;
 }
