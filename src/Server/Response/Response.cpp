@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:22:30 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 20:21:10 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	Response::setBody(std::string body){
 }
 
 std::string	Response::getHttp(){
-
 	this->_htpp += this->_fillHttp[STATUS][HTTP_VERSION];
 	this->_htpp += this->_fillHttp[STATUS][VALUE];
 	this->_htpp += this->_fillHttp[STATUS][REASON];
@@ -79,13 +78,13 @@ void	Response::sendIndex(int fd, std::string indexHTML){
 	status << 200;
 	this->setStatus(status.str(), " Ok");
 	this->setType("text/html");
-	this->setConnection("");
+	this->setConnection("MeuServidor/1.0 (Linux) ");
 	lengh << html.length();
 	this->setLength(lengh.str());
 	this->setBody(html);
 	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
+	std::cout << this->getHttp();
 	clean();
-
 }
 
 void	Response::sendImage(int fd, std::string image)
@@ -101,7 +100,7 @@ void	Response::sendImage(int fd, std::string image)
 	}
 	this->setStatus(status.str(), " Ok");
 	this->setType("image/png");
-	this->setConnection("");
+	this->setConnection("MeuServidor/1.0 (Linux)");
 	lengh << bImage.str().length();
 	this->setLength(lengh.str());
 	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
@@ -117,7 +116,7 @@ void Response::clean(){
 	this->_fillHttp[TYPE][HEADER] = "Content-Type: ";
 	this->_fillHttp[TYPE][HEADER_TYPE] = "";
 	this->_fillHttp[TYPE][ENDL] = "\r\n";
-	this->_fillHttp[CONNECTION][HEADER] = "Connection: ";
+	this->_fillHttp[CONNECTION][HEADER] = "Server: ";
 	this->_fillHttp[CONNECTION][HEADER_TYPE] = "";
 	this->_fillHttp[CONNECTION][ENDL] = "\r\n";
 	this->_fillHttp[LENGTH][HEADER] = "Content-Length: ";

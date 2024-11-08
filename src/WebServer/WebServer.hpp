@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:19:25 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 15:55:23 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 11:46:55 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ class WebService: public ParserRequest{
 		int				responseClient(int fd);
 		void			createEpoll();
 		void			initServicesAddSocket();
-
+		void			initEpollStruct();
 	public:
 		~WebService();
 		WebService();
 		WebService(std::map<std::string, Server> services);
 		void	loopingEvent();
+		
 };

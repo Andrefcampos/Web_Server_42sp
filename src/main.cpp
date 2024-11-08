@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:41:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:28:20 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/08 10:53:25 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <map>
 
 int main(){
-	std::map<std::string, Server> Services; 
+	std::map<std::string, Server> Services;
 	Server	web1(8080, 5, "localhost:8080", "0.0.0.0");
 	web1.setPathIndex("index/index.html");
 	web1.setPathImage("image/images.png");
@@ -25,6 +25,6 @@ int main(){
 	web2.setPathImage("image/img.png");
 	Services["localhost:8080"] = web1;
 	Services["localhost:8081"] = web2;
-	WebService Web(Services); 
+	WebService Web(Services);
 	Web.loopingEvent();
 }

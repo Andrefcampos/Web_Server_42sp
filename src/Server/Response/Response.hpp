@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:17:58 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:21:41 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,9 @@ class Response
 		void setLength(std::string length);
 		void setBody(std::string body);
 		std::string	getHttp();
-
 		virtual void	sendResponse(int fd, httpRequest http) = 0;
 		void	sendIndex(int fd, std::string indexHTML);
 		void	sendImage(int fd, std::string image);
-		
 		std::string getPathImage() const;
 		std::string getPathIndex() const;
 		void		setPathImage(std::string pathImage);

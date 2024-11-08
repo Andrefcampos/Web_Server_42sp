@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:24:56 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 12:44:12 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:21:02 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ class RequestLine{
 		RequestLine(){};
 		~RequestLine(){};
 		std::map<std::string, std::string>	setRequestLine(std::string line);
-		
+
 };

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/01 15:49:24 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:21:49 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	Socket::initTCP(int &socketFd, int &port, int &events, const char *ip){
 		setAddrToSocket(socketFd);
 		putSocketListeningLimit(socketFd, events);
 	}catch(std::exception &e){
-		std::cerr << e.what();		
+		std::cerr << e.what();
 	}
 }
 

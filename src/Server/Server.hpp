@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:18:39 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 19:46:46 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Server : public Socket, public Response{
 		int 		_maxEvents;
 		std::string	_ip;
 		std::string _hostName;
+		
 
 	public:
 		~Server();

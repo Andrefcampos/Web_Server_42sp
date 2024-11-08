@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:25:00 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 11:43:00 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:20:47 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "split.hpp"
 
 const std::string RequestLine::_keyLine[3] = {"Method", "Path", "Version"};
-std::map<std::string, std::string> 
+std::map<std::string, std::string>
 RequestLine::setRequestLine(std::string line){
 	std::list<std::string>::iterator	it;
 	int									i = 0;

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:38:15 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 19:51:53 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 
 WebService::WebService(std::map<std::string, Server> services):
 _services(services){
-	_maxEvents = 0;
+	initEpollStruct();
 	try{
 		createEpoll();
-		initServicesAddSocket();		
+		initServicesAddSocket();
 	}catch(std::exception &e){
 		std::cerr << e.what();
 	}
@@ -37,13 +37,11 @@ void	WebService::createEpoll(){
 void	WebService::initServicesAddSocket(){
 	_it = _services.begin();
 	_ite = _services.end();
-	while(_it != _ite){
-		int fd = _it->second.getSocketFd();
+	for(;_it != _ite; _it++){
+		_ev.data.fd = _it->second.getSocketFd();
 		_maxEvents += _it->second.getMaxEvent();
-		_ev.data.fd = fd;
-		if (epoll_ctl(_epollfd, EPOLL_CTL_ADD, fd, &_ev) == -1)
+		if (epoll_ctl(_epollfd, EPOLL_CTL_ADD, _ev.data.fd, &_ev) == -1)
 			throw std::runtime_error("error: epoll_ctl()");
-		_it++;
 	}
 }
 
@@ -51,16 +49,21 @@ void	WebService::loopingEvent(){
 	while(1){
 		_nfds = epoll_wait(_epollfd, _events, _maxEvents, -1);
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
-			if (not isNewClient(index_epoll))
-				readFdClient(_events[index_epoll], _ev, _epollfd);
+			if (isNewClient(index_epoll))
+				continue ;
+			if (readFdClient(_events[index_epoll])){
+				responseClient(_events[index_epoll].data.fd);
+				if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _events[index_epoll].data.fd, &_ev) == -1)
+					throw std::runtime_error("error: epoll_ctl()");
+				close(_events[index_epoll].data.fd);
+			}
 		}
 	}
 }
 
 int	WebService::isNewClient(int index){
 	_it = _services.begin();
-	_ite = _services.end();
-	while(_it != _ite){
+	for(;_it != _services.end(); _it++){
 		if (_events[index].data.fd == _it->second.getSocketFd()){
 			_ev.data.fd = accept(_it->second.getSocketFd(), 0, 0);
 			if (_ev.data.fd == -1)
@@ -70,7 +73,6 @@ int	WebService::isNewClient(int index){
 				throw std::runtime_error("error: epoll_ctl()");
 			return (1);
 		}
-		_it++;
 	}
 	return (0);
 }
@@ -86,25 +88,10 @@ WebService::~WebService(){}
 WebService::WebService(){}
 
 
-
-/* 	_it = _services.begin();
-_ite = _services.end();
-while(_it != _ite){
-if (resp.find("Host: localhost:8080") != std::string::npos)
-{
-	if (resp.find("Accept: text/html") != std::string::npos)
-		_it->second.sendResponse(fd, "index/index.html");
-	else if (resp.find("Accept: image/avif") != std::string::npos)
-		_it->second.sendImage(fd, "image/images.png");
-	break ;
+void	WebService::initEpollStruct(){
+	for(int i = 0; i < 80; i++)
+		std::memset(&_events[i], 0, sizeof(_events[i]));
+	std::memset(&_ev, 0, sizeof(_ev));
+	_maxEvents = 0;
+	_epollfd = 0;
 }
-else{
-	if (resp.find("Accept: text/html") != std::string::npos)
-		_it->second.sendResponse(fd, "index/index2.html");
-	else if (resp.find("Accept: image/avif") != std::string::npos)
-		_it->second.sendImage(fd, "image/img.png");
-	break ;
-}
-_it++;
-}
-resp = ""; */

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:25:37 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 16:35:56 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:20:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ void Headers::setRequestHeaders(std::string header){
 		_headers[key] = value;
 }
 
-
 mapHeader Headers::setHeaders(std::list<std::string> tokens){
 	std::list<std::string>::iterator it;
 
-	for(it = tokens.begin(); it != tokens.end(); it++) 
+	for(it = tokens.begin(); it != tokens.end(); it++)
 		setRequestHeaders(*it);
 	return _headers;
 }

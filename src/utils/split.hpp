@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 09:32:36 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/07 10:25:35 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ std::list<std::string>	split(T &s, C c){
 		if (!token.empty())
 			listToken.push_back(token);
 	}
-	return (listToken);	
+	return (listToken);
 }
 
 template<typename T>
