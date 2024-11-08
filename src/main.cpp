@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:41:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/31 15:50:51 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/08 03:06:38 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 #include <map>
 
 int main(){
-	std::map<std::string, Server> Services; 
-	Server	web1(8080, 5, "PombosHear", "127.0.0.1");
-	Server	web2(8081, 5, "Livros sem nada", "127.0.0.1");
-	Services["Service one"] = web1;
-	Services["Service two"] = web2;
-	WebService Web(Services); 
+	std::map<std::string, Server> Services;
+	Server	web1(8080, 5, "localhost:8080", "0.0.0.0");
+	web1.setPathIndex("index/index.html");
+	web1.setPathImage("image/images.png");
+	Server	web2(8081, 5, "localhost:8081", "0.0.0.0");
+	web2.setPathIndex("index/index2.html");
+	web2.setPathImage("image/img.png");
+	Services["localhost:8080"] = web1;
+	Services["localhost:8081"] = web2;
+	WebService Web(Services);
 	Web.loopingEvent();
 }

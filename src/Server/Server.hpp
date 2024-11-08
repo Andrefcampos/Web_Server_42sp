@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 18:09:07 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/08 03:07:49 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ class Server : public Socket, public Response{
 		int			getSocketFd() const;
 		int			getMaxEvent() const;
 		std::string	getHostName() const;
+		void		sendResponse(int fd, httpRequest http);
 };

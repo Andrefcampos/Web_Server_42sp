@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Location.hpp                                       :+:      :+:    :+:   */
+/*   include.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 16:20:36 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/10/16 16:22:20 by myokogaw         ###   ########.fr       */
+/*   Created: 2024/11/06 15:38:16 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/06 16:16:09 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include <map>
-# include <string>
+#include <map>
+#include <string>
 
-class Location {
-	public:
-		
-	private:
-		std::map<std::string, std::string> _directives;
-}
+#define REQUESTLINE	"requestLine"
+#define HEADERS 	"Headers"
+
+typedef std::map<std::string, std::map<std::string, std::string> > httpRequest;
+typedef std::map<std::string, std::string> mapHeader;

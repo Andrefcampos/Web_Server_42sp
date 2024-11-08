@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/31 16:04:52 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/08 03:08:13 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sstream>
 #include <fstream>
 #include <sys/socket.h>
+#include "include.hpp"
 
 class Response
 {
@@ -29,6 +30,10 @@ class Response
 		std::string	_body;
 		void 		clean();
 
+	protected:
+		std::string _pathIndex;
+		std::string _pathImage;
+
 	public:
 		Response();
 		~Response();
@@ -39,8 +44,14 @@ class Response
 		void setBody(std::string body);
 		std::string	getHttp();
 
-		void	sendResponseHTML(int fd, std::string indexHTML);
-		void	sendResponseImage(int fd, std::string image);		
+		virtual void	sendResponse(int fd, httpRequest http) = 0;
+		void	sendIndex(int fd, std::string indexHTML);
+		void	sendImage(int fd, std::string image);
+
+		std::string getPathImage() const;
+		std::string getPathIndex() const;
+		void		setPathImage(std::string pathImage);
+		void		setPathIndex(std::string pathIndex);
 };
 
 enum e_response

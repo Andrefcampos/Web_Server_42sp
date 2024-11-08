@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   define.hpp                                         :+:      :+:    :+:   */
+/*   RequestLine.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 10:48:38 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/03 10:49:14 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/06 10:24:56 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/06 12:44:12 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINE_HPP
-#define DEFINE_HPP
+#pragma once
 
-#define MAX_EVENTS 10
-#define SIZE 10024
+#include <string>
+#include <map>
+#include <list>
 
+class RequestLine{
+	private:
+		static const std::string			_keyLine[3];
+		static const std::string			_delimit;
+		std::list<std::string>				_tokens;
+		std::map<std::string, std::string>	_requestLine;
 
-#endif
+	protected:
+		RequestLine(){};
+		~RequestLine(){};
+		std::map<std::string, std::string>	setRequestLine(std::string line);
+		
+};
