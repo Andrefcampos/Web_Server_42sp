@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Imagem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Atualizar Imagem</h1>
+        <form id="updateImageForm">
+            <label for="image">Escolha uma nova imagem:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            <button type="submit" class="btn put">Atualizar</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('updateImageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const file = document.getElementById('image').files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                localStorage.setItem('image', reader.result);
+                alert('Imagem atualizada com sucesso!');
+                window.location.href = 'index.html';
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Server</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Métodos REST</h1>
+        <div class="button-group">
+            <button class="btn get" onclick="fetchData()">GET</button>
+            <button class="btn post" onclick="openFormPage()">POST</button>
+            <button class="btn put" onclick="openUpdatePage()">PUT</button>
+            <button class="btn delete" onclick="deleteImage()">DELETE</button>
+            <button class="btn patch" onclick="updateEmail()">PATCH</button>
+        </div>
+        <div id="output" class="output">
+            <h2>Resultado</h2>
+            <div id="dataDisplay"></div>
+            <img id="imageDisplay" style="display: none;" alt="Imagem Atualizada">
+        </div>
+    </div>
+	<script src="scripts/script.js" defer></script>
+</body>
+</html>
