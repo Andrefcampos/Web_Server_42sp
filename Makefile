@@ -95,6 +95,6 @@ debug: re
 	./$(NAME) "DEBUG"
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+	valgrind --suppressions=stl.supp --show-leak-kinds=all --leak-check=full --log-file=filename.txt ./$(NAME)
 
 .PHONY: all clean fclean re

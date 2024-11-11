@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/07 20:21:10 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/08 11:17:26 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void	Response::sendIndex(int fd, std::string indexHTML){
 	this->setLength(lengh.str());
 	this->setBody(html);
 	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
-	std::cout << this->getHttp();
 	clean();
 }
 
@@ -98,13 +97,15 @@ void	Response::sendImage(int fd, std::string image)
 	}catch(std::exception &e){
 		std::cerr << e.what();
 	}
+	std::cout << "Entrou \n";
 	this->setStatus(status.str(), " Ok");
 	this->setType("image/png");
 	this->setConnection("MeuServidor/1.0 (Linux)");
 	lengh << bImage.str().length();
 	this->setLength(lengh.str());
-	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
-	send(fd, bImage.str().c_str(), bImage.str().length(), 0);
+	setBody(bImage.str());
+	if (send(fd, this->getHttp().c_str(),this->getHttp().length(), 0) == -1)
+		std::cerr << "DEU MERDA\n";
 	clean();
 }
 
