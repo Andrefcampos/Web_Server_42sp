@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   WebServer.hpp                                      :+:      :+:    :+:   */
+/*   Webserv.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:19:25 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/08 03:08:45 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:07:28 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,21 @@
 #include <iterator>
 #include "ParserRequest.hpp"
 
-class WebService: public ParserRequest{
+class Webserv: public ParserRequest {
 	private:
 		std::map<std::string, Server>			_services;
 		std::map<std::string, Server>::iterator _it, _ite;
-		int				_nfds, _epollfd, _maxEvents;
-		epoll_event		_ev, _events[80];
+		// int				_nfds, _epollfd, _maxEvents;
+		// char			_buffer[8000];
+		// epoll_event		_ev, _events[80];
 		int				isNewClient(int index);
-		int				responseClient(int fd);
+		int				responseClient(int fd, std::string resp);
 		void			createEpoll();
 		void			initServicesAddSocket();
 
 	public:
-		~WebService();
-		WebService();
-		WebService(std::map<std::string, Server> services);
+		~Webserv();
+		Webserv();
+		// Webserv(std::map<std::string, Server> services);
 		void	loopingEvent();
 };

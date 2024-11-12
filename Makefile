@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------------------
 # Static library
-NAME		:= webServ
+NAME		:= webserv
 
 #-----------------------------------------------------------------------------------------
 # Compiler and flags
@@ -14,46 +14,58 @@ CMD_CLEAN	:= rm -Rf
 
 #-----------------------------------------------------------------------------------------
 # DIRECTORY
-DIR_MAIN 			:= src/
-DIR_INCLUDE			:= include/
-DIR_UTILS			:= src/utils/
-DIR_SERVER			:= src/Server/
-DIR_SOCKET			:= src/Server/Socket/
-DIR_RESPONSE		:= src/Server/Response/
-DIR_WEBSERVER		:= src/WebServer/
-DIR_PARSERREQUEST	:= src/ParserRequest/
-DIR_REQUESTLINE		:= src/ParserRequest/RequestLine/
-DIR_HEADERS			:= src/ParserRequest/Headers/
+SRC_DIR				:= src/ src/utils src/Server \
+					src/Server/Socket src/Server/Response \
+					src/Webserv src/ParserRequest \
+					src/Parser src/Logger src/Server/Location
+# DIR_MAIN 			:= src/
+# DIR_UTILS			:= src/utils/
+# DIR_SERVER			:= src/Server/
+# DIR_SOCKET			:= src/Server/Socket/
+# DIR_RESPONSE		:= src/Server/Response/
+# DIR_WEBSERV			:= src/Webserv/
+# DIR_PARSERREQUEST	:= src/ParserRequest/
+# DIR_INCLUDES		:= include/
+# DIR_PARSER			:= src/Parser/
+# DIR_LOGGER			:= src/Logger/
 
 #-----------------------------------------------------------------------------------------
 # Header file
-INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
-					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
-					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
-					-I $(DIR_REQUESTLINE) -I $(DIR_HEADERS)\
-					-I $(DIR_INCLUDE)\
+# INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
+# 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERV)\
+# 					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
+# 					-I $(DIR_INCLUDES) -I $(DIR_PARSER) \
+# 					-I $(DIR_LOGGER)
+
+INCLUDE				:= -I src/Server -I src/Server/Socket \
+					-I src/utils -I src/Server/Response \
+					-I src/Webserv -I src/ParserRequest \
+					-I src/Parser -I src/Logger -I include \
+					-I src/Server/Location
 
 #-----------------------------------------------------------------------------------------
 # Source files
-FILE_MAIN				:= main.cpp
-FILE_SERVER				:= Server.cpp
-FILE_SOCKET				:= Socket.cpp
-FILE_RESPONSE			:= Response.cpp
-FILE_WEBSERVER			:= WebServer.cpp
-FILE_PARSERREQUEST		:= ParserRequest.cpp
-FILE_REQUESTLINE		:= RequestLine.cpp
-FILE_HEADERS			:= Headers.cpp
+# FILE_MAIN				:= main.cpp
+# FILE_SERVER				:= Server.cpp
+# FILE_SOCKET				:= Socket.cpp
+# FILE_RESPONSE			:= Response.cpp
+# FILE_Webserv			:= Webserv.cpp
+# FILE_PARSERREQUEST		:= ParserRequest.cpp
+# FILE_PARSER				:= Parser.hpp
+# FILE_HANDLER			:= Handler.cpp
+
+SRC_FILES += $(foreach path, $(SRC_DIR), $(wildcard $(addprefix $(path)/, *.cpp)))
+
 
 #-----------------------------------------------------------------------------------------
 # Source files
-SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
-				$(addprefix $(DIR_SERVER), $(FILE_SERVER))\
-				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
-				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
-				$(addprefix $(DIR_WEBSERVER), $(FILE_WEBSERVER))\
-				$(addprefix $(DIR_REQUESTLINE), $(FILE_REQUESTLINE))\
-				$(addprefix $(DIR_HEADERS), $(FILE_HEADERS))\
-				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
+# SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
+# 				$(addprefix $(DIR_SERVER), $(FILE_SERVER))\
+# 				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
+# 				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
+# 				$(addprefix $(DIR_WEBSERV), $(FILE_Webserv))\
+# 				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
+# 				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files

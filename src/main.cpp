@@ -4,27 +4,40 @@
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:41:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/08 03:21:28 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/11/11 23:44:52 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
 #include <iostream>
 #include "Server.hpp"
-#include "WebServer.hpp"
+#include "Webserv.hpp"
+#include "Parser.hpp"
+#include "Conf.hpp"
+#include "defines.hpp"
+#include "Handler.hpp"
 #include <map>
 
-int main(){
-	std::map<std::string, Server> Services;
-	Server	web1(8080, 5, "localhost:8080", "0.0.0.0");
-	web1.setPathIndex("html/");
-	web1.setPathImage("image/images.png");
-	Server	web2(8081, 5, "localhost:8081", "0.0.0.0");
-	web2.setPathIndex("index/index2.html");
-	web2.setPathImage("image/img.png");
-	Services["localhost:8080"] = web1;
-	Services["localhost:8081"] = web2;
-	WebService Web(Services);
-	Web.loopingEvent();
+using namespace std;
+
+int main(int ac, char **av)
+{
+	if (ac <= 2) {
+		try {
+			Conf cf;
+			Parser::parser(cf, (ac == 1 ? "default.conf": av[1]));
+		} catch (const exception &e) {
+			cerr << e.what() << endl;
+		}
+	} else {
+		cerr << "usage: ./webserv <path to configuration file> or just ./webserv" << endl;
+		return (FAIL);
+	}
+	// Webserv Web(Services); 
+	// Web.loopingEvent();
+	return (SUCCESS);
 }
