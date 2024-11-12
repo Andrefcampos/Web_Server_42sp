@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Conf.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 11:41:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/11 23:44:52 by myokogaw         ###   ########.fr       */
+/*   Created: 2024/11/11 23:11:39 by myokogaw          #+#    #+#             */
+/*   Updated: 2024/11/11 23:44:44 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "Location.hpp"
 #include "Server.hpp"
-#include "Webserv.hpp"
-#include "Parser.hpp"
 #include "Conf.hpp"
 #include "defines.hpp"
 #include "Handler.hpp"
-#include <map>
 
-using namespace std;
+Conf::Conf(void) {
+	static ConfFile conf_file;
+	this->init = 0;
+	this->curr = 0;
+	this->line = 1;
+	this->conf_file = &conf_file;
+	this->args.clear();
+	this->ctx = MAIN_CONF;
+	initHandlerModules(*this);
+}
 
-int main(int ac, char **av)
-{
-	if (ac <= 2) {
-		try {
-			Conf cf;
-			Parser::parser(cf, (ac == 1 ? "default.conf": av[1]));
-		} catch (const exception &e) {
-			cerr << e.what() << endl;
-		}
-	} else {
-		cerr << "usage: ./webserv <path to configuration file> or just ./webserv" << endl;
-		return (FAIL);
-	}
-	// Webserv Web(Services); 
-	// Web.loopingEvent();
-	return (SUCCESS);
+Conf::~Conf(void) {
+	for (std::map<std::string, Handler *>::iterator it=handlers.begin(); it != handlers.end(); ++it)
+		delete it->second;
+	handlers.clear();
 }

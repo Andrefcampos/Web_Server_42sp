@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   define.hpp                                         :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 10:48:38 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/03 10:49:14 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/11 22:22:08 by myokogaw          #+#    #+#             */
+/*   Updated: 2024/11/11 22:22:15 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINE_HPP
-#define DEFINE_HPP
+#pragma once
 
-#define MAX_EVENTS 10
-#define SIZE 10024
-
-
-#endif
+class Client {
+	public:
+	private:
+};
