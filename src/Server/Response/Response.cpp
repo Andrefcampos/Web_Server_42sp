@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/08 11:17:26 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:29:23 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	Response::sendImage(int fd, std::string image)
 	}catch(std::exception &e){
 		std::cerr << e.what();
 	}
-	std::cout << "Entrou \n";
 	this->setStatus(status.str(), " Ok");
 	this->setType("image/png");
 	this->setConnection("MeuServidor/1.0 (Linux)");

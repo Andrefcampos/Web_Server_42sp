@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:06:43 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/07 14:27:02 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/13 13:23:53 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "RequestLine.hpp"
 #include "Headers.hpp"
 #include "include.hpp"
-#define	BUFFERSIZE 5
+#define	BUFFERSIZE 10
 
 struct	bufferFD{
 	std::string		buffer;
@@ -32,7 +32,7 @@ struct	bufferFD{
 class ParserRequest: public Headers, RequestLine{
 	private:
 		std::map<int, bufferFD>	_oneRequest;
-		int	parseHttpClient(bufferFD buffer);
+		int	parseHttpClient(bufferFD &buffer);
 
 	protected:
 		ParserRequest();

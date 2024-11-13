@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/11 14:27:21 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:21:25 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,7 @@ void	WebService::loopingEvent(){
 			if (isNewClient(index_epoll))
 				continue ;
 			if (readFdClient(_events[index_epoll])){
-				std::cout << "Entrou \n";
-				static_cast<Server*>(_events[index_epoll].data.ptr)->sendResponse(_events[index_epoll].data.fd, _httpRequest);
-				//responseClient(_events[index_epoll].data.fd);
+				responseClient(_events[index_epoll].data.fd);
 				if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _events[index_epoll].data.fd, &_ev) == -1)
 					throw std::runtime_error("error: epoll_ctl()");
 				close(_events[index_epoll].data.fd);

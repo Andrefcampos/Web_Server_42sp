@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/07 19:46:46 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:05:48 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "Response.hpp"
 #include <string>
 
-class Server : public Socket, public Response{
+class Server : public Socket, public Response {
 	private:
 		int			_socketFd;
 		int 		_port;
