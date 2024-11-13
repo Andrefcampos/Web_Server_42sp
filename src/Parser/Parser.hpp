@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 22:16:17 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/11 23:27:38 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:48:52 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 class Server;
 class Location;
+class Directive;
 
 namespace Parser {
 	void	parser(Conf &cf, const char *pathname);

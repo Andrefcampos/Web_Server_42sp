@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 03:42:43 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:13:08 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ class Server : public Socket, public Response {
 		// std::string	_ip;
 		// std::string _hostName;
 		std::map<std::string, Directive *> _directives;
-		
-		// std::map<std::string, Location *> _locations;
 
 	public:
 		Server();
 		~Server();
+
+		void	setDirective(const std::string &directive, const std::string &value);
 		// Server():_hostName(""){};
 		// Server(int port, int events, std::string hostName, std::string ip);
 		// int			getSocketFd() const;

@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/12 00:23:14 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:28:39 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,32 @@ unsigned int Handler::getType(void) {
 }
 
 void	ServerHandler::process(Conf &cf) {
-	// manager.append_server(new Server());
-	// cf.current_server = manager.last_server();
+	manager._conf["server"]->append_server(new Server());
+	cf.current_server = manager._conf["server"]->back();
 	cf.ctx = SRV_CONF;
 	cf.args.clear();
 	Parser::parser(cf, NULL);
 	cf.ctx = MAIN_CONF;
-	// cf.current_server = NULL;
+	cf.current_server = NULL;
 }
 
 void	ListenHandler::process(Conf &cf) {
-	// if (!cf.current_server || cf.current_location)
-	// 	throw (std::runtime_error(Logger::log_error(cf, "\"%s\" directive is not allowed here", cf.args.begin()->c_str())));
-	// size_t found = cf.args.end()->find(':');
-	// if (found) {
-	// 	std::string host = cf.args.end()->substr(0, found);
-	// 	std::string port = cf.args.end()->substr(found, cf.args.end()->length() - 1);
-	// 	if (host.size() == 0)
-	// 		throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
-	// 	else if (port.size() == 0)
-	// 		throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
-	// 	cf.current_server->set_directive(*cf.args.begin(), (host + " " + port));
-	// 	cf.args.clear();
-	// 	return ;
-	// }
-	// cf.current_server->set_directive(*cf.args.begin(), cf.args.end()->substr(0, cf.args.end()->length() - 1));
+	size_t found = cf.args.end->find_first_not_of("123456789.:");
+	if (found != std::string::npos)
+		std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.end()->c_str()));
+	found = cf.args.end()->find(':');
+	if (found) {
+		std::string host = cf.args.end()->substr(0, found);
+		std::string port = cf.args.end()->substr(found, cf.args.end()->length() - 1);
+		if (host.size() == 0)
+			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
+		else if (port.size() == 0)
+			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
+		cf.current_server->setDirective(*cf.args.begin(), (host + " " + port));
+		cf.args.clear();
+		return ;
+	}
+	cf.current_server->setDirective(*cf.args.begin(), cf.args.end()->substr(0, cf.args.end()->length() - 1));
 	cf.args.clear();
 }
 

@@ -10,12 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Webserv.hpp"
 #include <iterator>
 #include <stdexcept>
 #include <map>
 #include <iostream>
 #include <unistd.h>
+#include "Webserv.hpp"
+#include "Directive.hpp"
+
+Webserv manager();
+
+Webserv::Webserv() {		
+	_conf["server"] = new ServerDirective();
+};
+
+Webserv::~Webserv() {
+	for (std::map<std::string, Directive *>::iterator it = _conf.begin(); it != _conf.end(); ++it) {
+		delete it->second;
+	}
+	_conf.clear();
+	std::cout << "GoodBye" << std::endl;
+};
 
 // Webserv::Webserv(std::map<std::string, Server> services):
 // _services(services){

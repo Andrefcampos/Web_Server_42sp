@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/01 16:37:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:55:01 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,21 @@ void	Response::setBody(std::string body){
 
 std::string	Response::getHttp(){
 
-	this->_htpp += this->_fillHttp[STATUS][HTTP_VERSION];
-	this->_htpp += this->_fillHttp[STATUS][VALUE];
-	this->_htpp += this->_fillHttp[STATUS][REASON];
-	this->_htpp += this->_fillHttp[STATUS][END_LINE];
-	this->_htpp += this->_fillHttp[TYPE][HEADER];
-	this->_htpp += this->_fillHttp[TYPE][HEADER_TYPE];
-	this->_htpp += this->_fillHttp[TYPE][ENDL];
-	this->_htpp += this->_fillHttp[CONNECTION][HEADER];
-	this->_htpp += this->_fillHttp[CONNECTION][HEADER_TYPE];
-	this->_htpp += this->_fillHttp[CONNECTION][ENDL];
-	this->_htpp += this->_fillHttp[LENGTH][HEADER];
-	this->_htpp += this->_fillHttp[LENGTH][HEADER_TYPE];
-	this->_htpp += this->_fillHttp[LENGTH][ENDL];
-	this->_htpp += this->_body;
-	return (this->_htpp);
+	this->_http += this->_fillHttp[STATUS][HTTP_VERSION];
+	this->_http += this->_fillHttp[STATUS][VALUE];
+	this->_http += this->_fillHttp[STATUS][REASON];
+	this->_http += this->_fillHttp[STATUS][END_LINE];
+	this->_http += this->_fillHttp[TYPE][HEADER];
+	this->_http += this->_fillHttp[TYPE][HEADER_TYPE];
+	this->_http += this->_fillHttp[TYPE][ENDL];
+	this->_http += this->_fillHttp[CONNECTION][HEADER];
+	this->_http += this->_fillHttp[CONNECTION][HEADER_TYPE];
+	this->_http += this->_fillHttp[CONNECTION][ENDL];
+	this->_http += this->_fillHttp[LENGTH][HEADER];
+	this->_http += this->_fillHttp[LENGTH][HEADER_TYPE];
+	this->_http += this->_fillHttp[LENGTH][ENDL];
+	this->_http += this->_body;
+	return (this->_http);
 }
 
 void	Response::sendResponseHTML(int fd, std::string indexHTML)
@@ -124,5 +124,5 @@ void Response::clean(){
 	this->_fillHttp[LENGTH][HEADER_TYPE] = "";
 	this->_fillHttp[LENGTH][ENDL] = "\r\n\r\n";
 	this->_body = "";
-	this->_htpp = "";
+	this->_http = "";
 }

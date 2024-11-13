@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:23 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/12 00:25:43 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:49:00 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include "Server.hpp"
 #include "Handler.hpp"
 #include "Conf.hpp"
+#include "Directive.hpp"
 
 using namespace std;
 
@@ -107,15 +108,6 @@ int		Parser::read_conf_token(Conf &cf) {
 		len++;
 	}
 }
-
-// void	Parser::get_args(Conf &cf) {
-// 	cf.args.clear();
-// 	stringstream ss(cf.content.substr(cf.init, (cf.curr - cf.init) - 1));
-// 	string token;
-// 	while (ss >> token)
-// 		cf.args.push_back(token);
-// 	return ;
-// }
 
 void	Parser::conf_handler(Conf &cf, unsigned int last) {
 	Handler *handler = cf.handlers[*cf.args.begin()];

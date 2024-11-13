@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:46:49 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/23 15:55:36 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:38:02 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string>
 #include <netinet/in.h>
 
-class Socket{
+class Socket {
 	private:
 		sockaddr_in		_addr;
 		virtual void	initSocket(int &socketFd);

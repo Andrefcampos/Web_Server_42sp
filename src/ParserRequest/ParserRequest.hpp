@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserRequest.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:06:43 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/03 15:15:49 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:54:03 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 #define	BUFFERSIZE 4024
 
-class ParserRequest{
+class ParserRequest {
 	protected:
 		std::map<int, std::map<std::string, std::string> >	_clientes;			
 		std::map<std::string, std::string>					_request;

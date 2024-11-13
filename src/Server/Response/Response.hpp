@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/10/31 16:04:52 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/12 20:13:18 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class Response
 {
 	private:
 		std::string	_fillHttp[4][4];
-		std::string	_htpp;
+		std::string	_http;
 		std::string	_status[4];
 		std::string	_type[3];
 		std::string	_connection[3];
