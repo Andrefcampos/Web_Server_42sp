@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/13 16:17:09 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:06:48 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			Server::getMaxEvent() const{
 }
 
 void	Server::sendResponse(int fd, httpRequest http){
-	std::string path = http[REQUESTLINE]["Path"];
+	std::string path = http[fd][REQUESTLINE]["Path"];
 	if (path == "/")
 		sendIndex(fd, this->getPathIndex());
 	else

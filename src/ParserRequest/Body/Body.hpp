@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   include.hpp                                        :+:      :+:    :+:   */
+/*   Body.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 15:38:16 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/14 12:01:45 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 11:29:17 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 12:32:38 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
 #include <map>
 #include <string>
-
-#define REQUESTLINE	"requestLine"
-#define HEADERS 	"Headers"
-
-typedef std::map<int, std::map<std::string, std::map<std::string, std::string> > > httpRequest;
-typedef std::map<std::string, std::string> mapHeader;
+class Body{
+	protected:
+		std::map<std::string, std::string>	body;
+	
+	public:
+		int	Body::setBody(int fd);
+};

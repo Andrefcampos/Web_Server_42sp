@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:25:00 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/07 10:20:47 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 16:08:00 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ RequestLine::setRequestLine(std::string line){
 	std::list<std::string>::iterator	it;
 	int									i = 0;
 
-	_tokens = split(line, ' ');
+	_tokens = split<std::string, char, std::list<std::string> >(line, ' ');
 	for (it = _tokens.begin(); it != _tokens.end(); it++){
 		_requestLine[_keyLine[i]] = *it;
 		i++;

@@ -5,28 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 10:24:56 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 15:57:16 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 15:58:09 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 16:04:29 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
 #include <string>
 #include <map>
 #include <list>
+#define METHOD "Method"
+#define PATH "Path"
+#define VERSION "Version"
+
+using namespace std;
 
 class RequestLine{
 	private:
-		static const std::string			_keyLine[3];
-		static const std::string			_delimit;
-		std::list<std::string>				_tokens;
-		std::map<std::string, std::string>	_requestLine;
-
+		static const string	keyline[3];	
+		string	getKeyRequestLine(int index) const;
+		void	setLine(string key, string value);
+	
 	protected:
-		RequestLine(){};
-		~RequestLine(){};
-		std::map<std::string, std::string>	setRequestLine(std::string line);
+		map<string, string> _requestLine;
+		RequestLine();
+		~RequestLine();
 
+	public:
+		void	setLine(string key, string value);
+		void	setRequestLine(string requestLine);
+		string	getMethod() const;
+		string	getPath() const;
+		string	getVersion() const;
 };
-

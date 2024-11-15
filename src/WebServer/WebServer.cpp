@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/11 17:21:25 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 12:30:33 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	WebService::loopingEvent(){
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
 			if (isNewClient(index_epoll))
 				continue ;
-			if (readFdClient(_events[index_epoll])){
+			if (setBufferSocketFd(_events[index_epoll].data.fd)){
 				responseClient(_events[index_epoll].data.fd);
 				if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _events[index_epoll].data.fd, &_ev) == -1)
 					throw std::runtime_error("error: epoll_ctl()");
@@ -78,9 +78,16 @@ int	WebService::isNewClient(int index){
 	return (0);
 }
 
+#include <split.hpp>
+
 int	WebService::responseClient(int fd){
-	std::string	server = _httpRequest["Headers"]["Host"];
+	std::string	server = _httpRequest[fd]["Headers"]["Host"];
+/* 	putMap(_httpRequest[fd][REQUESTLINE]);
+	putMap(_httpRequest[fd][HEADERS]);
+	putMap(_httpRequest[fd]["Body"]); */
 	_services[server].sendResponse(fd, _httpRequest);
+	_httpRequest.erase(fd);
+
 	return (0);
 }
 

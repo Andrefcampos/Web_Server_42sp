@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   include.hpp                                        :+:      :+:    :+:   */
+/*   Headers.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 15:38:16 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/14 12:01:45 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 16:06:54 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 16:14:40 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "Headers.hpp"
 
-#include <map>
-#include <string>
+const string Headers::_delimiter = ": ";
 
-#define REQUESTLINE	"requestLine"
-#define HEADERS 	"Headers"
+void	Headers::addNewElement(string key, string value){
+	
+}
 
-typedef std::map<int, std::map<std::string, std::map<std::string, std::string> > > httpRequest;
-typedef std::map<std::string, std::string> mapHeader;
+list<string>	Headers::getHeader(string key) const {
+	
+}
+
+void	parseHeaders(string header){
+	
+}
