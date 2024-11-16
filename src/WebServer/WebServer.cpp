@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 12:30:33 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 20:15:24 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <map>
 #include <iostream>
 #include <unistd.h>
+#include <cstring>
 
 WebService::WebService(std::map<std::string, Server> services):
 _services(services){
@@ -78,16 +79,9 @@ int	WebService::isNewClient(int index){
 	return (0);
 }
 
-#include <split.hpp>
-
 int	WebService::responseClient(int fd){
-	std::string	server = _httpRequest[fd]["Headers"]["Host"];
-/* 	putMap(_httpRequest[fd][REQUESTLINE]);
-	putMap(_httpRequest[fd][HEADERS]);
-	putMap(_httpRequest[fd]["Body"]); */
-	_services[server].sendResponse(fd, _httpRequest);
-	_httpRequest.erase(fd);
 
+	fd = fd;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/13 16:05:48 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 17:58:52 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ class Server : public Socket, public Response {
 		int			getSocketFd() const;
 		int			getMaxEvent() const;
 		std::string	getHostName() const;
-		void		sendResponse(int fd, httpRequest http);
+		void		sendResponse(int fd);
 };

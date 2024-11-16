@@ -5,27 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 10:25:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/06 15:40:19 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 16:05:48 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 22:21:50 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <list>
-#include <map>
 #include <string>
-#include "include.hpp"
+#include <map>
+#include <list>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
 
 class Headers{
 	private:
-		static const std::string			_delimit;
-		std::list<std::string>				_requestHeaders;
-		std::map<std::string, std::string>	_headers;
-		std::list<std::string>::iterator	_it;
-		void	setRequestHeaders(std::string header);
-
+		void setLastHeader(string &headers);
+		void setHeaders(string &line);
+		
 	protected:
-		Headers(){};
-		~Headers(){};
-		mapHeader	setHeaders(std::list<std::string> tokens);
+		map<string, list<string> >	_header;
+
+	public:
+		void						addNewElement(string key, string value);
+		list<string>				getHeader(string key) const;
+		map<string, list<string> >	getAllHeader() const;
+		void						parseHeaders(string	&headers);
+	
 };

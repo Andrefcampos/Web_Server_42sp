@@ -21,17 +21,20 @@ DIR_SERVER			:= src/Server/
 DIR_SOCKET			:= src/Server/Socket/
 DIR_RESPONSE		:= src/Server/Response/
 DIR_WEBSERVER		:= src/WebServer/
-DIR_PARSERREQUEST	:= src/ParserRequest/
-DIR_REQUESTLINE		:= src/ParserRequest/RequestLine/
-DIR_HEADERS			:= src/ParserRequest/Headers/
+DIR_PARSEREQUEST	:= src/ParseRequest/
+DIR_REQUEST			:= src/ParseRequest/Request/
+DIR_BODY			:= src/ParseRequest/Request/Body/
+DIR_HEADERS			:= src/ParseRequest/Request/Headers/
+DIR_RLINE			:= src/ParseRequest/Request/RequestLine/
+
 
 #-----------------------------------------------------------------------------------------
 # Header file
 INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERVER)\
-					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
-					-I $(DIR_REQUESTLINE) -I $(DIR_HEADERS)\
-					-I $(DIR_INCLUDE)\
+					-I $(DIR_UTILS) -I $(DIR_PARSEREQUEST)\
+					-I $(DIR_REQUEST) -I $(DIR_BODY)\
+					-I $(DIR_HEADERS) -I $(DIR_RLINE)\
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -40,9 +43,16 @@ FILE_SERVER				:= Server.cpp
 FILE_SOCKET				:= Socket.cpp
 FILE_RESPONSE			:= Response.cpp
 FILE_WEBSERVER			:= WebServer.cpp
-FILE_PARSERREQUEST		:= ParserRequest.cpp
-FILE_REQUESTLINE		:= RequestLine.cpp
+FILE_PARSEREQUEST		:= ParseRequest.cpp
+
+
+FILE_REQUEST			:= Request.cpp
+FILE_BODY				:= Body.cpp
 FILE_HEADERS			:= Headers.cpp
+FILE_RLINE				:= RequestLine.cpp
+
+
+
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -51,9 +61,11 @@ SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
 				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
 				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
 				$(addprefix $(DIR_WEBSERVER), $(FILE_WEBSERVER))\
-				$(addprefix $(DIR_REQUESTLINE), $(FILE_REQUESTLINE))\
+				$(addprefix $(DIR_PARSEREQUEST), $(FILE_PARSEREQUEST))\
+				$(addprefix $(DIR_REQUEST), $(FILE_REQUEST))\
+				$(addprefix $(DIR_BODY), $(FILE_BODY))\
 				$(addprefix $(DIR_HEADERS), $(FILE_HEADERS))\
-				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
+				$(addprefix $(DIR_RLINE), $(FILE_RLINE))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files
@@ -95,6 +107,6 @@ debug: re
 	./$(NAME) "DEBUG"
 
 valgrind:
-	valgrind --suppressions=stl.supp --show-leak-kinds=all --leak-check=full --log-file=filename.txt ./$(NAME)
+	valgrind ./$(NAME)
 
 .PHONY: all clean fclean re

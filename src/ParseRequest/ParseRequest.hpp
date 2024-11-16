@@ -1,31 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Headers.hpp                                        :+:      :+:    :+:   */
+/*   ParseRequest.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 16:05:48 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 16:11:07 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 20:26:35 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <string>
+#include "Request.hpp"
 #include <map>
-#include <list>
+#define BUFFER_SIZE 10
 
-using namespace std;
 
-class Headers{
+struct ctrlFD{
+	Request		request;
+	bool		haveBody;
+	int			lentgh;
+	std::string	buffer;
+};
+
+class ParseRequest{
 	private:
-		static const string	_delimiter;
-	
-	protected:
-		map<string, list<string>>	header;
-	
+		char	buffer[BUFFER_SIZE +1];
+		int		bytesRead;
+		std::map<int, ctrlFD> _socket;
+
+		void	isNewSocket(int fd);
+		int		setBody(int fd);
+		int		setRequestLine(int fd);
+		int		setHeaders(int fd);
+		int		parseRequestLineHeaders(int fd);
+
 	public:
-		void			addNewElement(string key, string value);
-		list<string>	getHeader(string key) const;
-	
+		int		setBufferSocketFd(int fd);
 };

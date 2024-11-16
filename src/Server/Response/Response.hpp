@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/13 15:56:06 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 17:57:24 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sstream>
 #include <fstream>
 #include <sys/socket.h>
-#include "include.hpp"
+
 
 class Response
 {
@@ -43,7 +43,7 @@ class Response
 		void setLength(std::string length);
 		void setBody(std::string body);
 		std::string	getHttp();
-		virtual void	sendResponse(int fd, httpRequest http) = 0;
+		//virtual void	sendResponse(int fd, httpRequest http) = 0;
 		void	sendIndex(int fd, std::string indexHTML);
 		void	sendImage(int fd, std::string image);
 		std::string getPathImage() const;

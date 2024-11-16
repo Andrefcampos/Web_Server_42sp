@@ -6,16 +6,16 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:06:16 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 16:02:10 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 22:04:02 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RequestLine.hpp"
-#include "split.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
-const string	RequestLine::keyline[3] = {METHOD, PATH, VERSION};	
+const string	RequestLine::_keyline[3] = {METHOD, PATH, VERSION};	
 
 void	RequestLine::setRequestLine(string requestLine){
 	list<string>			tokens;
@@ -25,7 +25,6 @@ void	RequestLine::setRequestLine(string requestLine){
 	tokens = split<string, char, list<string> >(requestLine, ' ');
 	for (it = tokens.begin(); it != tokens.end(); it++){
 		setLine(getKeyRequestLine(++i), *it);
-		_requestLine[getKeyRequestLine(i)] = *it;
 	}
 }
 
@@ -36,23 +35,19 @@ void	RequestLine::setLine(string key, string value){
 string	RequestLine::getKeyRequestLine(int index) const {
 	if(index < 0 || index > 3)
 		return "Undefined";
-	return _keyLine[index];
-}
-
-void	RequestLine::setLine(string key, string value){
-	_requestLine[key] = value;
+	return _keyline[index];
 }
 
 string	RequestLine::getMethod() const{
-	return _requestLine[METHOD];
+	return _requestLine.at(METHOD);
 }
 
 string	RequestLine::getPath() const{
-	return _requestLine[PATH];
+	return _requestLine.at(PATH);
 }
 
 string	RequestLine::getVersion() const{
-	return _requestLine[VERSION];
+	return _requestLine.at(VERSION);
 }
 
 RequestLine::RequestLine(){}

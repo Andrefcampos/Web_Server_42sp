@@ -1,40 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestLine.hpp                                    :+:      :+:    :+:   */
+/*   Body.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 15:58:09 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 16:04:29 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 18:11:28 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 18:27:17 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
 #include <string>
 #include <map>
 #include <list>
-#define METHOD "Method"
-#define PATH "Path"
-#define VERSION "Version"
 
 using namespace std;
 
-class RequestLine{
-	private:
-		static const string	keyline[3];	
-		string	getKeyRequestLine(int index) const;
-		void	setLine(string key, string value);
-	
+class Body{
 	protected:
-		map<string, string> _requestLine;
-		RequestLine();
-		~RequestLine();
-
+		map<string, list<string> >	_body;
+	
 	public:
-		void	setLine(string key, string value);
-		void	setRequestLine(string requestLine);
-		string	getMethod() const;
-		string	getPath() const;
-		string	getVersion() const;
+		void			addNewElement(string key, string value);
+		list<string>	getHeader(string key);
 };

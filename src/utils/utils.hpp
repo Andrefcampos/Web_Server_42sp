@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split.hpp                                          :+:      :+:    :+:   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 13:33:46 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/15 22:01:49 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,46 @@ void putMap(T _request){
 	for(it = _request.begin(); it != _request.end(); it++){
 		std::cout << it->first << " " << it->second << "\n";
 	}
+}
+
+template<typename StringType, typename ContainerType>
+ContainerType getLine(StringType &orin, StringType delimiter){
+    std::size_t     find;
+    ContainerType   line;
+
+    if (delimiter.empty() || orin.empty()){
+        return "";
+    }
+    find = orin.find(delimiter);
+    if (find == std::string::npos){
+        return "";
+    }
+    line = orin.substr(0, find);
+	orin.erase(0, find + delimiter.length());
+	return line;
+}
+
+template<typename T>
+void putMapList(T _request){
+	typename T::iterator it;
+    std::list<std::string>::iterator l_IT;
+
+	for(it = _request.begin(); it != _request.end(); it++){
+		std::cout << it->first << " ";
+        l_IT = it->second.begin();
+        for (; l_IT != it->second.end(); l_IT++){
+            std::cout << *l_IT << " ";   
+        }
+        std::cout << "\n";
+	}
+}
+
+template<typename String>
+void trim(String str){
+    while(std::isspace(*str.begin()) && !str.empty()){
+    	str.erase(0, 1);
+    }
+	while(std::isspace(*(--str.end()))  && !str.empty()){
+		str.erase(str.length() -1, 1);
+    }
 }

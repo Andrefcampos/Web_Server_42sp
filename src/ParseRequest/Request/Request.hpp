@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Headers.cpp                                        :+:      :+:    :+:   */
+/*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 16:06:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 16:14:40 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/15 19:18:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+#include <string>
+#include <map>
+#include <list>
+#include "RequestLine.hpp"
 #include "Headers.hpp"
+#include "Body.hpp"
 
-const string Headers::_delimiter = ": ";
+using namespace std;
 
-void	Headers::addNewElement(string key, string value){
-	
-}
+class Request:public RequestLine, public Headers, public Body{
 
-list<string>	Headers::getHeader(string key) const {
-	
-}
+	protected:
 
-void	parseHeaders(string header){
-	
-}
+		void	setHeader(string headers);
+		void	setBody(std::string body);
+};
