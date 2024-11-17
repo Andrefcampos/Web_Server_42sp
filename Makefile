@@ -23,10 +23,12 @@ DIR_RESPONSE		:= src/Server/Response/
 DIR_WEBSERVER		:= src/WebServer/
 DIR_PARSEREQUEST	:= src/ParseRequest/
 DIR_REQUEST			:= src/ParseRequest/Request/
-DIR_BODY			:= src/ParseRequest/Request/ABody/
 DIR_HEADERS			:= src/ParseRequest/Request/AHeaders/
 DIR_RLINE			:= src/ParseRequest/Request/ARequestLine/
 
+DIR_BODY			:= src/ParseRequest/Request/ABody/
+DIR_DATABODY		:= src/ParseRequest/Request/ABody/DataBody/
+DIR_MULTPART		:= src/ParseRequest/Request/ABody/MultPart/
 
 #-----------------------------------------------------------------------------------------
 # Header file
@@ -35,6 +37,7 @@ INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
 					-I $(DIR_UTILS) -I $(DIR_PARSEREQUEST)\
 					-I $(DIR_REQUEST) -I $(DIR_BODY)\
 					-I $(DIR_HEADERS) -I $(DIR_RLINE)\
+					-I $(DIR_DATABODY) -I $(DIR_MULTPART)\
 
 #-----------------------------------------------------------------------------------------
 # Source files
@@ -47,10 +50,12 @@ FILE_PARSEREQUEST		:= ParseRequest.cpp
 
 
 FILE_REQUEST			:= Request.cpp
-FILE_BODY				:= ABody.cpp
 FILE_HEADERS			:= AHeaders.cpp
 FILE_RLINE				:= ARequestLine.cpp
 
+FILE_BODY				:= ABody.cpp
+FILE_DATABODY			:= DataBody.cpp
+FILE_MULTPART			:= MultPart.cpp
 
 
 
@@ -64,8 +69,11 @@ SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
 				$(addprefix $(DIR_PARSEREQUEST), $(FILE_PARSEREQUEST))\
 				$(addprefix $(DIR_REQUEST), $(FILE_REQUEST))\
 				$(addprefix $(DIR_BODY), $(FILE_BODY))\
+				$(addprefix $(DIR_DATABODY), $(FILE_DATABODY))\
 				$(addprefix $(DIR_HEADERS), $(FILE_HEADERS))\
 				$(addprefix $(DIR_RLINE), $(FILE_RLINE))\
+
+#$(addprefix $(DIR_MULTPART), $(FILE_MULTPART))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files

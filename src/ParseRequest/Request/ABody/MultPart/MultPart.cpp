@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ABody.cpp                                          :+:      :+:    :+:   */
+/*   MultPart.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 18:13:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/17 17:38:02 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/17 15:14:54 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/17 17:28:50 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ABody.hpp"
-#include <iostream>
+#include "MultPart.hpp"
 #include "utils.hpp"
 
-void	ABody::parseBody(string &buffer){
+void	MultPart::parseBody(string &buffer){
 	formatBuffer(buffer);
 	if (buffer.empty())
 		return ;
@@ -30,7 +29,8 @@ void	ABody::parseBody(string &buffer){
 	}
 }
 
-void	ABody::parseElement(string &boundary){
+void	MultPart::parseElement(string &boundary){
+	trim(boundary);
 	if (boundary.empty())
 		return ;
 	string	headers = getLineErase<string, string>(boundary, "\r\n\r\n", true);
@@ -38,7 +38,7 @@ void	ABody::parseElement(string &boundary){
 	setContentBody(boundary);
 }
 
-void	ABody::setHeaders(string &headers){
+void	MultPart::setHeaders(string &headers){
 	if (headers.empty())
 		return ;
 	while(not headers.empty()){
@@ -50,16 +50,17 @@ void	ABody::setHeaders(string &headers){
 		else
 			addNewHeaders(line);
 	}
+	putMapList(getAllHeaders());
 }
 
-void	ABody::setContentBody(string &contentBody){
+void	MultPart::setContentBody(string &contentBody){
 	trim(contentBody);
 	if (contentBody.empty())
 		return ;
 	setContent(contentBody);
 }
 
-void	ABody::addNewHeaders(string &headers){
+void	MultPart::addNewHeaders(string &headers){
 	string	key = getLineErase<string, string>(headers, ": ", true);
 	while(not headers.empty()){
 		string	value  = getLineErase<string, string>(headers, "; ", true);;
@@ -72,7 +73,7 @@ void	ABody::addNewHeaders(string &headers){
 	}
 }
 
-void	ABody::setBondary(string boundary){
+void	MultPart::setBondary(string boundary){
 	trim(boundary);
 	_boundary = "--";
 	_boundary += boundary;
@@ -81,20 +82,15 @@ void	ABody::setBondary(string boundary){
 	_endboundary += "--";
 }
 
-string	ABody::getEndBoundary() const {
+string	MultPart::getEndBoundary() const {
 	return _endboundary;
 }
 
-string	ABody::getBoundary() const {
+string	MultPart::getBoundary() const {
 	return _boundary;
 }
 
-ABody::ABody(){
-	_boundary = "";
-	_endboundary = "";
-};
-
-void	ABody::formatBuffer(string &buffer){
+void	MultPart::formatBuffer(string &buffer){
 	if (buffer.empty())
 		return ;
 	if (buffer.find(_endboundary) != string::npos)
@@ -103,24 +99,7 @@ void	ABody::formatBuffer(string &buffer){
 		buffer.erase(0, _boundary.length());
 }
 
-void	ABody::setNewHeaders(string &key, string &value){
-	this->_headers[key].push_back(value);
-}
-
-void	ABody::setContent(string &value){
-	this->_content = value;
-}
-
-list<string> ABody::getHeaders(string key) const{
-	if (not _headers.count(key))
-		return list<string>();
-	return _headers.at(key);
-}
-
-map<string, list<string> >	ABody::getAllHeaders() const{
-	return _headers;
-}
-
-string ABody::getContent() const{
-	return _content;
-}
+MultPart::MultPart(){
+	_boundary = "";
+	_endboundary = "";
+};
