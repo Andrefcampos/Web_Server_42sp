@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestLine.hpp                                    :+:      :+:    :+:   */
+/*   ARequestLine.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:58:09 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 18:23:40 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/17 11:34:30 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,22 @@
 
 using namespace std;
 
-class RequestLine{
+class ARequestLine{
 	private:
-		static const string	_keyline[3];	
+		static const string	_keyline[3];
+
 		string	getKeyRequestLine(int index) const;
 		void	setLine(string key, string value);
 	
 	protected:
+		bool				_parsedRequestLine;
 		map<string, string> _requestLine;
-		RequestLine();
-		~RequestLine();
+
+		virtual void	setRequestLine(string &buffer) = 0;
+		virtual 		~ARequestLine(){};
+		void			parseRequestLine(string requestLine);
 
 	public:
-		void	setRequestLine(string requestLine);
 		string	getMethod() const;
 		string	getPath() const;
 		string	getVersion() const;

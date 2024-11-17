@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 21:17:40 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/16 18:52:06 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,54 @@
 #include <sys/socket.h>
 #include "utils.hpp"
 
-
 int	ParseRequest::setBufferSocketFd(int fd){
 	if (fd == -1)
 		return 0;
 	isNewSocket(fd);
-	memset(buffer, 0, BUFFER_SIZE+1);
-	bytesRead =  recv(fd, buffer, BUFFER_SIZE, MSG_DONTWAIT);
-	_socket[fd].buffer.append(buffer, bytesRead);
+	setBuffer(fd);
 	if (setBody(fd))
 		cout << "HAVE BODY \n\n";
-	if (_socket[fd].buffer.find("\r\n\r\n") != string::npos)
-		return (parseRequestLineHeaders(fd));
+	if (parseRequest(fd))
+		return (1);
+	return 0;
+}
+
+int		ParseRequest::findBody(int fd){
+	if (_socket[fd].buffer.find(""))
+		return 1;
 	return 0;
 }
 
 void	ParseRequest::isNewSocket(int fd){
 	if (not _socket.count(fd)){
-		_socket[fd].haveBody = false;
 		_socket[fd].lentgh = 0;
+		_socket[fd].request = new Request();
 	}
 }
 
 int		ParseRequest::setBody(int fd){
-	if (_socket[fd].haveBody == false)
+	if (_socket[fd].parsedBody == false)
 		return false;
 	return true;
 }
 
-int		ParseRequest::parseRequestLineHeaders(int fd){
-	string temp;
-
-	temp = getLine<string, string>(_socket[fd].buffer, "\r\n");
-	if (temp.empty())
-		return 1;
-	_socket[fd].request.setRequestLine(temp);
-
-	cout << _socket[fd].request.getMethod() << '\n';
-	cout << _socket[fd].request.getPath() << '\n';
-	cout << _socket[fd].request.getVersion() << "\n\n";
-	
-	temp = getLine<string, string>(_socket[fd].buffer, "\r\n\r\n");
-	_socket[fd].request.parseHeaders(temp);
-	putMapList(_socket[fd].request.getAllHeader());
-	exit(1);
-	return 0;
+int		ParseRequest::parseRequest(int fd){
+	try{
+		_socket[fd].request->setRequestLine(_socket[fd].buffer);
+		_socket[fd].request->setHeader(_socket[fd].buffer);
+		_socket[fd].request->setBody(_socket[fd].buffer);
+	}catch(exception &e){
+		cout << e.what();
+		return 0;
+	}
+	return 1;
 }
 
+void	ParseRequest::setBuffer(int fd){
+	char	buffer[BUFFER_SIZE +1];
+	int		bytesRead;
+
+	memset(buffer, 0, BUFFER_SIZE+1);
+	bytesRead = recv(fd, buffer, BUFFER_SIZE, MSG_DONTWAIT);
+	_socket[fd].buffer.append(buffer, bytesRead);
+}

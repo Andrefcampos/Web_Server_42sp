@@ -23,9 +23,9 @@ DIR_RESPONSE		:= src/Server/Response/
 DIR_WEBSERVER		:= src/WebServer/
 DIR_PARSEREQUEST	:= src/ParseRequest/
 DIR_REQUEST			:= src/ParseRequest/Request/
-DIR_BODY			:= src/ParseRequest/Request/Body/
-DIR_HEADERS			:= src/ParseRequest/Request/Headers/
-DIR_RLINE			:= src/ParseRequest/Request/RequestLine/
+DIR_BODY			:= src/ParseRequest/Request/ABody/
+DIR_HEADERS			:= src/ParseRequest/Request/AHeaders/
+DIR_RLINE			:= src/ParseRequest/Request/ARequestLine/
 
 
 #-----------------------------------------------------------------------------------------
@@ -47,9 +47,9 @@ FILE_PARSEREQUEST		:= ParseRequest.cpp
 
 
 FILE_REQUEST			:= Request.cpp
-FILE_BODY				:= Body.cpp
-FILE_HEADERS			:= Headers.cpp
-FILE_RLINE				:= RequestLine.cpp
+FILE_BODY				:= ABody.cpp
+FILE_HEADERS			:= AHeaders.cpp
+FILE_RLINE				:= ARequestLine.cpp
 
 
 

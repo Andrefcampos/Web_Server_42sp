@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 20:15:24 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/16 12:29:29 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	WebService::initServicesAddSocket(){
 	}
 }
 
+#include "Request.hpp"
+
 void	WebService::loopingEvent(){
 	while(1){
 		_nfds = epoll_wait(_epollfd, _events, _maxEvents, -1);
@@ -80,8 +82,10 @@ int	WebService::isNewClient(int index){
 }
 
 int	WebService::responseClient(int fd){
-
-	fd = fd;
+	Request *request = _socket[fd].request;
+	_services[request->getHost()].sendResponse(fd, request);
+	delete request;
+	_socket.erase(fd);
 	return (0);
 }
 

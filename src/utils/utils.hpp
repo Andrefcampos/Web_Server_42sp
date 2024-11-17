@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 22:01:49 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/17 12:08:18 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void putMap(T _request){
 	}
 }
 
-template<typename StringType, typename ContainerType>
+/* template<typename StringType, typename ContainerType>
 ContainerType getLine(StringType &orin, StringType delimiter){
     std::size_t     find;
     ContainerType   line;
@@ -55,6 +55,24 @@ ContainerType getLine(StringType &orin, StringType delimiter){
     }
     line = orin.substr(0, find);
 	orin.erase(0, find + delimiter.length());
+	return line;
+} */
+
+template<typename StringType, typename ContainerType>
+ContainerType getLineErase(StringType &orin, StringType delimiter, bool erase){
+    std::size_t     find;
+    ContainerType   line;
+
+    if (delimiter.empty() || orin.empty()){
+        return "";
+    }
+    find = orin.find(delimiter);
+    if (find == std::string::npos){
+        return "";
+    }
+    line = orin.substr(0, find);
+    if (erase == true)
+	    orin.erase(0, find + delimiter.length());
 	return line;
 }
 
@@ -74,11 +92,13 @@ void putMapList(T _request){
 }
 
 template<typename String>
-void trim(String str){
-    while(std::isspace(*str.begin()) && !str.empty()){
+void trim(String &str){
+    
+    while(str.size() > 0 && std::isspace(static_cast<unsigned char>(str[0]))){
     	str.erase(0, 1);
     }
-	while(std::isspace(*(--str.end()))  && !str.empty()){
-		str.erase(str.length() -1, 1);
+	while(str.size() > 0 && std::isspace(static_cast<unsigned char>(str[str.size() -1]))){
+		str.erase(str.size() - 1, 1);
     }
 }
+

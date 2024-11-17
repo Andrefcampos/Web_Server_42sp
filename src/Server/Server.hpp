@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 17:58:52 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/16 11:18:11 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "Socket.hpp"
 #include "Response.hpp"
+#include "Request.hpp"
 #include <string>
 
 class Server : public Socket, public Response {
@@ -32,5 +33,5 @@ class Server : public Socket, public Response {
 		int			getSocketFd() const;
 		int			getMaxEvent() const;
 		std::string	getHostName() const;
-		void		sendResponse(int fd);
+		void		sendResponse(int fd, Request *request);
 };

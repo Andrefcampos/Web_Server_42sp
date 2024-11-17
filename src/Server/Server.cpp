@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/15 17:58:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/16 11:18:16 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int			Server::getMaxEvent() const{
 	return _maxEvents;
 }
 
-void	Server::sendResponse(int fd){
-	sendIndex(fd, this->getPathIndex());
-	sendImage(fd, this->getPathImage());
+void	Server::sendResponse(int fd, Request *request){
+	if (request->getPath() == "/")
+		sendIndex(fd, this->getPathIndex());
+	else
+		sendImage(fd, this->getPathImage());
 }
