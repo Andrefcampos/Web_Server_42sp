@@ -6,12 +6,13 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:14:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/17 17:28:50 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/18 09:59:29 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MultPart.hpp"
 #include "utils.hpp"
+#include <fstream>
 
 void	MultPart::parseBody(string &buffer){
 	formatBuffer(buffer);
@@ -19,57 +20,66 @@ void	MultPart::parseBody(string &buffer){
 		return ;
 	while(not buffer.empty()){
 		string	line = getLineErase<string, string>(buffer, _boundary, false);
+		DataBody	data;
 		if (line.empty()){
-			parseElement(buffer);
+			parseElement(buffer, data);
 			break ;
 		}
 		else
-			parseElement(line);
+			parseElement(line, data);
 		getLineErase<string, string>(buffer, _boundary, true);
+	}
+	list<DataBody> temp = getDataBody();
+	list<DataBody>::iterator it = temp.begin();
+	for (; it != temp.end(); it++){
+		DataBody temp;
+		temp = *it;
+		putMapList(temp.getAllHeaders());
+		cout << temp.getContent() << "\n";
 	}
 }
 
-void	MultPart::parseElement(string &boundary){
+void	MultPart::parseElement(string &boundary, DataBody &data){
 	trim(boundary);
 	if (boundary.empty())
 		return ;
 	string	headers = getLineErase<string, string>(boundary, "\r\n\r\n", true);
-	setHeaders(headers);
-	setContentBody(boundary);
+	setHeaders(headers, data);
+	setContentBody(boundary, data);
+	setDataBody(data);
 }
 
-void	MultPart::setHeaders(string &headers){
+void	MultPart::setHeaders(string &headers, DataBody &data){
 	if (headers.empty())
 		return ;
 	while(not headers.empty()){
 		string	line = getLineErase<string, string>(headers, "\r\n", true);
 		if (line.empty()){
-			addNewHeaders(headers);
+			addNewHeaders(headers, data);
 			break ;
 		}
 		else
-			addNewHeaders(line);
+			addNewHeaders(line, data);
 	}
-	putMapList(getAllHeaders());
 }
 
-void	MultPart::setContentBody(string &contentBody){
+void	MultPart::setContentBody(string &contentBody, DataBody &data){
 	trim(contentBody);
 	if (contentBody.empty())
 		return ;
-	setContent(contentBody);
+	data.setContent(contentBody);
 }
 
-void	MultPart::addNewHeaders(string &headers){
+void	MultPart::addNewHeaders(string &headers, DataBody &data){
 	string	key = getLineErase<string, string>(headers, ": ", true);
 	while(not headers.empty()){
 		string	value  = getLineErase<string, string>(headers, "; ", true);;
 		if (value.empty()){
-			setNewHeaders(key, headers);
+			data.setNewHeaders(key, headers);
 			break ;
 		}
 		else
-			setNewHeaders(key, value);
+			data.setNewHeaders(key, value);
 	}
 }
 

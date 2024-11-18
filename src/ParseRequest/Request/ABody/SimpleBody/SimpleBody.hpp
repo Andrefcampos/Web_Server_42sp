@@ -1,40 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParseRequest.hpp                                   :+:      :+:    :+:   */
+/*   SimpleBody.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 13:26:25 by rbutzke          ###   ########.fr       */
+/*   Created: 2024/11/18 09:46:24 by rbutzke           #+#    #+#             */
+/*   Updated: 2024/11/18 09:49:51 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "Request.hpp"
+
+#include <string>
 #include <map>
-#define BUFFER_SIZE 4012
+#include <list>
+#include "ABody.hpp"
 
-struct ctrlFD{
-	Request		*request;
-	bool		parsedBody;
-	int			lentgh;
-	std::string	buffer;
-};
+using namespace std;
 
-class ParseRequest{
+class SimpleBody : public ABody{
 	private:
-		void	isNewSocket(int fd);
-		void	setBuffer(int fd);
-		int		setBody(int fd);
-		int		findBody(int fd);
-		int		setRequestLine(int fd);
-		int		setHeaders(int fd);
-		int		parseRequest(int fd);
-	
-	protected:
-		std::map<int, ctrlFD> _socket;
 
 	public:
-		int		setBufferSocketFd(int fd);
+		void	parseBody(string &buffer);
 };

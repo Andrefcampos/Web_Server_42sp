@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:58:09 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/17 11:34:30 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/17 19:10:07 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class ARequestLine{
 		void	setLine(string key, string value);
 	
 	protected:
-		bool				_parsedRequestLine;
+	
 		map<string, string> _requestLine;
 
 		virtual void	setRequestLine(string &buffer) = 0;

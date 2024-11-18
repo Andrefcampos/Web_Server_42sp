@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/17 12:08:18 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/18 10:39:00 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,6 @@ void putMap(T _request){
 		std::cout << it->first << " " << it->second << "\n";
 	}
 }
-
-/* template<typename StringType, typename ContainerType>
-ContainerType getLine(StringType &orin, StringType delimiter){
-    std::size_t     find;
-    ContainerType   line;
-
-    if (delimiter.empty() || orin.empty()){
-        return "";
-    }
-    find = orin.find(delimiter);
-    if (find == std::string::npos){
-        return "";
-    }
-    line = orin.substr(0, find);
-	orin.erase(0, find + delimiter.length());
-	return line;
-} */
 
 template<typename StringType, typename ContainerType>
 ContainerType getLineErase(StringType &orin, StringType delimiter, bool erase){
