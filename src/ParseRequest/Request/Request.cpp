@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:25:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 13:42:20 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 10:58:57 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ void	Request::setBody(string &buffer){
 		_parsedBody = true;
 		return ;
 	}
-	if (buffer.length())
-		throw Request::RequestException("");
-	body->parseBody(buffer);
-	_parsedBody = true;
 	return ;
 }
 
@@ -176,5 +172,10 @@ Request::Request(){
 	_isSimpleBody = false;
 	_isChunkedBody = false;
 	_haveBody = false;
+	body = NULL;
+}
 
+
+ABody	*Request::getBody(){
+	return body;
 }

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 11:46:44 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 10:35:27 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Request:public ARequestLine, public AHeaders{
 	public:
 		Request();
 		~Request();
+		ABody	*getBody();
 		void	setRequestLine(string &buffer);
 		void	setHeader(string &buffer);
 		void	setBody(std::string &buffer);

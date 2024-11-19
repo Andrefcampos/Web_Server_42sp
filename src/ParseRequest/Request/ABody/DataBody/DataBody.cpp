@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 08:24:25 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 17:43:22 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 11:26:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void	DataBody::setNewHeaders(string &key, string &value){
 }
 
 void	DataBody::setContent(string &value){
-	trim(value);
-	this->_content = value;
+	this->_content.append(value);
 }
 
 void	DataBody::setContentApend(string value, size_t length){

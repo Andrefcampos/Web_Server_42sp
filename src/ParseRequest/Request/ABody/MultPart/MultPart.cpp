@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:14:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 09:59:29 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 11:43:00 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ void	MultPart::parseBody(string &buffer){
 		else
 			parseElement(line, data);
 		getLineErase<string, string>(buffer, _boundary, true);
-	}
-	list<DataBody> temp = getDataBody();
-	list<DataBody>::iterator it = temp.begin();
-	for (; it != temp.end(); it++){
-		DataBody temp;
-		temp = *it;
-		putMapList(temp.getAllHeaders());
-		cout << temp.getContent() << "\n";
 	}
 }
 

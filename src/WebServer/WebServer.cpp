@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/16 12:29:29 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 11:51:05 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,36 @@ int	WebService::isNewClient(int index){
 	return (0);
 }
 
+#include "utils.hpp"
+#include "ABody.hpp"
+#include "DataBody.hpp"
+#include <fstream>
+
 int	WebService::responseClient(int fd){
 	Request *request = _socket[fd].request;
+
+	cout << "Host: " << request->getHost() << "\n";
+	cout << "Path: " << request->getPath() << "\n";
+	cout << "Version: " << request->getVersion() << "\n";
+	putMapList(request->getAllHeader());
+	cout << "\n";
+
+ 	ABody *ptr = request->getBody();
+	std::ofstream outfile("/home/rafael/webServ/image.png");
+	if (!outfile.is_open())
+		cout << "nao abriu\n";
+
+	if (ptr != NULL){
+		list<DataBody> body;
+	 	body = ptr->getDataBody();
+		for (list<DataBody>::iterator it = body.begin(); it != body.end(); it++){
+			putMapList(it->getAllHeaders());
+			cout << it->getContent() << "\n";
+			if(it->getContent().length() > 60)
+				outfile << it->getContent();
+		} 
+	}
+	
 	_services[request->getHost()].sendResponse(fd, request);
 	delete request;
 	_socket.erase(fd);
