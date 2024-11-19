@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:11:28 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 10:18:40 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 09:06:04 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ using namespace std;
 
 class ABody{
 	protected:
-		size_t						_lengthBody;
-		list<DataBody>				_data;
-		void	setDataBody(DataBody &data);
+		size_t			_lengthBody;
+		list<DataBody>	_data;
+		void			setDataBody(DataBody &data);
 
 	public:
 		list<DataBody>	getDataBody();

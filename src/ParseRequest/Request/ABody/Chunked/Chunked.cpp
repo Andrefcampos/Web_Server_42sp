@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 10:36:12 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 19:07:21 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/11/19 09:06:18 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,52 +15,40 @@
 #include <cstdlib>
 
 void	Chunked::parseBody(string &buffer){
-
-	string		sizeHexDecimal, value;
+	size_t		bytes;
 	DataBody	data;
-
 	
- 	sizeHexDecimal = getLineErase<string, string>(buffer, "\r\n", true);
-	trim(sizeHexDecimal);
-	_bytes = std::strtol(sizeHexDecimal.c_str(), 0, 16);
-
-	while(_bytes > 0){
-		value = getLineErase<string, string>(buffer, "\r\n", true);
-		trim(value);
-		data.setContentApend(value, _bytes);
-	
-	 	sizeHexDecimal = getLineErase<string, string>(buffer, "\r\n", true);
-		trim(sizeHexDecimal);
-		_bytes = std::strtol(sizeHexDecimal.c_str(), 0, 16);
+	bytes = popNbrBytes(buffer);
+	while(bytes > 0){
+		data.setContentApend(popChunke(buffer, bytes), bytes);
+		removeDelimiter(buffer);;
+		bytes = popNbrBytes(buffer);
 	}
-
+	setDataBody(data);
 	cout << data.getContent() << '\n';
 }
 
-void	Chunked::getLineAndRemove(string &buffer, size_t length, DataBody &data){
-	if (buffer.empty())
-		return ;
-	string value = buffer.substr(0, length);
+void	Chunked::removeDelimiter(string &buffer){
+	while (buffer[0] == '\n' || buffer[0] == '\r')
+		buffer.erase(0, 1);
+}
+
+string	Chunked::popChunke(string &buffer, size_t length){
+	string	value = buffer.substr(0, length);
 	buffer.erase(0, length);
-	data.setContentApend(value, length);
+	return value;	
 }
 
-Chunked::Chunked(){
-	_bytes = 0;
+size_t	Chunked::popNbrBytes(string &buffer){
+	string	nbrBytesInHex;
+	size_t	nbrBytesInBuffer;
+
+	if (buffer.empty())
+		return 0;	
+ 	nbrBytesInHex = getLineErase<string, string>(buffer, "\r\n", true);
+	trim(nbrBytesInHex);
+	nbrBytesInBuffer = std::strtol(nbrBytesInHex.c_str(), 0, 16);
+	return nbrBytesInBuffer;
 }
 
-void	debug(string buffer){
-
-	for(size_t i = 0; i < buffer.size(); i++){
-		if (buffer[i] == '\r'){
-			cout << "\\r" << flush; 
-			i++;
-		}
-		if (buffer[i] == '\n'){
-			cout << "\\n" << flush;
-			i++;
-		}
-		if (buffer[i] != '\n' || buffer[i] != '\r')
-			cout << buffer[i] << flush;
-	}
-}
+Chunked::Chunked(){}
