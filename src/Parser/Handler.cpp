@@ -73,7 +73,7 @@ void	ListenHandler::process(Conf &cf) {
 }
 
 void	ServerNameHandler::process(Conf &cf) {
-	
+	cf.current_server->setDirective(*cf.args.begin(), cf.args.end()->substr(0, cf->args.end()->length() - 1));
 	cf.args.clear();
 }
 

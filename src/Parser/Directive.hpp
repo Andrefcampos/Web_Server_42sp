@@ -12,7 +12,9 @@
 
 #pragma once
 
+# include <map>
 # include <vector>
+class Server;
 
 class Directive {
 	public:
@@ -35,62 +37,96 @@ class ListenDirective : public Directive {
 		const std::string _value;
 	public:
 		ListenDirective(const std::string &value);
-		~ListenDirective() {};
+		~ListenDirective();
 };
 
 class ServerNameDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~ServerNameDirective() {};
+		ServerNameDirective(const std::string &value);
+		~ServerNameDirective();
 };
 
 class ClientMaxBodySizeDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~ClientMaxBodySizeDirective() {};
+		ClientMaxBodySizeDirective(const std::string &value);
+		~ClientMaxBodySizeDirective();
 };
 
 class LocationDirective : public Directive {
+	private:
+		std::map<std::string, Directive *> _directives;
 	public:
-		~LocationDirective() {};
+		void	setDirective(const std::string &directive, const std::string &value);
+		LocationDirective();
+		~LocationDirective();
 };
 
 class AllowMethodsDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~AllowMethodsDirective() {};
+		AllowMethodsDirective(const std::string &value);
+		~AllowMethodsDirective();
 };
 
 class RedirectDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~RedirectDirective() {};
+		RedirectDirective(const std::string &value);
+		~RedirectDirective();
 };
 
 class RootDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~RootDirective() {};
+		RootDirective(const std::string &value);
+		~RootDirective();
 };
 
 class AutoIndexDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~AutoIndexDirective() {};
+		AutoIndexDirective(const std::string &value);
+		~AutoIndexDirective();
 };
 
 class IndexDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~IndexDirective() {};
+		IndexDirective(const std::string &value);
+		~IndexDirective();
 };
 
 class CgiDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~CgiDirective() {};
+		CgiDirective(const std::string &value);
+		~CgiDirective();
 };
 
 class UploadDirDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~UploadDirDirective() {};
+		UploadDirDirective(const std::string &value);
+		~UploadDirDirective();
 };
 
 class ErrorPageDirective : public Directive {
+	private:
+		const std::string _value;
 	public:
-		~ErrorPageDirective() {};
+		ErrorPageDirective(const std::string &value);
+		~ErrorPageDirective();
 };
 
 void	initConf(void);

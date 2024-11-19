@@ -14,6 +14,7 @@
 
 # include "Socket.hpp"
 # include "Response.hpp"
+# include "Directive.hpp"
 # include <string>
 # include <map>
 

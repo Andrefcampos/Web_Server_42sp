@@ -19,6 +19,6 @@ class Location {
     public:
         Location();
         ~Location();
-    protected:
-        std::map<std::string, std::string> _directives;
+    private:
+        std::map<std::string, Directive *> _directives;
 };

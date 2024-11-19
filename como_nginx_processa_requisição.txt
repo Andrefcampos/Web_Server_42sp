@@ -1,0 +1,29 @@
+Como o nginx identifica qual servidor do arquivo de configuração deve ser usado para responder a requisição.
+
+Exemplo:
+
+server {
+    listen      80;
+    server_name example.org www.example.org;
+    ...
+}
+
+server {
+    listen      80;
+    server_name example.net www.example.net;
+    ...
+}
+
+server {
+    listen      80;
+    server_name example.com www.example.com;
+    ...
+}
+
+Caso o nginx não encontre o servidor com o HOST correspondente ele usará o servidor default para a 
+porta específicada, sendo o default o primeiro servidor configurado para a porta em específico ou explicitamente
+nomeado como default (listen      80 default_server;).
+
+Pontos a fazer.
+
+Guardar as informações da configuração dos servidores. E usar para um depara com o conteúdo da requisição!.

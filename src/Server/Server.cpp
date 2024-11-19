@@ -35,23 +35,34 @@
 // 	return _maxEvents;
 // }
 
-Server::Server() : _directives() {
-	// _directives["listen"] = new ListenDirective();
-	// _directives["server_name"] = new ServerNameDirective();
-	// _directives["client_max_body_size"] = new ClientMaxBodySizeDirective();
-    // _directives["location"] = new LocationDirective();
-	// _directives["allow_methods"] = new AllowMethodsDirective();
-    // _directives["redirect"] = new RedirectDirective();
-	// _directives["root"] = new RootDirective();
-    // _directives["autoindex"] = new AutoIndexDirective();
-	// _directives["index"] = new IndexDirective();
-    // _directives["cgi"] = new CgiDirective();
-	// _directives["upload_dir"] = new UploadDirDirective();
-    // _directives["error_page"] = new ListenDirective();
-};
+Server::Server() : _directives() {};
 
 Server::~Server() {};
 
 void    Server::setDirective(const std::string &directive, const std::string &value) {
-    _directives[directive] = DirectiveLocation;
+    Directive *directive_obj = _directives[directive];
+	if (not directive_obj) {
+		if (directive.compare("listen") != 0) {
+			_directives[directive] = new ListenDirective(value);
+			return ;
+		}
+		else if (directive.compare("server_name") != 0) {
+			_directives[directive] = new ServerNameDirective(value);
+			return ;
+		}
+		else if (directive.compare("client_max_body_size") != 0) {
+			_directives[directive] = new ClientMaxBodySizeDirective(value);
+			return ;
+		}
+		else if (directive.compare("error_page") != 0) {
+			_directives = new ErrorPageDirective(value);
+			return ;
+		}
+		else if (directive.compare("location") != 0)
+			_directives[directive] = new LocationDirective();
+	}
+	if (directive.compare("listen") != 0 || directive.compare("server_name") != 0
+	|| directive.compare("client_max_body_size") != 0 || directive.compare("error_page") != 0)
+		throw (std::runtime_error(Logger::log_error("duplicated directive %s not allowed", directive.c_str())));
+	directive_obj->setDirective(directive, value);
 }

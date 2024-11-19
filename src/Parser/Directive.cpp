@@ -31,8 +31,51 @@ Server  *ServerDirective::back(void) {
     return(_servers.back());
 }
 
-ListenDirective::ListenDirective(const std::string &value) {
-    _value = value;
-}
+ListenDirective::ListenDirective(const std::string &value) : _value(value) {}
 
 ListenDirective::~ListenDirective() {}
+
+ServerNameDirective::ServerNameDirective(const std::string &value) : _value(value) {}
+
+ServerNameDirective::~ServerNameDirective() {}
+
+ClientMaxBodySizeDirective::ClientMaxBodySizeDirective(const std::string &value) : _value(value) {}
+
+
+ClientMaxBodySizeDirective::~ClientMaxBodySizeDirective() {}
+
+LocationDirective::LocationDirective() {}
+
+LocationDirective::~LocationDirective() {}
+
+AllowMethodsDirective::AllowMethodsDirective(const std::string &value) : _value(value) {}
+
+AllowMethodsDirective::~AllowMethodsDirective() {}
+
+RedirectDirective::RedirectDirective(const std::string &value) : _value(value) {}
+
+RedirectDirective::~RedirectDirective() {}
+
+RootDirective::RootDirective(const std::string &value) : _value(value) {}
+
+RootDirective::~RootDirective() {}
+
+AutoIndexDirective::AutoIndexDirective(const std::string &value) : _value(value) {}
+
+AutoIndexDirective::~AutoIndexDirective() {}
+
+IndexDirective::IndexDirective(const std::string &value) : _value(value) {}
+
+IndexDirective::~IndexDirective() {}
+
+CgiDirective::CgiDirective(const std::string &value) : _value(value) {}
+
+CgiDirective::~CgiDirective() {}
+
+UploadDirDirective::UploadDirDirective(const std::string &value) : _value(value) {}
+
+UploadDirDirective::~UploadDirDirective() {}
+
+ErrorPageDirective::ErrorPageDirective(const std::string &value) : _value(value) {}
+
+ErrorPageDirective::~ErrorPageDirective() {}
