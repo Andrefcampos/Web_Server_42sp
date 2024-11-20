@@ -53,7 +53,7 @@ void	ServerHandler::process(Conf &cf) {
 }
 
 void	ListenHandler::process(Conf &cf) {
-	size_t found = cf.args.end->find_first_not_of("123456789.:");
+	size_t found = cf.args.end()->find_first_not_of("123456789.:");
 	if (found != std::string::npos)
 		std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.end()->c_str()));
 	found = cf.args.end()->find(':');
@@ -64,16 +64,16 @@ void	ListenHandler::process(Conf &cf) {
 			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
 		else if (port.size() == 0)
 			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
-		cf.current_server->setDirective(*cf.args.begin(), (host + " " + port));
+		cf.current_server->setDirective(cf);
 		cf.args.clear();
 		return ;
 	}
-	cf.current_server->setDirective(*cf.args.begin(), cf.args.end()->substr(0, cf.args.end()->length() - 1));
+	cf.current_server->setDirective(cf);
 	cf.args.clear();
 }
 
 void	ServerNameHandler::process(Conf &cf) {
-	cf.current_server->setDirective(*cf.args.begin(), cf.args.end()->substr(0, cf->args.end()->length() - 1));
+	cf.current_server->setDirective(cf);
 	cf.args.clear();
 }
 

@@ -31,9 +31,9 @@ class Server : public Socket, public Response {
 
 	public:
 		Server();
-		~Server();
+		virtual ~Server();
 
-		void	setDirective(const std::string &directive, const std::string &value);
+		void	setDirective(Conf &cf);
 		// Server():_hostName(""){};
 		// Server(int port, int events, std::string hostName, std::string ip);
 		// int			getSocketFd() const;

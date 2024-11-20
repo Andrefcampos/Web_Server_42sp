@@ -12,13 +12,16 @@
 
 #pragma once
 
+# include <string>
 # include <map>
 # include <vector>
+# include "Conf.hpp"
+
 class Server;
 
 class Directive {
 	public:
-		virtual ~Directive() {};
+		virtual ~Directive() = 0;
 };
 
 class ServerDirective : public Directive {
@@ -26,8 +29,8 @@ class ServerDirective : public Directive {
 		std::vector<Server *> _servers;
 	public:
 		ServerDirective();
-		~ServerDirective();
-		void			appendServer(const Server &server);
+		virtual ~ServerDirective();
+		void			appendServer(Server *server);
 		Server			*back(void);
 		const Server	&getServer(const std::string &host);
 };
@@ -60,7 +63,7 @@ class LocationDirective : public Directive {
 	private:
 		std::map<std::string, Directive *> _directives;
 	public:
-		void	setDirective(const std::string &directive, const std::string &value);
+		void	setDirective(Conf &cf);
 		LocationDirective();
 		~LocationDirective();
 };

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Conf.hpp"
+#include "Logger.hpp"
 #include "Server.hpp"
 
 // Server::~Server(){};
@@ -35,27 +37,28 @@
 // 	return _maxEvents;
 // }
 
-Server::Server() : _directives() {};
+Server::Server() : _directives() {}
 
-Server::~Server() {};
+Server::~Server() {}
 
-void    Server::setDirective(const std::string &directive, const std::string &value) {
+void    Server::setDirective(Conf &cf) {
+	const std::string	directive = *cf.args.begin();
     Directive *directive_obj = _directives[directive];
 	if (not directive_obj) {
 		if (directive.compare("listen") != 0) {
-			_directives[directive] = new ListenDirective(value);
+			_directives[directive] = new ListenDirective(cf.args.back());
 			return ;
 		}
 		else if (directive.compare("server_name") != 0) {
-			_directives[directive] = new ServerNameDirective(value);
+			_directives[directive] = new ServerNameDirective(cf.args.back());
 			return ;
 		}
 		else if (directive.compare("client_max_body_size") != 0) {
-			_directives[directive] = new ClientMaxBodySizeDirective(value);
+			_directives[directive] = new ClientMaxBodySizeDirective(cf.args.back());
 			return ;
 		}
 		else if (directive.compare("error_page") != 0) {
-			_directives = new ErrorPageDirective(value);
+			_directives[directive] = new ErrorPageDirective(cf.args.back());
 			return ;
 		}
 		else if (directive.compare("location") != 0)
@@ -63,6 +66,6 @@ void    Server::setDirective(const std::string &directive, const std::string &va
 	}
 	if (directive.compare("listen") != 0 || directive.compare("server_name") != 0
 	|| directive.compare("client_max_body_size") != 0 || directive.compare("error_page") != 0)
-		throw (std::runtime_error(Logger::log_error("duplicated directive %s not allowed", directive.c_str())));
-	directive_obj->setDirective(directive, value);
+		throw (std::runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+	(static_cast<LocationDirective *>(directive_obj))->setDirective(cf);
 }

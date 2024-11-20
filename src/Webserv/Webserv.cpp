@@ -18,8 +18,6 @@
 #include "Webserv.hpp"
 #include "Directive.hpp"
 
-Webserv manager();
-
 Webserv::Webserv() {		
 	_conf["server"] = new ServerDirective();
 };
