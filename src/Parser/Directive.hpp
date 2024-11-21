@@ -21,7 +21,8 @@ class Server;
 
 class Directive {
 	public:
-		virtual ~Directive() = 0;
+		Directive() {};
+		virtual ~Directive() {};
 };
 
 class ServerDirective : public Directive {

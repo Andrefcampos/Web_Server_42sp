@@ -23,6 +23,8 @@ class Handler {
 		unsigned int getType(void);
 		const std::string &getName(void);
 		virtual void	process(Conf &cf) = 0;
+
+		friend class Webserv;
 	private:
 		const std::string     _name;
 		const unsigned int    _type;

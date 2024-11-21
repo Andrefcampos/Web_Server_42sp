@@ -14,11 +14,12 @@
 
 # include <map>
 # include <string>
+class	Directive;
 
 class Location {
-    public:
-        Location();
-        ~Location();
-    private:
-        std::map<std::string, Directive *> _directives;
+	public:
+		Location();
+		~Location();
+	private:
+		std::map<std::string, Directive *> _directives;
 };

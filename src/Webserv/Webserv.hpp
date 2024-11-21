@@ -48,8 +48,19 @@ class Webserv {
 		~Webserv();
 		Webserv();
 
-		friend class Handler;
+		friend class ServerHandler;
+		friend class ListenHandler;
+		friend class ServerNameHandler;
+		friend class ClientMaxBodySizeHandler;
+		friend class LocationHandler;
+		friend class AllowMethodsHandler;
+		friend class RedirectHandler;
+		friend class RootHandler;
+		friend class AutoIndexHandler;
+		friend class IndexHandler;
+		friend class CgiHandler;
+		friend class UploadDirHandler;
+		friend class ErrorPageHandler;
 };
-
 
 extern Webserv manager;

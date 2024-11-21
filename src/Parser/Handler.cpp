@@ -43,8 +43,8 @@ unsigned int Handler::getType(void) {
 }
 
 void	ServerHandler::process(Conf &cf) {
-	manager._conf["server"]->append_server(new Server());
-	cf.current_server = manager._conf["server"]->back();
+	static_cast<ServerDirective *>(manager._conf["server"])->appendServer(new Server());
+	cf.current_server = static_cast<ServerDirective *>(manager._conf["server"])->back();
 	cf.ctx = SRV_CONF;
 	cf.args.clear();
 	Parser::parser(cf, NULL);
