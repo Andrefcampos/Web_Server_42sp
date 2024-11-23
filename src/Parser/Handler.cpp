@@ -53,17 +53,17 @@ void	ServerHandler::process(Conf &cf) {
 }
 
 void	ListenHandler::process(Conf &cf) {
-	size_t found = cf.args.end()->find_first_not_of("123456789.:");
+	size_t found = cf.args.back().find_first_not_of("123456789.:");
 	if (found != std::string::npos)
-		std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.end()->c_str()));
-	found = cf.args.end()->find(':');
+		std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
+	found = cf.args.back().find(':');
 	if (found) {
-		std::string host = cf.args.end()->substr(0, found);
-		std::string port = cf.args.end()->substr(found, cf.args.end()->length() - 1);
+		std::string host = cf.args.back().substr(0, found);
+		std::string port = cf.args.back().substr(found, cf.args.back().length() - 1);
 		if (host.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
+			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
 		else if (port.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.end()->c_str(), cf.args.begin()->c_str())));
+			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
 		cf.current_server->setDirective(cf);
 		cf.args.clear();
 		return ;
@@ -82,8 +82,10 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 }
 
 void	LocationHandler::process(Conf &cf) {
-	cf.ctx = LOC_CONF;
+	cf.ctx = LOC_CONF;	
 	cf.args.clear();
+	Parser::parser(cf, NULL);
+	cf.ctx = SRV_CONF;
 }
 
 void	AllowMethodsHandler::process(Conf &cf) {

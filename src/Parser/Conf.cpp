@@ -16,7 +16,11 @@
 #include "defines.hpp"
 #include "Handler.hpp"
 
-Conf::Conf(void) {
+ConfFile::ConfFile() {
+	this->file_size = 0;
+}
+
+Conf::Conf(void) : args(), content() {
 	static ConfFile conf_file;
 	this->init = 0;
 	this->curr = 0;

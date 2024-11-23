@@ -14,9 +14,11 @@
 #include "Logger.hpp"
 #include "Server.hpp"
 
+using namespace std;
+
 // Server::~Server(){};
 
-// Server::Server(int port, int events, std::string hostName, std::string ip)
+// Server::Server(int port, int events, string hostName, string ip)
 // :Socket(), _port(port), _maxEvents(events), _ip(ip){
 // 	if (hostName.empty())
 // 		_hostName = "";
@@ -29,7 +31,7 @@
 // 	return _socketFd;
 // }
 
-// std::string Server::getHostName() const{
+// string Server::getHostName() const{
 // 	return _hostName;
 // }
 
@@ -39,10 +41,14 @@
 
 Server::Server() : _directives() {}
 
-Server::~Server() {}
+Server::~Server() {
+	for (map<string, Directive *>::iterator it = _directives.begin(); it != _directives.end(); ++it)
+		delete it->second;
+	_directives.clear();
+}
 
 void    Server::setDirective(Conf &cf) {
-	const std::string	directive = *cf.args.begin();
+	const string	directive = *cf.args.begin();
     Directive *directive_obj = _directives[directive];
 	if (not directive_obj) {
 		if (directive.compare("listen") != 0) {
@@ -66,6 +72,6 @@ void    Server::setDirective(Conf &cf) {
 	}
 	if (directive.compare("listen") != 0 || directive.compare("server_name") != 0
 	|| directive.compare("client_max_body_size") != 0 || directive.compare("error_page") != 0)
-		throw (std::runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+		throw (runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
 	(static_cast<LocationDirective *>(directive_obj))->setDirective(cf);
 }

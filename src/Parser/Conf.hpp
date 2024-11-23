@@ -25,6 +25,7 @@ struct ConfFile {
 	const char		*pathname;
 	std::streampos	file_size;
 	std::ifstream	file;
+	ConfFile();
 };
 
 struct Conf {

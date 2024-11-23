@@ -7,7 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:23 by myokogaw          #+#    #+#             */
 /*   Updated: 2024/11/12 19:49:00 by myokogaw         ###   ########.fr       */
-/*                                                                            */
+/*                                                                             */
 /* ************************************************************************** */
 
 #include <iostream>
@@ -36,7 +36,7 @@ void	Parser::open_file(Conf &cf) {
 }
 
 int		Parser::read_conf_token(Conf &cf) {
-	char	ch;
+	char	ch = 0;
 	int		len = 0;
 	bool	sharp_comment = false, last_space = false, found = false;
 
@@ -48,6 +48,7 @@ int		Parser::read_conf_token(Conf &cf) {
 			if (size > BUFFER_SIZE)
 				size = BUFFER_SIZE;
 			char buf[size];
+			std::memset(buf, 0, size);
 			cf.conf_file->file.read(buf, size);
 			if (cf.conf_file->file.tellg() == cf.conf_file->file_size)
 				cf.conf_file->file.close();
@@ -89,7 +90,7 @@ int		Parser::read_conf_token(Conf &cf) {
 				last_space = true;
 				found = true;
 		}
-		if (found) {
+		if (found && len != 0) {
 			stringstream ss(cf.content.substr(cf.curr - len, len));
 			string token;
 			ss >> token;
@@ -97,8 +98,9 @@ int		Parser::read_conf_token(Conf &cf) {
 				cf.args.push_back(token);
 			len = 0;
 		}
-		if (ch == ';')
+		if (ch == ';') {
 			return (CONF_OK);
+		}
 		if (ch == '{') {
 			if (cf.args.size() == 0)
 				throw (runtime_error(Logger::cf_syntax_err(cf, "{", "unexpected", cf.line)));
@@ -138,7 +140,7 @@ void	Parser::conf_handler(Conf &cf, unsigned int last) {
 }
 
 void	Parser::parser(Conf &cf, const char *pathname) {
-	int rc;
+	int rc = 0;
 
 	if (pathname) {
 		cf.conf_file->pathname = pathname;
