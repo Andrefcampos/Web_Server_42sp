@@ -47,8 +47,8 @@ int		Parser::read_conf_token(Conf &cf) {
 			size_t size = cf.conf_file->file_size - cf.conf_file->file.tellg();
 			if (size > BUFFER_SIZE)
 				size = BUFFER_SIZE;
-			char buf[size];
-			std::memset(buf, 0, size);
+			char buf[size + 1];
+			std::memset(buf, 0, size + 1);
 			cf.conf_file->file.read(buf, size);
 			if (cf.conf_file->file.tellg() == cf.conf_file->file_size)
 				cf.conf_file->file.close();
