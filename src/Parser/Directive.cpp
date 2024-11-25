@@ -27,7 +27,7 @@ void    ServerDirective::appendServer(Server *server) {
 	_servers.push_back(server);
 }
 
-Server  *ServerDirective::back(void) {
+Server  *ServerDirective::back(void) const {
 	return(_servers.back());
 }
 

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// A classe Directive comtempla os métodos para processar a requisição
+
 #pragma once
 
 # include <string>
@@ -23,6 +25,8 @@ class Directive {
 	public:
 		Directive() {};
 		virtual ~Directive() {};
+
+		friend class Handler;
 };
 
 class ServerDirective : public Directive {
@@ -32,8 +36,10 @@ class ServerDirective : public Directive {
 		ServerDirective();
 		virtual ~ServerDirective();
 		void			appendServer(Server *server);
-		Server			*back(void);
+		Server			*back(void) const;
 		const Server	&getServer(const std::string &host);
+
+		friend class ServerHandler;
 };
 
 class ListenDirective : public Directive {
@@ -42,6 +48,8 @@ class ListenDirective : public Directive {
 	public:
 		ListenDirective(const std::string &value);
 		~ListenDirective();
+
+		friend class ListenHandler;
 };
 
 class ServerNameDirective : public Directive {
@@ -50,6 +58,8 @@ class ServerNameDirective : public Directive {
 	public:
 		ServerNameDirective(const std::string &value);
 		~ServerNameDirective();
+
+		friend class ServerNameHandler;
 };
 
 class ClientMaxBodySizeDirective : public Directive {
@@ -58,6 +68,8 @@ class ClientMaxBodySizeDirective : public Directive {
 	public:
 		ClientMaxBodySizeDirective(const std::string &value);
 		~ClientMaxBodySizeDirective();
+
+		friend class ServerHandler;
 };
 
 class LocationDirective : public Directive {
@@ -67,6 +79,8 @@ class LocationDirective : public Directive {
 		void	setDirective(Conf &cf);
 		LocationDirective();
 		~LocationDirective();
+
+		friend class LocationHandler;
 };
 
 class AllowMethodsDirective : public Directive {
@@ -75,6 +89,8 @@ class AllowMethodsDirective : public Directive {
 	public:
 		AllowMethodsDirective(const std::string &value);
 		~AllowMethodsDirective();
+
+		friend class AllowMethodsHandler;
 };
 
 class RedirectDirective : public Directive {
@@ -83,6 +99,8 @@ class RedirectDirective : public Directive {
 	public:
 		RedirectDirective(const std::string &value);
 		~RedirectDirective();
+
+		friend class RedirectHandler;
 };
 
 class RootDirective : public Directive {
@@ -91,6 +109,8 @@ class RootDirective : public Directive {
 	public:
 		RootDirective(const std::string &value);
 		~RootDirective();
+
+		friend class RootHandler;
 };
 
 class AutoIndexDirective : public Directive {
@@ -99,6 +119,8 @@ class AutoIndexDirective : public Directive {
 	public:
 		AutoIndexDirective(const std::string &value);
 		~AutoIndexDirective();
+
+		friend class AutoIndexHandler;
 };
 
 class IndexDirective : public Directive {
@@ -107,6 +129,8 @@ class IndexDirective : public Directive {
 	public:
 		IndexDirective(const std::string &value);
 		~IndexDirective();
+
+		friend class IndexHandler;
 };
 
 class CgiDirective : public Directive {
@@ -115,6 +139,8 @@ class CgiDirective : public Directive {
 	public:
 		CgiDirective(const std::string &value);
 		~CgiDirective();
+
+		friend class CgiHandler;
 };
 
 class UploadDirDirective : public Directive {
@@ -123,6 +149,8 @@ class UploadDirDirective : public Directive {
 	public:
 		UploadDirDirective(const std::string &value);
 		~UploadDirDirective();
+
+		friend class UploadDirHandler;
 };
 
 class ErrorPageDirective : public Directive {
@@ -131,6 +159,8 @@ class ErrorPageDirective : public Directive {
 	public:
 		ErrorPageDirective(const std::string &value);
 		~ErrorPageDirective();
+
+		friend class ErrorPageHandler;
 };
 
 void	initConf(void);

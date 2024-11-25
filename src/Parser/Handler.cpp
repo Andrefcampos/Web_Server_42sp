@@ -26,7 +26,7 @@ void	initHandlerModules(Conf &cf) {
 	cf.handlers["location"] = new LocationHandler("location", SRV_CONF|CONF_BLOCK|CONF_TAKE1);
 	cf.handlers["allow_methods"] = new AllowMethodsHandler("allow_methods", LOC_CONF|CONF_1MORE);
 	cf.handlers["redirect"] = new RedirectHandler("redirect", LOC_CONF|CONF_TAKE1);
-	cf.handlers["root"] = new RootHandler("root", LOC_CONF|CONF_TAKE1);
+		cf.handlers["root"] = new RootHandler("root", LOC_CONF|CONF_TAKE1);
 	cf.handlers["autoindex"] = new AutoIndexHandler("autoindex", LOC_CONF|CONF_TAKE1);
 	cf.handlers["index"] = new IndexHandler("index", LOC_CONF|CONF_TAKE1);
 	cf.handlers["cgi"] = new CgiHandler("cgi", LOC_CONF|CONF_1MORE);

@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// A classe Handler comtempla os métodos para preencher as estruturas de dados
+// baseado no arquivo de configuração.
+
 #pragma once
 
 # include <string>
@@ -50,7 +53,6 @@ class ServerNameHandler : public Handler {
 		~ServerNameHandler() {};
 		void	process(Conf &cf);
 };
-
 
 class ClientMaxBodySizeHandler : public Handler {
 	public:
@@ -123,4 +125,3 @@ class ErrorPageHandler : public Handler {
 };
 
 void	initHandlerModules(Conf &cf);
- 
