@@ -33,6 +33,7 @@ class Server : public Socket, public Response {
 		Server();
 		virtual ~Server();
 
+		Directive *getDirective(const std::string &directive);
 		void	setDirective(Conf &cf);
 		// Server():_hostName(""){};
 		// Server(int port, int events, std::string hostName, std::string ip);

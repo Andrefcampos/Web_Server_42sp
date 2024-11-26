@@ -47,12 +47,16 @@ Server::~Server() {
 	_directives.clear();
 }
 
+Directive	*Server::getDirective(const std::string &directive) {
+	return (_directives[directive]);
+}
+
 void    Server::setDirective(Conf &cf) {
 	const string	directive = *cf.args.begin();
     Directive *directive_obj = _directives[directive];
 	if (not directive_obj) {
 		if (directive.compare("listen") != 0) {
-			_directives[directive] = new ListenDirective(cf.args.back());
+			_directives[directive] = new ListenDirective();
 			return ;
 		}
 		else if (directive.compare("server_name") != 0) {

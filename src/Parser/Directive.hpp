@@ -14,6 +14,7 @@
 
 #pragma once
 
+# include <inttypes.h>
 # include <string>
 # include <map>
 # include <vector>
@@ -44,11 +45,20 @@ class ServerDirective : public Directive {
 
 class ListenDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string _host;
+		std::string _port;
+		in_addr_t _ip;
+		in_port_t _port_value;
 	public:
-		ListenDirective(const std::string &value);
+		ListenDirective();
 		~ListenDirective();
 
+		void	setHost(const std::string &host);
+		void	setPort(const std::string &port);
+		void	setIP(unsigned int &ip);
+		const std::string &getHost(void) const;
+		const std::string &getPort(void) const;
+		const unsigned int &getIP(void) const;
 		friend class ListenHandler;
 };
 

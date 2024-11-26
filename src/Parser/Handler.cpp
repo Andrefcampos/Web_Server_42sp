@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cerrno>
+#include <cstdlib>
 #include "Webserv.hpp"
 #include "Handler.hpp"
 #include "Logger.hpp"
@@ -53,22 +55,31 @@ void	ServerHandler::process(Conf &cf) {
 }
 
 void	ListenHandler::process(Conf &cf) {
-	size_t found = cf.args.back().find_first_not_of("123456789.:");
-	if (found != std::string::npos)
-		std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
+	// std::string host("0.0.0.0");
+	// std::string port("8080");
+	// unsigned int ip;
+	// int	port = 8080;
+	std::string::size_type found = cf.args.back().find_first_not_of("0123456789.:;");
+	// Directive *listen_obj = new ListenDirective();
+	if (found != cf.args.back().npos)
+		throw std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
 	found = cf.args.back().find(':');
 	if (found) {
 		std::string host = cf.args.back().substr(0, found);
-		std::string port = cf.args.back().substr(found, cf.args.back().length() - 1);
+		std::string port = cf.args.back().substr(found + 1, cf.args.back().length());
+		std::cout << port << std::endl;
 		if (host.size() == 0)
 			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
 		else if (port.size() == 0)
 			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
-		cf.current_server->setDirective(cf);
+		int n = std::strtol(port.c_str(), NULL, 10);
+		if (n < 1 || n > 65535)
+			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
 		cf.args.clear();
 		return ;
 	}
-	cf.current_server->setDirective(cf);
+
+	// cf.current_server->setDirective(listen_obj);
 	cf.args.clear();
 }
 

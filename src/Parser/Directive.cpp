@@ -31,7 +31,7 @@ Server  *ServerDirective::back(void) const {
 	return(_servers.back());
 }
 
-ListenDirective::ListenDirective(const std::string &value) : _value(value) {}
+ListenDirective::ListenDirective() : _host("0.0.0.0"), _port("8080"), _ip(0), _port_value(8080) {}
 
 ListenDirective::~ListenDirective() {}
 
