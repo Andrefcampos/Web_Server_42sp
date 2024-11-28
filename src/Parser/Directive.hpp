@@ -56,10 +56,12 @@ class ListenDirective : public Directive {
 
 		void	setHost(const std::string &host);
 		void	setPort(const std::string &port);
-		void	setIP(unsigned int &ip);
+		void	setIP(in_addr_t &ip);
+		void	setPortValue(in_port_t &port);
 		const std::string &getHost(void) const;
 		const std::string &getPort(void) const;
-		const unsigned int &getIP(void) const;
+		const in_addr_t &getIP(void) const;
+		const in_port_t &getPortValue(void) const;
 		friend class ListenHandler;
 };
 
@@ -91,30 +93,36 @@ class ClientMaxBodySizeDirective : public Directive {
 
 class LocationDirective : public Directive {
 	private:
+		std::string _route;
 		std::map<std::string, Directive *> _directives;
 	public:
-		void	setDirective(Conf &cf);
 		LocationDirective();
 		~LocationDirective();
 
-		friend class LocationHandler;
+		void	setRoute(const std::string &route);
+		// void	setDirective(Conf &cf);
+
+		friend class AllowMethodsHandler;
 };
 
 class AllowMethodsDirective : public Directive {
 	private:
-		const std::string _value;
+		bool _GET;
+		bool _POST;
+		bool _DELETE;
 	public:
-		AllowMethodsDirective(const std::string &value);
+		AllowMethodsDirective();
 		~AllowMethodsDirective();
 
+		bool	isAllowed(const std::string &method) const;
 		friend class AllowMethodsHandler;
 };
 
 class RedirectDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string redirect_route;
 	public:
-		RedirectDirective(const std::string &value);
+		RedirectDirective();
 		~RedirectDirective();
 
 		friend class RedirectHandler;
@@ -122,9 +130,9 @@ class RedirectDirective : public Directive {
 
 class RootDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string root;
 	public:
-		RootDirective(const std::string &value);
+		RootDirective();
 		~RootDirective();
 
 		friend class RootHandler;
@@ -132,9 +140,9 @@ class RootDirective : public Directive {
 
 class AutoIndexDirective : public Directive {
 	private:
-		const std::string _value;
+		bool _autoindex;
 	public:
-		AutoIndexDirective(const std::string &value);
+		AutoIndexDirective();
 		~AutoIndexDirective();
 
 		friend class AutoIndexHandler;
@@ -142,9 +150,9 @@ class AutoIndexDirective : public Directive {
 
 class IndexDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string _index;
 	public:
-		IndexDirective(const std::string &value);
+		IndexDirective();
 		~IndexDirective();
 
 		friend class IndexHandler;
@@ -152,9 +160,9 @@ class IndexDirective : public Directive {
 
 class CgiDirective : public Directive {
 	private:
-		const std::string _value;
+		std::vector<std::string> _exts;
 	public:
-		CgiDirective(const std::string &value);
+		CgiDirective();
 		~CgiDirective();
 
 		friend class CgiHandler;
@@ -162,9 +170,9 @@ class CgiDirective : public Directive {
 
 class UploadDirDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string _upload_dir;
 	public:
-		UploadDirDirective(const std::string &value);
+		UploadDirDirective();
 		~UploadDirDirective();
 
 		friend class UploadDirHandler;
@@ -172,9 +180,10 @@ class UploadDirDirective : public Directive {
 
 class ErrorPageDirective : public Directive {
 	private:
-		const std::string _value;
+		std::vector<std::string> _codes;
+		std::string	_files;
 	public:
-		ErrorPageDirective(const std::string &value);
+		ErrorPageDirective();
 		~ErrorPageDirective();
 
 		friend class ErrorPageHandler;

@@ -55,31 +55,40 @@ void	ServerHandler::process(Conf &cf) {
 }
 
 void	ListenHandler::process(Conf &cf) {
-	// std::string host("0.0.0.0");
-	// std::string port("8080");
-	// unsigned int ip;
-	// int	port = 8080;
-	// Directive *listen_obj = new ListenDirective();
-	// std::string::size_type found = cf.args.back().find_first_not_of("0123456789.:;");
-	// if (found != cf.args.back().npos)
-	// 	throw std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
-	std::string::size_type found = cf.args.back().find(':');
+	std::string value;
+	std::string host;
+	std::string port;
+	std::string::size_type found;
+	struct sockaddr hints;
+	ListenDirective *listen_obj = cf.current_server->_directives["location"];
+	if (listen_obj)
+		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	std::memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	value = cf.args.back();
+	found = value.find(':');
 	if (found) {
-		std::string host = cf.args.back().substr(0, found);
-		std::cout << host << std::endl;
-		std::string port = cf.args.back().substr(found + 1, cf.args.back().length());
-		std::cout << port << std::endl;
+		host = value.substr(0, found);
+		port = value.substr(found + 1, value.length());
 		if (host.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
+			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
 		else if (port.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
+			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
 		int n = std::strtol(port.c_str(), NULL, 10);
-		if (n < 1 || n > 65535)
-			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", cf.args.back().c_str(), cf.args.begin()->c_str())));
+		if (errno || n < 1 || n > 65535)
+			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
+
+		listen_obj->setHost(host);
+		listen_obj->setPort(port);
+		listen_obj->setPortValue(static_cast<in_port_t>(n));
+
 		cf.args.clear();
 		return ;
 	}
-
+	else if (cf.args.back().find('.')) {
+		host = cf
+	}
 	// cf.current_server->setDirective(listen_obj);
 	cf.args.clear();
 }
@@ -105,7 +114,7 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 	char *unit;
 	std::string value;
 	std::string::size_type found;
-	Directive *client_max_body_size_obj = cf.current_server->_directives["client_max_body_size"];
+	ClientMaxBodySizeDirective *client_max_body_size_obj = static_cast<ClientMaxBodySizeDirective *>(cf.current_server->_directives["client_max_body_size"]);
 	if (client_max_body_size_obj)
 		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back();
@@ -122,20 +131,27 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 		size_max *= (1 << 10);
 	else
 		throw (std::runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
-	static_cast<ClientMaxBodySizeDirective *>(client_max_body_size_obj)->setSizeMax(size_max);
-	std::cout << static_cast<ClientMaxBodySizeDirective *>(client_max_body_size_obj)->getSizeMax() << std::endl;
+	client_max_body_size_obj->setSizeMax(size_max);
+	std::cout << client_max_body_size_obj->getSizeMax() << std::endl;
 	cf.current_server->_directives["client_max_body_size"] = client_max_body_size_obj;
 	cf.args.clear();
 }
 
 void	LocationHandler::process(Conf &cf) {
-	cf.ctx = LOC_CONF;	
-	cf.args.clear();
-	Parser::parser(cf, NULL);
-	cf.ctx = SRV_CONF;
+	cf.current_location = new LocationDirective();
+	if (std::strchr(cf.args.back().c_str(), '/')) {
+		cf.current_location->setRoute(cf.args.back());
+		cf.ctx = LOC_CONF;	
+		cf.args.clear();
+		Parser::parser(cf, NULL);
+		cf.ctx = SRV_CONF;
+	} else
+		throw (std::runtime_error(Logger::log_error(cf, "invalid route \"%s\" for directive \"%s\"", cf.args.back().c_str(), cf.args.front().c_str())));
+	return ;
 }
 
 void	AllowMethodsHandler::process(Conf &cf) {
+
 	cf.args.clear();
 }
 

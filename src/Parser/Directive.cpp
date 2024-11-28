@@ -63,74 +63,88 @@ LocationDirective::LocationDirective() {}
 
 LocationDirective::~LocationDirective() {}
 
-void	LocationDirective::setDirective(Conf &cf) {
-	const std::string	directive = *cf.args.begin();
-    Directive *directive_obj = _directives[directive];
-	if (not directive_obj) {
-		if (directive.compare("allow_methods") != 0) {
-			_directives[directive] = new AllowMethodsDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("redirect") != 0) {
-			_directives[directive] = new RedirectDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("root") != 0) {
-			_directives[directive] = new RootDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("autoindex") != 0) {
-			_directives[directive] = new AutoIndexDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("index") != 0) {
-			_directives[directive] = new IndexDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("cgi") != 0) {
-			_directives[directive] = new CgiDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("upload_dir") != 0) {
-			_directives[directive] = new UploadDirDirective(cf.args.back());
-			return ;
-		}
-	}
-	if (directive.compare("allow_methods") != 0 || directive.compare("redirect") != 0
-	|| directive.compare("root") != 0 || directive.compare("autoindex") != 0
-	|| directive.compare("index") != 0 || directive.compare("cgi") != 0
-	|| directive.compare("upload_dir") != 0)
-		throw (std::runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+void	LocationDirective::setRoute(const std::string &route) {
+	this->_route = route;
 }
 
-AllowMethodsDirective::AllowMethodsDirective(const std::string &value) : _value(value) {}
+// void	LocationDirective::setDirective(Conf &cf) {
+// 	const std::string	directive = *cf.args.begin();
+//     Directive *directive_obj = _directives[directive];
+// 	if (not directive_obj) {
+// 		if (directive.compare("allow_methods") != 0) {
+// 			_directives[directive] = new AllowMethodsDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("redirect") != 0) {
+// 			_directives[directive] = new RedirectDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("root") != 0) {
+// 			_directives[directive] = new RootDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("autoindex") != 0) {
+// 			_directives[directive] = new AutoIndexDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("index") != 0) {
+// 			_directives[directive] = new IndexDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("cgi") != 0) {
+// 			_directives[directive] = new CgiDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("upload_dir") != 0) {
+// 			_directives[directive] = new UploadDirDirective(cf.args.back());
+// 			return ;
+// 		}
+// 	}
+// 	if (directive.compare("allow_methods") != 0 || directive.compare("redirect") != 0
+// 	|| directive.compare("root") != 0 || directive.compare("autoindex") != 0
+// 	|| directive.compare("index") != 0 || directive.compare("cgi") != 0
+// 	|| directive.compare("upload_dir") != 0)
+// 		throw (std::runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+// }
+
+AllowMethodsDirective::AllowMethodsDirective() : _GET(false), _POST(false), _DELETE(false) {}
 
 AllowMethodsDirective::~AllowMethodsDirective() {}
 
-RedirectDirective::RedirectDirective(const std::string &value) : _value(value) {}
+bool AllowMethodsDirective::isAllowed(const std::string &method) const {
+	if (method.compare("GET") == 0 && _GET == true)
+		return (true);
+	else if (method.compare("POST") == 0 && _POST == true)
+		return (true);
+	else if (method.compare("DELETE") == 0 && _DELETE == true)
+		return (true);
+	return (false);
+}
+
+RedirectDirective::RedirectDirective() {}
 
 RedirectDirective::~RedirectDirective() {}
 
-RootDirective::RootDirective(const std::string &value) : _value(value) {}
+RootDirective::RootDirective() {}
 
 RootDirective::~RootDirective() {}
 
-AutoIndexDirective::AutoIndexDirective(const std::string &value) : _value(value) {}
+AutoIndexDirective::AutoIndexDirective() {}
 
 AutoIndexDirective::~AutoIndexDirective() {}
 
-IndexDirective::IndexDirective(const std::string &value) : _value(value) {}
+IndexDirective::IndexDirective() {}
 
 IndexDirective::~IndexDirective() {}
 
-CgiDirective::CgiDirective(const std::string &value) : _value(value) {}
+CgiDirective::CgiDirective() {}
 
 CgiDirective::~CgiDirective() {}
 
-UploadDirDirective::UploadDirDirective(const std::string &value) : _value(value) {}
+UploadDirDirective::UploadDirDirective() {}
 
 UploadDirDirective::~UploadDirDirective() {}
 
-ErrorPageDirective::ErrorPageDirective(const std::string &value) : _value(value) {}
+ErrorPageDirective::ErrorPageDirective() {}
 
 ErrorPageDirective::~ErrorPageDirective() {}
