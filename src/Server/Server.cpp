@@ -51,31 +51,31 @@ Directive	*Server::getDirective(const std::string &directive) {
 	return (_directives[directive]);
 }
 
-void    Server::setDirective(Conf &cf) {
-	const string	directive = *cf.args.begin();
-    Directive *directive_obj = _directives[directive];
-	if (not directive_obj) {
-		if (directive.compare("listen") != 0) {
-			_directives[directive] = new ListenDirective();
-			return ;
-		}
-		else if (directive.compare("server_name") != 0) {
-			_directives[directive] = new ServerNameDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("client_max_body_size") != 0) {
-			_directives[directive] = new ClientMaxBodySizeDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("error_page") != 0) {
-			_directives[directive] = new ErrorPageDirective(cf.args.back());
-			return ;
-		}
-		else if (directive.compare("location") != 0)
-			_directives[directive] = new LocationDirective();
-	}
-	if (directive.compare("listen") != 0 || directive.compare("server_name") != 0
-	|| directive.compare("client_max_body_size") != 0 || directive.compare("error_page") != 0)
-		throw (runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
-	(static_cast<LocationDirective *>(directive_obj))->setDirective(cf);
-}
+// void    Server::setDirective(Conf &cf) {
+// 	const string	directive = *cf.args.begin();
+//     Directive *directive_obj = _directives[directive];
+// 	if (not directive_obj) {
+// 		if (directive.compare("listen") != 0) {
+// 			_directives[directive] = new ListenDirective();
+// 			return ;
+// 		}
+// 		else if (directive.compare("server_name") != 0) {
+// 			_directives[directive] = new ServerNameDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("client_max_body_size") != 0) {
+// 			_directives[directive] = new ClientMaxBodySizeDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("error_page") != 0) {
+// 			_directives[directive] = new ErrorPageDirective(cf.args.back());
+// 			return ;
+// 		}
+// 		else if (directive.compare("location") != 0)
+// 			_directives[directive] = new LocationDirective();
+// 	}
+// 	if (directive.compare("listen") != 0 || directive.compare("server_name") != 0
+// 	|| directive.compare("client_max_body_size") != 0 || directive.compare("error_page") != 0)
+// 		throw (runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+// 	(static_cast<LocationDirective *>(directive_obj))->setDirective(cf);
+// }

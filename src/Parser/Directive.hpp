@@ -14,6 +14,7 @@
 
 #pragma once
 
+# include <netinet/in.h>
 # include <inttypes.h>
 # include <string>
 # include <map>
@@ -64,22 +65,28 @@ class ListenDirective : public Directive {
 
 class ServerNameDirective : public Directive {
 	private:
-		const std::string _value;
+		std::string _server_name;
 	public:
-		ServerNameDirective(const std::string &value);
+		ServerNameDirective();
 		~ServerNameDirective();
 
+		void	setServerName(const std::string &server_name);
+		const std::string &getServerName(void) const;
+		
 		friend class ServerNameHandler;
 };
 
 class ClientMaxBodySizeDirective : public Directive {
 	private:
-		const std::string _value;
+		long long int _size_max;
 	public:
-		ClientMaxBodySizeDirective(const std::string &value);
+		ClientMaxBodySizeDirective();
 		~ClientMaxBodySizeDirective();
 
-		friend class ServerHandler;
+		void	setSizeMax(const long long int size_max);
+		long long int	getSizeMax(void) const;
+
+		friend class ClientMaxBodySizeHandler;
 };
 
 class LocationDirective : public Directive {

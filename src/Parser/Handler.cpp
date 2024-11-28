@@ -59,13 +59,14 @@ void	ListenHandler::process(Conf &cf) {
 	// std::string port("8080");
 	// unsigned int ip;
 	// int	port = 8080;
-	std::string::size_type found = cf.args.back().find_first_not_of("0123456789.:;");
 	// Directive *listen_obj = new ListenDirective();
-	if (found != cf.args.back().npos)
-		throw std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
-	found = cf.args.back().find(':');
+	// std::string::size_type found = cf.args.back().find_first_not_of("0123456789.:;");
+	// if (found != cf.args.back().npos)
+	// 	throw std::runtime_error(Logger::log_error(cf, "invalid value in \"%s\" directive", cf.args.back().c_str()));
+	std::string::size_type found = cf.args.back().find(':');
 	if (found) {
 		std::string host = cf.args.back().substr(0, found);
+		std::cout << host << std::endl;
 		std::string port = cf.args.back().substr(found + 1, cf.args.back().length());
 		std::cout << port << std::endl;
 		if (host.size() == 0)
@@ -84,11 +85,46 @@ void	ListenHandler::process(Conf &cf) {
 }
 
 void	ServerNameHandler::process(Conf &cf) {
-	cf.current_server->setDirective(cf);
+	Directive *server_name_obj = cf.current_server->_directives["server_name"];
+	if (server_name_obj)
+		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	server_name_obj = new ServerNameDirective();
+	static_cast<ServerNameDirective *>(server_name_obj)->setServerName(cf.args.back().substr(0, cf.args.back().length() - 1));
+	std::cout << static_cast<ServerNameDirective *>(server_name_obj)->getServerName() << std::endl;
+	cf.current_server->_directives["server_name"] = server_name_obj;
 	cf.args.clear();
 }
 
+// Sets the maximum allowed size of the client request body.
+// If the size in a request exceeds the configured value, the 413 (Request Entity Too Large)
+// error is returned to the client. Please be aware that browsers cannot
+// correctly display this error. Setting size to 0 disables checking of client request body size.
+
 void	ClientMaxBodySizeHandler::process(Conf &cf) {
+	long long int size_max;
+	char *unit;
+	std::string value;
+	std::string::size_type found;
+	Directive *client_max_body_size_obj = cf.current_server->_directives["client_max_body_size"];
+	if (client_max_body_size_obj)
+		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	value = cf.args.back();
+	found = value.find_first_not_of("0123456789mMkK;");
+	client_max_body_size_obj = new ClientMaxBodySizeDirective();
+	if (found != std::string::npos)
+		throw (std::runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
+	size_max = std::strtoll(value.c_str(), &unit, 10);
+	if (errno == ERANGE)
+		throw (std::runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
+	if (*unit == 'm' || *unit == 'M')
+		size_max *= (1 << 20);
+	else if (*unit == 'k' || *unit == 'K')
+		size_max *= (1 << 10);
+	else
+		throw (std::runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
+	static_cast<ClientMaxBodySizeDirective *>(client_max_body_size_obj)->setSizeMax(size_max);
+	std::cout << static_cast<ClientMaxBodySizeDirective *>(client_max_body_size_obj)->getSizeMax() << std::endl;
+	cf.current_server->_directives["client_max_body_size"] = client_max_body_size_obj;
 	cf.args.clear();
 }
 

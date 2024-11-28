@@ -34,10 +34,12 @@ class Server : public Socket, public Response {
 		virtual ~Server();
 
 		Directive *getDirective(const std::string &directive);
-		void	setDirective(Conf &cf);
+		// void	setDirective(Conf &cf);
 		// Server():_hostName(""){};
 		// Server(int port, int events, std::string hostName, std::string ip);
 		// int			getSocketFd() const;
 		// int			getMaxEvent() const;
 		// std::string	getHostName() const;
+		friend class ServerNameHandler;
+		friend class ClientMaxBodySizeHandler;
 };

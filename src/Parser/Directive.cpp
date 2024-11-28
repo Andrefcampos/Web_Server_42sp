@@ -35,13 +35,29 @@ ListenDirective::ListenDirective() : _host("0.0.0.0"), _port("8080"), _ip(0), _p
 
 ListenDirective::~ListenDirective() {}
 
-ServerNameDirective::ServerNameDirective(const std::string &value) : _value(value) {}
+ServerNameDirective::ServerNameDirective() {}
 
 ServerNameDirective::~ServerNameDirective() {}
 
-ClientMaxBodySizeDirective::ClientMaxBodySizeDirective(const std::string &value) : _value(value) {}
+void	ServerNameDirective::setServerName(const std::string &server_name) {
+	this->_server_name = server_name;
+}
+
+const std::string &ServerNameDirective::getServerName(void) const {
+	return (this->_server_name);
+}
+
+ClientMaxBodySizeDirective::ClientMaxBodySizeDirective() : _size_max(1 * (1 << 20)) {}
 
 ClientMaxBodySizeDirective::~ClientMaxBodySizeDirective() {}
+
+void	ClientMaxBodySizeDirective::setSizeMax(const long long int size_max) {
+	this->_size_max = size_max;
+}
+
+long long int ClientMaxBodySizeDirective::getSizeMax(void) const {
+	return (this->_size_max);
+}
 
 LocationDirective::LocationDirective() {}
 
