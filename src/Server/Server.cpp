@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 20:14:10 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/29 02:40:23 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ using namespace std;
 // 	return _maxEvents;
 // }
 
-Server::Server() : _directives() {}
+Server::Server() {
+	this->_directives["listen"] = new ListenDirective();
+	this->_directives["location"] = new LocationDirective();
+	this->_directives["client_max_body_size"] = new ClientMaxBodySizeDirective();
+}
 
 Server::~Server() {
 	for (map<string, Directive *>::iterator it = _directives.begin(); it != _directives.end(); ++it)

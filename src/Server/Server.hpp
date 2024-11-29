@@ -42,4 +42,7 @@ class Server : public Socket, public Response {
 		// std::string	getHostName() const;
 		friend class ServerNameHandler;
 		friend class ClientMaxBodySizeHandler;
+		friend class LocationHandler;
+		friend class ListenHandler;
+		friend class AllowMethodsHandler;
 };
