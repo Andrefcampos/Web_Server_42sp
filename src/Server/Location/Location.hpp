@@ -17,9 +17,12 @@
 class	Directive;
 
 class Location {
+	private:
+		std::string _route;
+		std::map<std::string, Directive *> _directives;
 	public:
 		Location();
 		~Location();
-	private:
-		std::map<std::string, Directive *> _directives;
+
+		friend class AllowMethodsHandler;
 };
