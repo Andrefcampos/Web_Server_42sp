@@ -6,10 +6,11 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/12 20:28:39 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/11/29 02:40:59 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <netinet/in.h>
 #include <cerrno>
 #include <cstdlib>
 #include "Webserv.hpp"
@@ -19,6 +20,7 @@
 #include "Conf.hpp"
 #include "Parser.hpp"
 #include "defines.hpp"
+#include "Location.hpp"
 
 void	initHandlerModules(Conf &cf) {
 	cf.handlers["server"] = new ServerHandler("server", MAIN_CONF|CONF_BLOCK|CONF_NOARGS);
@@ -55,40 +57,41 @@ void	ServerHandler::process(Conf &cf) {
 }
 
 void	ListenHandler::process(Conf &cf) {
-	std::string value;
-	std::string host;
-	std::string port;
-	std::string::size_type found;
-	struct sockaddr hints;
-	ListenDirective *listen_obj = cf.current_server->_directives["location"];
-	if (listen_obj)
-		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
-	std::memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	value = cf.args.back();
-	found = value.find(':');
-	if (found) {
-		host = value.substr(0, found);
-		port = value.substr(found + 1, value.length());
-		if (host.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
-		else if (port.size() == 0)
-			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
-		int n = std::strtol(port.c_str(), NULL, 10);
-		if (errno || n < 1 || n > 65535)
-			throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
+	// std::string value;
+	// std::string host;
+	// std::string port;
+	// std::string::size_type found;
+	// struct sockaddr hints;
+	// ListenDirective *listen_obj = static_cast<ListenDirective *>(cf.current_server->_directives["location"]);
+	// if (!listen_obj->getDefaultConfBool())
+	// 	throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	// std::memset(&hints, 0, sizeof(hints));
+	// hints.ai_family = AF_INET;
+	// hints.ai_socktype = SOCK_STREAM;
+	// value = cf.args.back();
+	// found = value.find(':');
+	// if (found) {
+	// 	host = value.substr(0, found);
+	// 	port = value.substr(found + 1, value.length());
+	// 	if (host.size() == 0)
+	// 		throw (std::runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
+	// 	else if (port.size() == 0)
+	// 		throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
+	// 	int n = std::strtol(port.c_str(), NULL, 10);
+	// 	if (errno || n < 1 || n > 65535)
+	// 		throw (std::runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
 
-		listen_obj->setHost(host);
-		listen_obj->setPort(port);
-		listen_obj->setPortValue(static_cast<in_port_t>(n));
+	// 	listen_obj->setHost(host);
+	// 	// listen_obj->setPort(port);
+	// 	listen_obj->setPortValue(static_cast<in_port_t>(n));
 
-		cf.args.clear();
-		return ;
-	}
-	else if (cf.args.back().find('.')) {
-		host = cf
-	}
+	// 	cf.args.clear();
+	// 	return ;
+	// }
+	// listen_obj->setDefaultConfBool(false);
+	// else if (cf.args.back().find('.')) {
+	// 	host = cf
+	// }
 	// cf.current_server->setDirective(listen_obj);
 	cf.args.clear();
 }
@@ -115,11 +118,11 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 	std::string value;
 	std::string::size_type found;
 	ClientMaxBodySizeDirective *client_max_body_size_obj = static_cast<ClientMaxBodySizeDirective *>(cf.current_server->_directives["client_max_body_size"]);
-	if (client_max_body_size_obj)
+	if (client_max_body_size_obj->getDefaultConfBool() == false)
 		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back();
 	found = value.find_first_not_of("0123456789mMkK;");
-	client_max_body_size_obj = new ClientMaxBodySizeDirective();
+	// client_max_body_size_obj = new ClientMaxBodySizeDirective();
 	if (found != std::string::npos)
 		throw (std::runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
 	size_max = std::strtoll(value.c_str(), &unit, 10);
@@ -138,21 +141,52 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 }
 
 void	LocationHandler::process(Conf &cf) {
-	cf.current_location = new LocationDirective();
 	if (std::strchr(cf.args.back().c_str(), '/')) {
-		cf.current_location->setRoute(cf.args.back());
-		cf.ctx = LOC_CONF;	
+		cf.current_location = new Location();
+		cf.ctx = LOC_CONF;
 		cf.args.clear();
 		Parser::parser(cf, NULL);
 		cf.ctx = SRV_CONF;
+		static_cast<LocationDirective *>(cf.current_server->_directives["location"])->appendLocation(cf.current_location);
 	} else
 		throw (std::runtime_error(Logger::log_error(cf, "invalid route \"%s\" for directive \"%s\"", cf.args.back().c_str(), cf.args.front().c_str())));
 	return ;
 }
 
 void	AllowMethodsHandler::process(Conf &cf) {
-
-	cf.args.clear();
+	AllowMethodsDirective *allow_methods_obj = static_cast<AllowMethodsDirective *>(cf.current_location->_directives["allow_methods"]);
+	// std::cout << "DEFAULT CONF " << allow_methods_obj->getDefaultConfBool() << std::endl;
+	// std::cout << "GET " <<allow_methods_obj->getGetBool() << std::endl;
+	// std::cout << "POST " << allow_methods_obj->getPostBool() << std::endl;
+	// std::cout << "DELETE " << allow_methods_obj->getDeleteBool() << std::endl;
+	if (allow_methods_obj->getDefaultConfBool()) {
+		std::stringstream ss;
+		std::string::size_type found;
+		std::string token;
+		for (std::vector<std::string>::iterator it = ++cf.args.begin(); it != cf.args.end(); ++it) {
+			ss.str(*it);
+			ss >> token;
+			found = token.find(';');
+			// std::cout << token << std::endl;
+			if (found)
+				token = token.substr(0, found);
+			if (token.compare("GET") == 0)
+				allow_methods_obj->setGetBool(true);
+			else if (token.compare("POST") == 0)
+				allow_methods_obj->setPostBool(true);
+			else if (token.compare("DELETE") == 0)
+				allow_methods_obj->setDeleteBool(true);
+			ss.clear();
+		}
+		allow_methods_obj->setDefaultConfBool(false);
+	}
+	else
+		throw (std::runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	// std::cout << "DEFAULT CONF " << allow_methods_obj->getDefaultConfBool() << std::endl;
+	// std::cout << "GET " << allow_methods_obj->getGetBool() << std::endl;
+	// std::cout << "POST " << allow_methods_obj->getPostBool() << std::endl;
+	// std::cout << "DELETE " << allow_methods_obj->getDeleteBool() << std::endl;
+	cf.args.clear(); 
 }
 
 void	RedirectHandler::process(Conf &cf) {
