@@ -36,7 +36,7 @@ class ServerDirective : public Directive {
 		std::vector<Server *> _servers;
 	public:
 		ServerDirective();
-		virtual ~ServerDirective();
+		~ServerDirective();
 		void			appendServer(Server *server);
 		Server			*back(void) const;
 		const Server	&getServer(const std::string &host);
@@ -46,18 +46,21 @@ class ServerDirective : public Directive {
 
 class ListenDirective : public Directive {
 	private:
+		bool	_default_conf;
 		std::string _host;
 		std::string _port;
 		in_addr_t _ip;
-		in_port_t _port_value;
+		short unsigned int _port_value;
 	public:
 		ListenDirective();
 		~ListenDirective();
 
+		void	setDefaultConfBool(bool state);
 		void	setHost(const std::string &host);
 		void	setPort(const std::string &port);
-		void	setIP(in_addr_t &ip);
-		void	setPortValue(in_port_t &port);
+		void	setIP(in_addr_t ip);
+		void	setPortValue(in_port_t port);
+		bool	getDefaultConfBool(void) const;
 		const std::string &getHost(void) const;
 		const std::string &getPort(void) const;
 		const in_addr_t &getIP(void) const;
@@ -80,12 +83,15 @@ class ServerNameDirective : public Directive {
 
 class ClientMaxBodySizeDirective : public Directive {
 	private:
+		bool	_default_conf;
 		long long int _size_max;
 	public:
 		ClientMaxBodySizeDirective();
 		~ClientMaxBodySizeDirective();
 
+		void	setDefaultConfBool(const bool state);
 		void	setSizeMax(const long long int size_max);
+		bool	getDefaultConfBool(void) const;
 		long long int	getSizeMax(void) const;
 
 		friend class ClientMaxBodySizeHandler;
@@ -93,13 +99,14 @@ class ClientMaxBodySizeDirective : public Directive {
 
 class LocationDirective : public Directive {
 	private:
-		std::string _route;
-		std::map<std::string, Directive *> _directives;
+		std::vector<Location *> _locations;
 	public:
 		LocationDirective();
 		~LocationDirective();
 
-		void	setRoute(const std::string &route);
+		void		appendLocation(Location *location);
+		Location	*back(void) const;
+		// void	setRoute(const std::string &route);
 		// void	setDirective(Conf &cf);
 
 		friend class AllowMethodsHandler;
@@ -107,13 +114,22 @@ class LocationDirective : public Directive {
 
 class AllowMethodsDirective : public Directive {
 	private:
-		bool _GET;
-		bool _POST;
-		bool _DELETE;
+		bool	_default_conf;
+		bool	_GET;
+		bool	_POST;
+		bool	_DELETE;
 	public:
 		AllowMethodsDirective();
 		~AllowMethodsDirective();
 
+		void	setDefaultConfBool(const bool state);
+		void	setGetBool(const bool state);
+		void	setPostBool(const bool state);
+		void	setDeleteBool(const bool state);
+		bool	getDefaultConfBool(void) const;
+		bool	getGetBool(void) const;
+		bool	getPostBool(void) const;
+		bool	getDeleteBool(void) const;
 		bool	isAllowed(const std::string &method) const;
 		friend class AllowMethodsHandler;
 };
