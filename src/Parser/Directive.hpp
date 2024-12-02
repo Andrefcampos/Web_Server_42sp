@@ -50,7 +50,7 @@ class ListenDirective : public Directive {
 		std::string _host;
 		std::string _port;
 		in_addr_t _ip;
-		short unsigned int _port_value;
+		in_port_t _port_value;
 	public:
 		ListenDirective();
 		~ListenDirective();

@@ -29,7 +29,6 @@ Webserv::~Webserv() {
 		delete it->second;
 	}
 	_conf.clear();
-	std::cout << "GoodBye" << std::endl;
 };
 
 // Webserv::Webserv(std::map<std::string, Server> services):

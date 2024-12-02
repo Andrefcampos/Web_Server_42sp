@@ -116,9 +116,9 @@ void	Parser::conf_handler(Conf &cf, unsigned int last) {
 	if (handler) {
 		unsigned int type = handler->getType();
 		if (!(type & CONF_BLOCK) && last != CONF_OK)
-			throw (runtime_error(Logger::log_error(cf, "\"%s\" directive is not terminated by \";\" ", cf.args.begin()->c_str())));
+			throw (runtime_error(Logger::log_error(cf, "\"%s\" directive is not terminated by \";\"", cf.args.begin()->c_str())));
 		if ((type & CONF_BLOCK) && last != CONF_BLOCK_START)
-			throw (runtime_error(Logger::log_error(cf, "directive \"%s\" has no opening \"{\" ", cf.args.begin()->c_str())));
+			throw (runtime_error(Logger::log_error(cf, "directive \"%s\" has no opening \"{\"", cf.args.begin()->c_str())));
 		if (!(type & cf.ctx))
 			throw (runtime_error(Logger::log_error(cf, "\"%s\" directive is not allowed here", cf.args.begin()->c_str())));
 		if (type & CONF_NOARGS) {

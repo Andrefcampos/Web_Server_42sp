@@ -49,12 +49,32 @@ void	ListenDirective::setPort(const std::string &port) {
 	this->_port = port;
 }
 
+void	ListenDirective::setIP(in_addr_t ip) {
+	this->_ip = htonl(ip);
+}
+
 void	ListenDirective::setPortValue(in_port_t port_value) {
-	this->_port_value = port_value;
+	this->_port_value = htons(port_value);
 }
 
 bool	ListenDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
+}
+
+const string &ListenDirective::getHost(void) const {
+	return (this->_host);
+}
+
+const string &ListenDirective::getPort(void) const {
+	return (this->_port);
+}
+
+const in_addr_t &ListenDirective::getIP(void) const {
+	return (this->_ip);
+}
+
+const in_port_t &ListenDirective::getPortValue(void) const {
+	return (this->_port_value);
 }
 
 ServerNameDirective::ServerNameDirective() {}
