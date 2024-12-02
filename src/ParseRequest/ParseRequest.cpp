@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 10:22:05 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/02 14:39:28 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int		ParseRequest::setBody(int fd){
 
 int		ParseRequest::parseRequest(int fd){
 	try{
+		cout << _socket[fd].buffer << "\n\n\n\n";
 		_socket[fd].request->setRequestLine(_socket[fd].buffer);
 		_socket[fd].request->setHeader(_socket[fd].buffer);
 		_socket[fd].request->setBody(_socket[fd].buffer);

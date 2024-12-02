@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:21:13 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 11:51:05 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/02 16:15:39 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstring>
+#include "utils.hpp"
+#include "ABody.hpp"
+#include "DataBody.hpp"
+#include <fstream>
 
 WebService::WebService(std::map<std::string, Server> services):
 _services(services){
@@ -81,10 +85,7 @@ int	WebService::isNewClient(int index){
 	return (0);
 }
 
-#include "utils.hpp"
-#include "ABody.hpp"
-#include "DataBody.hpp"
-#include <fstream>
+
 
 int	WebService::responseClient(int fd){
 	Request *request = _socket[fd].request;
@@ -94,23 +95,27 @@ int	WebService::responseClient(int fd){
 	cout << "Version: " << request->getVersion() << "\n";
 	putMapList(request->getAllHeader());
 	cout << "\n";
-
  	ABody *ptr = request->getBody();
-	std::ofstream outfile("/home/rafael/webServ/image.png");
-	if (!outfile.is_open())
-		cout << "nao abriu\n";
-
 	if (ptr != NULL){
-		list<DataBody> body;
+		list<DataBody>	body;
 	 	body = ptr->getDataBody();
 		for (list<DataBody>::iterator it = body.begin(); it != body.end(); it++){
 			putMapList(it->getAllHeaders());
-			cout << it->getContent() << "\n";
-			if(it->getContent().length() > 60)
-				outfile << it->getContent();
-		} 
+			list<string> temp = it->getHeaders("Content-Type");
+			if (not temp.empty()){
+				list<string> t = it->getHeaders("Content-Disposition");
+				list<string>::iterator i = t.end();
+				i--;
+				i->erase(0, 10);
+				i->erase(i->size()-1, 1);
+				std::ofstream	outfile(i->c_str());
+				if (!outfile.is_open())
+					cout << "nao abriu\n";
+				if(it->getContent().length() > 60)
+					outfile << it->getContent();
+			}
+		}
 	}
-	
 	_services[request->getHost()].sendResponse(fd, request);
 	delete request;
 	_socket.erase(fd);
@@ -120,7 +125,6 @@ int	WebService::responseClient(int fd){
 WebService::~WebService(){}
 
 WebService::WebService(){}
-
 
 void	WebService::initEpollStruct(){
 	for(int i = 0; i < 80; i++)
