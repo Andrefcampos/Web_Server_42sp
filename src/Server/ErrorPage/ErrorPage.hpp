@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Location.hpp                                       :+:      :+:    :+:   */
+/*   ErrorPage.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 22:15:36 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/11 22:15:36 by myokogaw         ###   ########.fr       */
+/*   Created: 2024/12/03 17:27:22 by myokogaw          #+#    #+#             */
+/*   Updated: 2024/12/03 17:27:22 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include <map>
+# include <vector>
 # include <string>
-# include "Directive.hpp"
 
-class Location {
+class ErrorPage {
 	private:
-		std::string _route;
-		std::map<std::string, Directive *> _directives;
+		std::vector<std::string>	_codes;
+		std::string					_uri;
 	public:
-		Location();
-		~Location();
+		ErrorPage();
+		~ErrorPage();
 
-		friend class AllowMethodsHandler;
-		friend class RedirectHandler;
-		friend class RootHandler;
-		friend class AutoIndexHandler;
-		friend class IndexHandler;
-		friend class CgiHandler;
-		friend class UploadDirHandler;
-		friend class ErrorPageHandler; 
+		void				appendCode(const std::string &code);
+		void				setUri(const std::string &uri);
+		bool				hasCode(const std::string &code) const;
+		const std::string	&getUri(void) const;
 };

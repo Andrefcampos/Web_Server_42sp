@@ -6,13 +6,14 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/02 21:01:48 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:26:06 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <cerrno>
@@ -25,6 +26,7 @@
 #include "Parser.hpp"
 #include "defines.hpp"
 #include "Location.hpp"
+#include "ErrorPage.hpp"
 
 using namespace std;
 
@@ -280,17 +282,73 @@ void	AutoIndexHandler::process(Conf &cf) {
 }
 
 void	IndexHandler::process(Conf &cf) {
+	string value;
+	IndexDirective *index_obj = static_cast<IndexDirective *>(cf.current_location->_directives["index"]);
+	if (index_obj->getDefaultConfBool() == false)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	value = cf.args.back().substr(0, cf.args.back().find(';'));
+	cout << "index: " << value << endl;
+	index_obj->setIndex(value);
+	index_obj->setDefaultConfBool(false);
 	cf.args.clear();
 }
 
 void	CgiHandler::process(Conf &cf) {
+	stringstream ss;
+	string token;
+	CgiDirective *cgi_obj = static_cast<CgiDirective *>(cf.current_location->_directives["cgi"]);
+	if (cgi_obj->getDefaultConfBool() == false)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	for (vector<string>::iterator it= ++cf.args.begin(); it != cf.args.end(); ++it) {
+		ss.str(*it);
+		ss >> token;
+		if (token.find(';') != string::npos)
+			token = token.substr(0, token.find(';'));
+		cout << token << endl;
+		cgi_obj->appendExt(token);
+		token.clear();
+		ss.clear();
+	}
+	cgi_obj->setDefaultConfBool(false);
 	cf.args.clear();
 }
 
 void	UploadDirHandler::process(Conf &cf) {
+	struct stat info;
+	string value;
+	UploadDirDirective *upload_dir_obj = static_cast<UploadDirDirective *>(cf.current_location->_directives["upload_dir"]);
+	if (upload_dir_obj)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	value = cf.args.back().substr(0, cf.args.back().find(';'));
+	if (stat(value.c_str(), &info) != 0)
+		throw (runtime_error(Logger::log_error(cf, "directory \"%s\" in directive \"%s\" not exists", value.c_str(), cf.args.front().c_str())));
+	else if (info.st_mode & S_IFDIR)
+		upload_dir_obj->setUploadDir(value);
+	else
+		throw (runtime_error(Logger::log_error(cf, "value \"%s\" in directive \"%s\" is not a directory", value.c_str(), cf.args.front().c_str())));
 	cf.args.clear();
 }
 
 void	ErrorPageHandler::process(Conf &cf) {
+	stringstream ss;
+	string token;
+	ErrorPage *error_page_obj = new ErrorPage();
+	for (vector<string>::iterator it = ++cf.args.begin(); it != cf.args.end(); ++it) {
+		ss.str(*it);
+		ss >> token;
+		if (token.find(';') != string::npos) {
+			token = token.substr(0, token.find(';'));
+			error_page_obj->setUri(token);
+			break ;
+		}
+		if (token.find_first_not_of("0123456789") != string::npos) {
+			delete error_page_obj;
+			throw (runtime_error(Logger::log_error(cf, "invalid value \"%s\"", token.c_str())));
+		}
+		error_page_obj->appendCode(token);
+		token.clear();
+		ss.clear();
+	}
+	static_cast<ErrorPageDirective *>(cf.current_server->_directives["error_page"])->appendErrorPage(error_page_obj);
 	cf.args.clear();
 } 

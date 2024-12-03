@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 22:12:48 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/02 14:16:22 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:45:03 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,19 @@
 #pragma once
 
 # include <string>
-// # include "Conf.hpp"
 struct Conf;
 
 class Handler {
-	public:
-		Handler(const std::string &name, const unsigned int type) : _name(name), _type(type) {};
-		virtual ~Handler() {};
-		unsigned int getType(void);
-		const std::string &getName(void);
-		virtual void	process(Conf &cf) = 0;
-
-		friend class Webserv;
 	private:
 		const std::string     _name;
 		const unsigned int    _type;
+	public:
+		Handler(const std::string &name, const unsigned int type) : _name(name), _type(type) {};
+		virtual ~Handler() {};
+
+		unsigned int		getType(void);
+		virtual void		process(Conf &cf) = 0;
+		const std::string	&getName(void);
 };
 
 class ServerHandler : public Handler {

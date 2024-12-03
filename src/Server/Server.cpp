@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/02 14:17:32 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:35:16 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ Server::Server() {
 	this->_directives["listen"] = new ListenDirective();
 	this->_directives["location"] = new LocationDirective();
 	this->_directives["client_max_body_size"] = new ClientMaxBodySizeDirective();
-	
+	this->_directives["error_page"] = new ErrorPageDirective();
 }
 
 Server::~Server() {

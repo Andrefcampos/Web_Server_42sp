@@ -22,6 +22,7 @@
 # include "Conf.hpp"
 
 class Server;
+class ErrorPage;
 
 class Directive {
 	public:
@@ -43,11 +44,11 @@ class ServerDirective : public Directive {
 
 class ListenDirective : public Directive {
 	private:
-		bool	_default_conf;
-		std::string _host;
-		std::string _port;
-		in_addr_t _ip;
-		in_port_t _port_value;
+		bool		_default_conf;
+		in_addr_t	_ip;
+		in_port_t	_port_value;
+		std::string	_host;
+		std::string	_port;
 	public:
 		ListenDirective();
 		~ListenDirective();
@@ -77,8 +78,8 @@ class ServerNameDirective : public Directive {
 
 class ClientMaxBodySizeDirective : public Directive {
 	private:
-		bool	_default_conf;
-		long long int _size_max;
+		bool			_default_conf;
+		long long int	_size_max;
 	public:
 		ClientMaxBodySizeDirective();
 		~ClientMaxBodySizeDirective();
@@ -159,22 +160,30 @@ class AutoIndexDirective : public Directive {
 
 class IndexDirective : public Directive {
 	private:
-		std::string _index;
+		bool		_default_conf;
+		std::string	_index;
 	public:
 		IndexDirective();
 		~IndexDirective();
 
-		friend class IndexHandler;
+		void				setDefaultConfBool(const bool state);
+		void				setIndex(const std::string &index);
+		bool				getDefaultConfBool(void) const;
+		const std::string	&getIndex(void) const;
 };
 
 class CgiDirective : public Directive {
 	private:
-		std::vector<std::string> _exts;
+		bool						_default_conf;
+		std::vector<std::string>	_exts;
 	public:
 		CgiDirective();
 		~CgiDirective();
 
-		friend class CgiHandler;
+		void	setDefaultConfBool(const bool state);
+		bool	getDefaultConfBool(void) const;
+		void	appendExt(const std::string &ext);
+		bool	isAllowed(const std::string &ext) const;
 };
 
 class UploadDirDirective : public Directive {
@@ -184,18 +193,19 @@ class UploadDirDirective : public Directive {
 		UploadDirDirective();
 		~UploadDirDirective();
 
-		friend class UploadDirHandler;
+		void				setUploadDir(const std::string &upload_dir);
+		const std::string	&getUploadDir(void) const;
 };
 
 class ErrorPageDirective : public Directive {
 	private:
-		std::vector<std::string> _codes;
-		std::string	_files;
+		std::vector<ErrorPage *>	_error_pages;
 	public:
 		ErrorPageDirective();
 		~ErrorPageDirective();
 
-		friend class ErrorPageHandler;
+		void		appendErrorPage(ErrorPage *error_page);
+		ErrorPage	*back(void) const;
 };
 
 void	initConf(void);

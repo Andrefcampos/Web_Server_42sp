@@ -17,7 +17,8 @@ CMD_CLEAN	:= rm -Rf
 SRC_DIR				:= src/ src/utils src/Server \
 					src/Server/Socket src/Server/Response \
 					src/Webserv src/ParserRequest \
-					src/Parser src/Logger src/Server/Location
+					src/Parser src/Logger src/Server/Location \
+					src/Server/ErrorPage
 # DIR_MAIN 			:= src/
 # DIR_UTILS			:= src/utils/
 # DIR_SERVER			:= src/Server/
@@ -41,7 +42,7 @@ INCLUDE				:= -I src/Server -I src/Server/Socket \
 					-I src/utils -I src/Server/Response \
 					-I src/Webserv -I src/ParserRequest \
 					-I src/Parser -I src/Logger -I include \
-					-I src/Server/Location
+					-I src/Server/Location -I src/Server/ErrorPage
 
 #-----------------------------------------------------------------------------------------
 # Source files

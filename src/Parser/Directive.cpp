@@ -14,6 +14,7 @@
 #include "Logger.hpp"
 #include "Directive.hpp"
 #include "Server.hpp"
+#include "ErrorPage.hpp"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ Server  *ServerDirective::back(void) const {
 	return(_servers.back());
 }
 
-ListenDirective::ListenDirective() : _default_conf(true), _host("0.0.0.0"), _port("8080"), _ip(0), _port_value(htons(8080)) {}
+ListenDirective::ListenDirective() : _default_conf(true), _ip(0), _port_value(htons(8080)), _host("0.0.0.0"), _port("8080") {}
 
 ListenDirective::~ListenDirective() {}
 
@@ -260,18 +261,74 @@ bool	AutoIndexDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
 }
 
-IndexDirective::IndexDirective() {}
+IndexDirective::IndexDirective() : _default_conf(true), _index("/index.html") {}
 
 IndexDirective::~IndexDirective() {}
 
-CgiDirective::CgiDirective() {}
+void	IndexDirective::setDefaultConfBool(const bool state) {
+	this->_default_conf = state;
+}
+
+void	IndexDirective::setIndex(const string &index) {
+	this->_index = index;
+}
+
+bool	IndexDirective::getDefaultConfBool(void) const {
+	return (this->_default_conf);
+}
+
+const string	&IndexDirective::getIndex(void) const {
+	return (this->_index);
+}
+
+CgiDirective::CgiDirective() : _default_conf(true), _exts() {}
 
 CgiDirective::~CgiDirective() {}
+
+void	CgiDirective::setDefaultConfBool(const bool state) {
+	this->_default_conf = state;
+}
+
+bool	CgiDirective::getDefaultConfBool(void) const {
+	return (this->_default_conf);
+}
+
+void	CgiDirective::appendExt(const string &ext) {
+	_exts.push_back(ext);
+}
+
+bool	CgiDirective::isAllowed(const string &ext) const {
+	for (vector<string>::const_iterator it=_exts.begin(); it != _exts.end(); ++it) {
+		if (*it == ext)
+			return (true);
+	}
+	return (false);
+}
 
 UploadDirDirective::UploadDirDirective() {}
 
 UploadDirDirective::~UploadDirDirective() {}
 
-ErrorPageDirective::ErrorPageDirective() {}
+void	UploadDirDirective::setUploadDir(const string &upload_dir) {
+	this->_upload_dir = upload_dir;
+}
 
-ErrorPageDirective::~ErrorPageDirective() {}
+const string	&UploadDirDirective::getUploadDir(void) const {
+	return (this->_upload_dir);
+} 
+
+ErrorPageDirective::ErrorPageDirective() : _error_pages() {}
+
+ErrorPageDirective::~ErrorPageDirective() {
+	for (vector<ErrorPage *>::iterator it = _error_pages.begin(); it != _error_pages.end(); ++it)
+		delete *it;
+	_error_pages.clear();
+}
+
+void	ErrorPageDirective::appendErrorPage(ErrorPage *error_page) {
+	this->_error_pages.push_back(error_page);
+}
+
+ErrorPage *ErrorPageDirective::back(void) const {
+	return (this->_error_pages.back());
+}
