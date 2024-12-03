@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 20:13:08 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/02 20:43:38 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,4 @@ class Server : public Socket, public Response {
 		friend class ClientMaxBodySizeHandler;
 		friend class LocationHandler;
 		friend class ListenHandler;
-		friend class AllowMethodsHandler;
 };

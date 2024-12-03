@@ -41,11 +41,11 @@ void	ListenDirective::setDefaultConfBool(bool state) {
 	this->_default_conf = state;
 }
 
-void	ListenDirective::setHost(const std::string &host) {
+void	ListenDirective::setHost(const string &host) {
 	this->_host = host;
 }
 
-void	ListenDirective::setPort(const std::string &port) {
+void	ListenDirective::setPort(const string &port) {
 	this->_port = port;
 }
 
@@ -81,11 +81,11 @@ ServerNameDirective::ServerNameDirective() {}
 
 ServerNameDirective::~ServerNameDirective() {}
 
-void	ServerNameDirective::setServerName(const std::string &server_name) {
+void	ServerNameDirective::setServerName(const string &server_name) {
 	this->_server_name = server_name;
 }
 
-const std::string &ServerNameDirective::getServerName(void) const {
+const string &ServerNameDirective::getServerName(void) const {
 	return (this->_server_name);
 }
 
@@ -112,7 +112,7 @@ bool	ClientMaxBodySizeDirective::getDefaultConfBool(void) const {
 LocationDirective::LocationDirective() : _locations() {}
 
 LocationDirective::~LocationDirective() {
-	for (std::vector<Location *>::iterator it = _locations.begin(); it != _locations.end(); ++it)
+	for (vector<Location *>::iterator it = _locations.begin(); it != _locations.end(); ++it)
 		delete *it;
 	_locations.clear();
 }
@@ -125,12 +125,12 @@ Location  *LocationDirective::back(void) const {
 	return(_locations.back());
 }
 
-// void	LocationDirective::setRoute(const std::string &route) {
+// void	LocationDirective::setRoute(const string &route) {
 // 	this->_route = route;
 // }
 
 // void	LocationDirective::setDirective(Conf &cf) {
-// 	const std::string	directive = *cf.args.begin();
+// 	const string	directive = *cf.args.begin();
 //     Directive *directive_obj = _directives[directive];
 // 	if (not directive_obj) {
 // 		if (directive.compare("allow_methods") != 0) {
@@ -166,7 +166,7 @@ Location  *LocationDirective::back(void) const {
 // 	|| directive.compare("root") != 0 || directive.compare("autoindex") != 0
 // 	|| directive.compare("index") != 0 || directive.compare("cgi") != 0
 // 	|| directive.compare("upload_dir") != 0)
-// 		throw (std::runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
+// 		throw (runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
 // }
 
 AllowMethodsDirective::AllowMethodsDirective() : _default_conf(true), _GET(true), _POST(false), _DELETE(false) {}
@@ -206,7 +206,7 @@ bool	AllowMethodsDirective::getDeleteBool(void) const {
 }
 
 
-bool AllowMethodsDirective::isAllowed(const std::string &method) const {
+bool AllowMethodsDirective::isAllowed(const string &method) const {
 	if (method.compare("GET") == 0 && _GET == true)
 		return (true);
 	else if (method.compare("POST") == 0 && _POST == true)
@@ -220,13 +220,45 @@ RedirectDirective::RedirectDirective() {}
 
 RedirectDirective::~RedirectDirective() {}
 
+void	RedirectDirective::setRedirectRoute(const string &redirect_route) {
+	this->_redirect_route = redirect_route;
+}
+
+const string &RedirectDirective::getRedirectRoute(void) const {
+	return (this->_redirect_route);
+}
+
 RootDirective::RootDirective() {}
 
 RootDirective::~RootDirective() {}
 
-AutoIndexDirective::AutoIndexDirective() {}
+void	RootDirective::setRoot(const string &root) {
+	this->_root = root;
+}
+
+const string &RootDirective::getRoot(void) const {
+	return (this->_root);
+}
+
+AutoIndexDirective::AutoIndexDirective() : _default_conf(true), _autoindex(false) {}
 
 AutoIndexDirective::~AutoIndexDirective() {}
+
+void	AutoIndexDirective::setAutoIndex(const bool state) {
+	this->_autoindex = state;
+}
+
+void	AutoIndexDirective::setDefaultConfBool(const bool state) {
+	this->_default_conf = state;
+}
+
+bool	AutoIndexDirective::getAutoIndex(void) const {
+	return (this->_autoindex);
+}
+
+bool	AutoIndexDirective::getDefaultConfBool(void) const {
+	return (this->_default_conf);
+}
 
 IndexDirective::IndexDirective() {}
 

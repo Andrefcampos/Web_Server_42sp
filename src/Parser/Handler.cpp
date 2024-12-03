@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/02 17:29:17 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:01:48 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,46 +62,6 @@ void	ServerHandler::process(Conf &cf) {
 	cf.current_server = NULL;
 }
 
-// void	ListenHandler::process(Conf &cf) {
-	// string value;
-	// string host;
-	// string port;
-	// string::size_type found;
-	// struct sockaddr hints;
-	// ListenDirective *listen_obj = static_cast<ListenDirective *>(cf.current_server->_directives["location"]);
-	// if (!listen_obj->getDefaultConfBool())
-	// 	throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
-	// memset(&hints, 0, sizeof(hints));
-	// hints.ai_family = AF_INET;
-	// hints.ai_socktype = SOCK_STREAM;
-	// value = cf.args.back();
-	// found = value.find(':');
-	// if (found) {
-	// 	host = value.substr(0, found);
-	// 	port = value.substr(found + 1, value.length());
-	// 	if (host.size() == 0)
-	// 		throw (runtime_error(Logger::log_error(cf, "no host in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
-	// 	else if (port.size() == 0)
-	// 		throw (runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
-	// 	int n = strtol(port.c_str(), NULL, 10);
-	// 	if (errno || n < 1 || n > 65535)
-	// 		throw (runtime_error(Logger::log_error(cf, "invalid port in \"%s\" of the \"%s\" directive", value.c_str(), cf.args.begin()->c_str())));
-
-	// 	listen_obj->setHost(host);
-	// 	// listen_obj->setPort(port);
-	// 	listen_obj->setPortValue(static_cast<in_port_t>(n));
-
-	// 	cf.args.clear();
-	// 	return ;
-	// }
-	// listen_obj->setDefaultConfBool(false);
-	// else if (cf.args.back().find('.')) {
-	// 	host = cf
-	// }
-	// cf.current_server->setDirective(listen_obj);
-// 	cf.args.clear();
-// }
-
 void	ListenHandler::process(Conf &cf) {
 	string value;
 	string::size_type found;
@@ -112,11 +72,11 @@ void	ListenHandler::process(Conf &cf) {
 	ss.str(cf.args.back());
 	ss >> value;
 	found = value.find(':');
-	cout << "Defaul conf listen" << endl;
-	cout << "ip: "<< listen_obj->getIP() << endl;
-	cout << "host: " << listen_obj->getHost() << endl;
-	cout << "port: " << listen_obj->getPort() << endl;
-	cout << "port value: " << listen_obj->getPortValue() << endl << endl;
+	// cout << "Defaul conf listen" << endl;
+	// cout << "ip: "<< listen_obj->getIP() << endl;
+	// cout << "host: " << listen_obj->getHost() << endl;
+	// cout << "port: " << listen_obj->getPort() << endl;
+	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;
 	if (found != string::npos) {
 		struct addrinfo hints;
 		struct addrinfo *res;
@@ -146,6 +106,7 @@ void	ListenHandler::process(Conf &cf) {
 		listen_obj->setPort(port);
 		listen_obj->setIP(inp.s_addr);
 		listen_obj->setPortValue(static_cast<in_port_t>(n));
+		freeaddrinfo(res);
 	} else if (value.find('.') != string::npos) {
 		struct addrinfo hints;
 		struct addrinfo *res;
@@ -165,6 +126,7 @@ void	ListenHandler::process(Conf &cf) {
 			throw (runtime_error(Logger::log_error(cf, "inet_aton: \"%s\"", gai_strerror(rc))));
 		listen_obj->setHost(host);
 		listen_obj->setIP(inp.s_addr);
+		freeaddrinfo(res);
 	} else {
 		string port = value.substr(0, value.find(';'));
 		long n;
@@ -178,11 +140,11 @@ void	ListenHandler::process(Conf &cf) {
 		listen_obj->setPort(port);
 		listen_obj->setPortValue(static_cast<in_port_t>(n));
 	}
-	cout << "After parser listen directive" << endl;
-	cout << "ip: "<< listen_obj->getIP() << endl;
-	cout << "host: " << listen_obj->getHost() << endl;
-	cout << "port: " << listen_obj->getPort() << endl;
-	cout << "port value: " << listen_obj->getPortValue() << endl << endl;;
+	// cout << "After parser listen directive" << endl;
+	// cout << "ip: "<< listen_obj->getIP() << endl;
+	// cout << "host: " << listen_obj->getHost() << endl;
+	// cout << "port: " << listen_obj->getPort() << endl;
+	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;;
 	listen_obj->setDefaultConfBool(false);
 	cf.args.clear();
 }
@@ -193,7 +155,7 @@ void	ServerNameHandler::process(Conf &cf) {
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	server_name_obj = new ServerNameDirective();
 	server_name_obj->setServerName(cf.args.back().substr(0, cf.args.back().length() - 1));
-	cout << server_name_obj->getServerName() << endl;
+	// cout << server_name_obj->getServerName() << endl;
 	cf.current_server->_directives["server_name"] = server_name_obj;
 	cf.args.clear();
 }
@@ -226,7 +188,7 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 	else
 		throw (runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
 	client_max_body_size_obj->setSizeMax(size_max);
-	cout << client_max_body_size_obj->getSizeMax() << endl;
+	// cout << client_max_body_size_obj->getSizeMax() << endl;
 	cf.current_server->_directives["client_max_body_size"] = client_max_body_size_obj;
 	cf.args.clear();
 }
@@ -281,14 +243,39 @@ void	AllowMethodsHandler::process(Conf &cf) {
 }
 
 void	RedirectHandler::process(Conf &cf) {
+	RedirectDirective *redirect_obj = static_cast<RedirectDirective *>(cf.current_location->_directives["redirect"]);
+	if (redirect_obj)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	redirect_obj = new RedirectDirective();
+	redirect_obj->setRedirectRoute(cf.args.back().substr(0, cf.args.back().find(';')));
+	cout << redirect_obj->getRedirectRoute() << endl;
+	cf.current_location->_directives["redirect"] = redirect_obj;
 	cf.args.clear();
 }
 
 void	RootHandler::process(Conf &cf) {
+	RootDirective *root_obj = static_cast<RootDirective *>(cf.current_location->_directives["root"]);
+	if (root_obj)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	root_obj = new RootDirective();
+	root_obj->setRoot(cf.args.back().substr(0, cf.args.back().find(';')));
+	cout << root_obj->getRoot() << endl;
+	cf.current_location->_directives["root"] = root_obj;
 	cf.args.clear();
 }
 
 void	AutoIndexHandler::process(Conf &cf) {
+	string value;
+	AutoIndexDirective *auto_index_obj = static_cast<AutoIndexDirective *>(cf.current_location->_directives["autoindex"]);
+	if (auto_index_obj->getDefaultConfBool() == false)
+		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
+	value = cf.args.back().substr(0, cf.args.back().find(';'));
+	if (value.compare("on") == 0)
+		auto_index_obj->setAutoIndex(true);
+	else if (value.compare("off") == 0)
+		auto_index_obj->setAutoIndex(true);
+	else
+		throw (runtime_error(Logger::log_error(cf, "invalid value \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
 	cf.args.clear();
 }
 
@@ -306,4 +293,4 @@ void	UploadDirHandler::process(Conf &cf) {
 
 void	ErrorPageHandler::process(Conf &cf) {
 	cf.args.clear();
-}
+} 

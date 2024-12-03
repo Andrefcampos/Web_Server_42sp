@@ -27,7 +27,7 @@ int main(int ac, char **av)
 	if (ac <= 2) {
 		try {
 			Conf cf;
-			Parser::parser(cf, (ac == 1 ? "default.conf": av[1]));
+			Parser::parser(cf, (ac == 1 ? "conf/default.conf": av[1]));
 		} catch (const exception &e) {
 			cerr << e.what() << endl;
 		}

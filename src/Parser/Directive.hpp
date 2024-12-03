@@ -27,8 +27,6 @@ class Directive {
 	public:
 		Directive() {};
 		virtual ~Directive() {};
-
-		friend class Handler;
 };
 
 class ServerDirective : public Directive {
@@ -37,11 +35,10 @@ class ServerDirective : public Directive {
 	public:
 		ServerDirective();
 		~ServerDirective();
+
 		void			appendServer(Server *server);
 		Server			*back(void) const;
 		const Server	&getServer(const std::string &host);
-
-		friend class ServerHandler;
 };
 
 class ListenDirective : public Directive {
@@ -55,17 +52,16 @@ class ListenDirective : public Directive {
 		ListenDirective();
 		~ListenDirective();
 
-		void	setDefaultConfBool(bool state);
-		void	setHost(const std::string &host);
-		void	setPort(const std::string &port);
-		void	setIP(in_addr_t ip);
-		void	setPortValue(in_port_t port);
-		bool	getDefaultConfBool(void) const;
-		const std::string &getHost(void) const;
-		const std::string &getPort(void) const;
-		const in_addr_t &getIP(void) const;
-		const in_port_t &getPortValue(void) const;
-		friend class ListenHandler;
+		void				setDefaultConfBool(bool state);
+		void				setHost(const std::string &host);
+		void				setPort(const std::string &port);
+		void				setIP(in_addr_t ip);
+		void				setPortValue(in_port_t port);
+		bool				getDefaultConfBool(void) const;
+		const std::string	&getHost(void) const;
+		const std::string	&getPort(void) const;
+		const in_addr_t		&getIP(void) const;
+		const in_port_t		&getPortValue(void) const;
 };
 
 class ServerNameDirective : public Directive {
@@ -75,10 +71,8 @@ class ServerNameDirective : public Directive {
 		ServerNameDirective();
 		~ServerNameDirective();
 
-		void	setServerName(const std::string &server_name);
-		const std::string &getServerName(void) const;
-		
-		friend class ServerNameHandler;
+		void				setServerName(const std::string &server_name);
+		const std::string	&getServerName(void) const;
 };
 
 class ClientMaxBodySizeDirective : public Directive {
@@ -89,12 +83,10 @@ class ClientMaxBodySizeDirective : public Directive {
 		ClientMaxBodySizeDirective();
 		~ClientMaxBodySizeDirective();
 
-		void	setDefaultConfBool(const bool state);
-		void	setSizeMax(const long long int size_max);
-		bool	getDefaultConfBool(void) const;
+		void			setDefaultConfBool(const bool state);
+		void			setSizeMax(const long long int size_max);
+		bool			getDefaultConfBool(void) const;
 		long long int	getSizeMax(void) const;
-
-		friend class ClientMaxBodySizeHandler;
 };
 
 class LocationDirective : public Directive {
@@ -106,10 +98,6 @@ class LocationDirective : public Directive {
 
 		void		appendLocation(Location *location);
 		Location	*back(void) const;
-		// void	setRoute(const std::string &route);
-		// void	setDirective(Conf &cf);
-
-		friend class AllowMethodsHandler;
 };
 
 class AllowMethodsDirective : public Directive {
@@ -131,37 +119,42 @@ class AllowMethodsDirective : public Directive {
 		bool	getPostBool(void) const;
 		bool	getDeleteBool(void) const;
 		bool	isAllowed(const std::string &method) const;
-		friend class AllowMethodsHandler;
 };
 
 class RedirectDirective : public Directive {
 	private:
-		std::string redirect_route;
+		std::string _redirect_route;
 	public:
 		RedirectDirective();
 		~RedirectDirective();
 
-		friend class RedirectHandler;
+		void				setRedirectRoute(const std::string &redirect_route);
+		const std::string	&getRedirectRoute(void) const;
 };
 
 class RootDirective : public Directive {
 	private:
-		std::string root;
+		std::string _root;
 	public:
 		RootDirective();
 		~RootDirective();
 
-		friend class RootHandler;
+		void				setRoot(const std::string &root);
+		const std::string	&getRoot(void) const;
 };
 
 class AutoIndexDirective : public Directive {
 	private:
+		bool _default_conf;
 		bool _autoindex;
 	public:
 		AutoIndexDirective();
 		~AutoIndexDirective();
 
-		friend class AutoIndexHandler;
+		void	setDefaultConfBool(const bool state);
+		void	setAutoIndex(const bool state);
+		bool	getAutoIndex(void) const;
+		bool	getDefaultConfBool(void) const;
 };
 
 class IndexDirective : public Directive {

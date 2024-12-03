@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 02:19:28 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/29 02:24:01 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/02 20:53:30 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 Location::Location() : _route("") {
     this->_directives["allow_methods"] = new AllowMethodsDirective();
+    this->_directives["autoindex"] = new AutoIndexDirective();
 }
 
 Location::~Location() {

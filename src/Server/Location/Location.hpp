@@ -14,7 +14,7 @@
 
 # include <map>
 # include <string>
-class	Directive;
+# include "Directive.hpp"
 
 class Location {
 	private:
@@ -25,4 +25,7 @@ class Location {
 		~Location();
 
 		friend class AllowMethodsHandler;
+		friend class RedirectHandler;
+		friend class RootHandler;
+		friend class AutoIndexHandler;
 };
