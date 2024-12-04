@@ -28,6 +28,7 @@ int main(int ac, char **av)
 		try {
 			Conf cf;
 			Parser::parser(cf, (ac == 1 ? "conf/default.conf": av[1]));
+			manager.loopingEvent();
 		} catch (const exception &e) {
 			cerr << e.what() << endl;
 		}
@@ -35,7 +36,5 @@ int main(int ac, char **av)
 		cerr << "usage: ./webserv <path to configuration file> or just ./webserv" << endl;
 		return (FAIL);
 	}
-	// Webserv Web(Services); 
-	// Web.loopingEvent();
 	return (SUCCESS);
 }

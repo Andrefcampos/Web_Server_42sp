@@ -25,9 +25,8 @@ Webserv::Webserv() {
 };
 
 Webserv::~Webserv() {
-	for (std::map<std::string, Directive *>::iterator it = _conf.begin(); it != _conf.end(); ++it) {
+	for (std::map<std::string, Directive *>::iterator it = _conf.begin(); it != _conf.end(); ++it)
 		delete it->second;
-	}
 	_conf.clear();
 };
 
@@ -61,15 +60,15 @@ Webserv::~Webserv() {
 // 	}
 // }
 
-// void	Webserv::loopingEvent(){
-// 	while(1){
-// 		_nfds = epoll_wait(_epollfd, _events, _maxEvents, -1);
-// 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
-// 			if (not isNewClient(index_epoll))
-// 				readFdClient(_events[index_epoll], _ev, _epollfd);
-// 		}
-// 	}
-// }
+void	Webserv::loopingEvent(){
+	while (true) {
+		_nfds = epoll_wait(_epollfd, _events, _maxEvents, -1);
+		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
+			if (not isNewClient(index_epoll))
+				readFdClient(_events[index_epoll], _ev, _epollfd);
+		}
+	}
+}
 
 // int	Webserv::isNewClient(int index){
 // 	_it = _services.begin();
