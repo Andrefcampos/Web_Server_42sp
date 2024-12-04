@@ -20,7 +20,10 @@
 
 Webserv manager;
 
-Webserv::Webserv() {		
+Webserv::Webserv() : ParserRequest() {
+	if ((_epollFd = epoll_create1(EPOLL_CLOEXEC)) == -1)
+		throw std::runtime_error("error: epoll_create1()");
+	
 	_conf["server"] = new ServerDirective();
 };
 
@@ -60,9 +63,9 @@ Webserv::~Webserv() {
 // 	}
 // }
 
-void	Webserv::loopingEvent(){
+void	Webserv::loopingEvent() {
 	while (true) {
-		_nfds = epoll_wait(_epollfd, _events, _maxEvents, -1);
+		_nfds = epoll_wait(_epollFd, _events, _maxEvents, -1);
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
 			if (not isNewClient(index_epoll))
 				readFdClient(_events[index_epoll], _ev, _epollfd);
@@ -88,30 +91,30 @@ void	Webserv::loopingEvent(){
 // 	return (0);
 // }
 
-// int	Webserv::responseClient(int fd, std::string resp){
-// 	_it = _services.begin();
-// 	_ite = _services.end();
-// 	while(_it != _ite){
-// 		if (resp.find("Host: localhost:8080") != std::string::npos)
-// 		{
-// 			if (resp.find("Accept: text/html") != std::string::npos)
-// 				_it->second.sendResponseHTML(fd, "index/index.html");
-// 			else if (resp.find("Accept: image/avif") != std::string::npos)
-// 				_it->second.sendResponseImage(fd, "image/images.png");
-// 			break ;
-// 		}
-// 		else{
-// 			if (resp.find("Accept: text/html") != std::string::npos)
-// 				_it->second.sendResponseHTML(fd, "index/index2.html");
-// 			else if (resp.find("Accept: image/avif") != std::string::npos)
-// 				_it->second.sendResponseImage(fd, "image/img.png");
-// 			break ;
-// 		}
-// 		_it++;
-// 	}
-// 	resp = "";
-// 	return (0);
-// }
+int	Webserv::responseClient(int fd, std::string resp){
+	_it = _services.begin();
+	_ite = _services.end();
+	while(_it != _ite){
+		if (resp.find("Host: localhost:8080") != std::string::npos)
+		{
+			if (resp.find("Accept: text/html") != std::string::npos)
+				_it->second.sendResponseHTML(fd, "index/index.html");
+			else if (resp.find("Accept: image/avif") != std::string::npos)
+				_it->second.sendResponseImage(fd, "image/images.png");
+			break ;
+		}
+		else{
+			if (resp.find("Accept: text/html") != std::string::npos)
+				_it->second.sendResponseHTML(fd, "index/index2.html");
+			else if (resp.find("Accept: image/avif") != std::string::npos)
+				_it->second.sendResponseImage(fd, "image/img.png");
+			break ;
+		}
+		_it++;
+	}
+	resp = "";
+	return (0);
+}
 
 // Webserv::~Webserv(){}
 

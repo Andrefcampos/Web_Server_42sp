@@ -37,6 +37,7 @@ class ServerDirective : public Directive {
 		ServerDirective();
 		~ServerDirective();
 
+		void			initServers(void);
 		void			appendServer(Server *server);
 		Server			*back(void) const;
 		const Server	&getServer(const std::string &host);

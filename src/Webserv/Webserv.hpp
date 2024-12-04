@@ -41,26 +41,18 @@ class Handler;
 // 		friend class Handler;
 // };
 
-class Webserv {
+class Webserv : ParserRequest {
 	private:
 		std::map<std::string, Directive *>	_conf;
+		int									_epollFd;
+		epoll_event							_ev, _events[80];
+		int		responseClient(int fd, std::string resp);
+		void	loopingEvent(void);
 	public:
 		~Webserv();
 		Webserv();
 
 		friend class ServerHandler;
-		// friend class ListenHandler;
-		// friend class ServerNameHandler;
-		// friend class ClientMaxBodySizeHandler;
-		// friend class LocationHandler;
-		// friend class AllowMethodsHandler;
-		// friend class RedirectHandler;
-		// friend class RootHandler;
-		// friend class AutoIndexHandler;
-		// friend class IndexHandler;
-		// friend class CgiHandler;
-		// friend class UploadDirHandler;
-		// friend class ErrorPageHandler;
 };
 
 extern Webserv manager;

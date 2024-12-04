@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/03 17:39:10 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:26:04 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,17 @@ class Location;
 
 class Server : public Socket, public Response {
 	private:
-		// int			_socketFd;
-		// int 		_port;
-		// int 		_maxEvents;
-		// std::string	_ip;
-		// std::string _hostName;
-		std::map<std::string, Directive *> _directives;
+		int									_socketFd;
+		std::map<std::string, Directive *>	_directives;
 
 	public:
 		Server();
 		virtual ~Server();
 
-		Directive *getDirective(const std::string &directive);
-		// void	setDirective(Conf &cf);
-		// Server():_hostName(""){};
-		// Server(int port, int events, std::string hostName, std::string ip);
-		// int			getSocketFd() const;
-		// int			getMaxEvent() const;
-		// std::string	getHostName() const;
+		Directive	*getDirective(const std::string &directive);
+		int			getSocketFd() const;
+		void		setSocketFd(const int socketFd);
+
 		friend class ServerNameHandler;
 		friend class ClientMaxBodySizeHandler;
 		friend class LocationHandler;

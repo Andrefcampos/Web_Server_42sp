@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 18:38:41 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:32:04 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ Socket::Socket(){
 	std::memset(&_addr, 0, sizeof(_addr));
 }
 
-void	Socket::initTCP(int &socketFd, int &port, int &events, const char *ip){
+int		Socket::initTCP(const in_port_t &port, int events, const in_addr_t &ip) {
+	int socketFd = 0;
 	try{
 		initSocket(socketFd);
 		setSocketReusable(socketFd);
@@ -34,9 +35,11 @@ void	Socket::initTCP(int &socketFd, int &port, int &events, const char *ip){
 		setAddr(socketFd, port, ip);
 		setAddrToSocket(socketFd);
 		putSocketListeningLimit(socketFd, events);
-	}catch(std::exception &e){
+		return (socketFd);
+	} catch(std::exception &e) {
 		std::cerr << e.what();		
 	}
+	return (-1);
 }
 
 void	Socket::initSocket(int &socketFd){
@@ -59,13 +62,10 @@ void	Socket::setPortReusable(int &socketFd){
 		throw std::runtime_error("error: setsockopt()");
 }
 
-void	Socket::setAddr(int socketFd, int &port, const char *ip){
+void	Socket::setAddr(int socketFd, const in_port_t &port, const in_addr_t &ip){
 	_addr.sin_family = AF_INET;
-	_addr.sin_port = htons(port);
-	if (inet_pton(AF_INET, ip, &_addr.sin_addr) <= 0){
-		   close(socketFd);
-        throw std::runtime_error("error: invalid IP address");
-	}
+	_addr.sin_port = port;
+	_addr.sin_addr.s_addr = ip;
 }
 
 void	Socket::setAddrToSocket(int &socketFd){

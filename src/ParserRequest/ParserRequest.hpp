@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 10:06:43 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 18:54:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:34:32 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <cstring>
 #include <sys/epoll.h>
 
-#define	BUFFERSIZE 4024
+#define	BUFFERSIZE 4096
 
 class ParserRequest {
 	protected:

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+# include <netinet/in.h>
+# include <inttypes.h>
 #include "Location.hpp"
 #include "Logger.hpp"
 #include "Directive.hpp"
@@ -32,6 +34,14 @@ void    ServerDirective::appendServer(Server *server) {
 
 Server  *ServerDirective::back(void) const {
 	return(_servers.back());
+}
+
+void	ServerDirective::initServers(void) {
+	ListenDirective *listen_obj;
+	for (vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
+		listen_obj = static_cast<ListenDirective *>((*it)->getDirective("listen"));
+		(*it)->setSocketFd((*it)->initTCP(listen_obj->getPortValue(), 5, listen_obj->getIP()));
+	}
 }
 
 ListenDirective::ListenDirective() : _default_conf(true), _ip(0), _port_value(htons(8080)), _host("0.0.0.0"), _port("8080") {}

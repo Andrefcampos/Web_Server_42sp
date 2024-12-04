@@ -6,14 +6,16 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:46:49 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 18:38:02 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:26:59 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>
-#include <netinet/in.h>
+# include <string>
+# include <netinet/in.h>
+# include <inttypes.h>
+
 
 class Socket {
 	private:
@@ -21,12 +23,12 @@ class Socket {
 		virtual void	initSocket(int &socketFd);
 		virtual void	setSocketReusable(int &socketFd);
 		virtual void	setPortReusable(int &socketFd);
-		virtual void	setAddr(int socketFd, int &port, const char *ip);
+		virtual void	setAddr(int socketFd, const in_port_t &port, const in_addr_t &ip);
 		virtual void	setAddrToSocket(int &socketFd);
 		virtual void	putSocketListeningLimit(int &socketFd, int &events);
 
 	public:
 		Socket();
 		~Socket();
-		virtual void	initTCP(int &socketFd, int &port, int &events, const char *ip);
+		virtual int		initTCP(const in_port_t &port, int events, const in_addr_t &ip);
 };
