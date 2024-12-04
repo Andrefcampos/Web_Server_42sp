@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar JSON no Corpo</title>
+</head>
+<body>
+    <h1>Enviar Dados JSON no Corpo</h1>
+    <form id="jsonForm">
+        <label for="jsonInput">Insira o JSON:</label><br>
+        <textarea id="jsonInput" rows="10" cols="50" placeholder='{"key": "value"}'></textarea><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+    <script>
+        document.getElementById('jsonForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Previne o comportamento padrão do formulário
+
+            const jsonInput = document.getElementById('jsonInput').value.trim();
+
+            try {
+                // Verifica se o JSON é válido
+                JSON.parse(jsonInput);
+
+                // Envia os dados JSON no corpo da requisição
+                const response = await fetch('/process-json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': jsonInput.length.toString()
+                    },
+                    body: jsonInput
+                });
+                if (response.ok) {
+                    alert("JSON enviado com sucesso!");
+                } else {
+                    alert("Erro ao enviar o JSON. Código HTTP: " + response.status);
+                }
+            } catch (error) {
+                alert("JSON inválido. Verifique o formato e tente novamente.");
+            }
+        });
+    </script>
+</body>
+</html>

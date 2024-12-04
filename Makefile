@@ -18,55 +18,34 @@ SRC_DIR				:= src/ src/utils src/Server \
 					src/Server/Socket src/Server/Response \
 					src/Webserv src/ParserRequest \
 					src/Parser src/Logger src/Server/Location \
-					src/Server/ErrorPage
-# DIR_MAIN 			:= src/
-# DIR_UTILS			:= src/utils/
-# DIR_SERVER			:= src/Server/
-# DIR_SOCKET			:= src/Server/Socket/
-# DIR_RESPONSE		:= src/Server/Response/
-# DIR_WEBSERV			:= src/Webserv/
-# DIR_PARSERREQUEST	:= src/ParserRequest/
-# DIR_INCLUDES		:= include/
-# DIR_PARSER			:= src/Parser/
-# DIR_LOGGER			:= src/Logger/
+					src/Server/ErrorPage src/ParseRequest/Request \
+					src/ParseRequest/Request/AHeaders \
+					src/ParseRequest/Request/ARequestLine \
+					src/ParseRequest/Request/ABody \
+					src/ParseRequest/Request/ABody/DataBody \
+					src/ParseRequest/Request/ABody/MultPart \
+					src/ParseRequest/Request/ABody/Chunked \
+					src/ParseRequest/Request/ABody/SimpleBody \
 
 #-----------------------------------------------------------------------------------------
 # Header file
-# INCLUDE			:= -I $(DIR_SERVER) -I $(DIR_SOCKET)\
-# 					-I $(DIR_RESPONSE) -I $(DIR_WEBSERV)\
-# 					-I $(DIR_PARSERREQUEST) -I $(DIR_UTILS)\
-# 					-I $(DIR_INCLUDES) -I $(DIR_PARSER) \
-# 					-I $(DIR_LOGGER) 
-
 INCLUDE				:= -I src/Server -I src/Server/Socket \
 					-I src/utils -I src/Server/Response \
 					-I src/Webserv -I src/ParserRequest \
 					-I src/Parser -I src/Logger -I include \
-					-I src/Server/Location -I src/Server/ErrorPage
+					-I src/Server/Location -I src/Server/ErrorPage \
+					-I src/ParseRequest/Request \
+					-I src/ParseRequest/Request/AHeaders \
+					-I src/ParseRequest/Request/ARequestLine \
+					-I src/ParseRequest/Request/ABody \
+					-I src/ParseRequest/Request/ABody/DataBody \
+					-I src/ParseRequest/Request/ABody/MultPart \
+					-I src/ParseRequest/Request/ABody/Chunked \
+					-I src/ParseRequest/Request/ABody/SimpleBody \
 
 #-----------------------------------------------------------------------------------------
 # Source files
-# FILE_MAIN				:= main.cpp
-# FILE_SERVER				:= Server.cpp
-# FILE_SOCKET				:= Socket.cpp
-# FILE_RESPONSE			:= Response.cpp
-# FILE_Webserv			:= Webserv.cpp
-# FILE_PARSERREQUEST		:= ParserRequest.cpp
-# FILE_PARSER				:= Parser.hpp
-# FILE_HANDLER			:= Handler.cpp
-
 SRC_FILES += $(foreach path, $(SRC_DIR), $(wildcard $(addprefix $(path)/, *.cpp)))
-
-
-#-----------------------------------------------------------------------------------------
-# Source files
-# SRC_FILES	:= $(addprefix $(DIR_MAIN), $(FILE_MAIN))\
-# 				$(addprefix $(DIR_SERVER), $(FILE_SERVER))\
-# 				$(addprefix $(DIR_SOCKET), $(FILE_SOCKET))\
-# 				$(addprefix $(DIR_RESPONSE), $(FILE_RESPONSE))\
-# 				$(addprefix $(DIR_WEBSERV), $(FILE_Webserv))\
-# 				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
-# 				$(addprefix $(DIR_PARSERREQUEST), $(FILE_PARSERREQUEST))\
 
 #-----------------------------------------------------------------------------------------
 # Directory for object files
@@ -108,6 +87,14 @@ debug: re
 	./$(NAME) "DEBUG"
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+	valgrind ./$(NAME)
+
+curl:
+	curl -X POST -H "Transfer-Encoding: chunked" -H "Content-Type: application/json" --data-binary @index/dados.json 127.0.0.1:8080
+
+telnet:
+	@bash -c "telnet 127.0.0.1 8080"
+	@sleep 2
+	@bash -c "cat index/RequisicaoChunked"
 
 .PHONY: all clean fclean re

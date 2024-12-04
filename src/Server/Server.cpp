@@ -6,13 +6,14 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 16:26:36 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:44:41 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Conf.hpp"
 #include "Logger.hpp"
 #include "Server.hpp"
+#include <iostream>
 
 using namespace std;
 

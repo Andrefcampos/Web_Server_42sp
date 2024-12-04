@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/12 18:55:01 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:45:40 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,24 @@ void	Response::setBody(std::string body){
 }
 
 std::string	Response::getHttp(){
-
-	this->_http += this->_fillHttp[STATUS][HTTP_VERSION];
-	this->_http += this->_fillHttp[STATUS][VALUE];
-	this->_http += this->_fillHttp[STATUS][REASON];
-	this->_http += this->_fillHttp[STATUS][END_LINE];
-	this->_http += this->_fillHttp[TYPE][HEADER];
-	this->_http += this->_fillHttp[TYPE][HEADER_TYPE];
-	this->_http += this->_fillHttp[TYPE][ENDL];
-	this->_http += this->_fillHttp[CONNECTION][HEADER];
-	this->_http += this->_fillHttp[CONNECTION][HEADER_TYPE];
-	this->_http += this->_fillHttp[CONNECTION][ENDL];
-	this->_http += this->_fillHttp[LENGTH][HEADER];
-	this->_http += this->_fillHttp[LENGTH][HEADER_TYPE];
-	this->_http += this->_fillHttp[LENGTH][ENDL];
-	this->_http += this->_body;
-	return (this->_http);
+	this->_htpp += this->_fillHttp[STATUS][HTTP_VERSION];
+	this->_htpp += this->_fillHttp[STATUS][VALUE];
+	this->_htpp += this->_fillHttp[STATUS][REASON];
+	this->_htpp += this->_fillHttp[STATUS][END_LINE];
+	this->_htpp += this->_fillHttp[TYPE][HEADER];
+	this->_htpp += this->_fillHttp[TYPE][HEADER_TYPE];
+	this->_htpp += this->_fillHttp[TYPE][ENDL];
+	this->_htpp += this->_fillHttp[CONNECTION][HEADER];
+	this->_htpp += this->_fillHttp[CONNECTION][HEADER_TYPE];
+	this->_htpp += this->_fillHttp[CONNECTION][ENDL];
+	this->_htpp += this->_fillHttp[LENGTH][HEADER];
+	this->_htpp += this->_fillHttp[LENGTH][HEADER_TYPE];
+	this->_htpp += this->_fillHttp[LENGTH][ENDL];
+	this->_htpp += this->_body;
+	return (this->_htpp);
 }
 
-void	Response::sendResponseHTML(int fd, std::string indexHTML)
-{
+void	Response::sendIndex(int fd, std::string indexHTML){
 	std::ifstream		file(indexHTML.c_str());
 	std::stringstream	status, lengh;
 	std::string			html;
@@ -80,7 +78,7 @@ void	Response::sendResponseHTML(int fd, std::string indexHTML)
 	status << 200;
 	this->setStatus(status.str(), " Ok");
 	this->setType("text/html");
-	this->setConnection("");
+	this->setConnection("MeuServidor/1.0 (Linux) ");
 	lengh << html.length();
 	this->setLength(lengh.str());
 	this->setBody(html);
@@ -88,7 +86,7 @@ void	Response::sendResponseHTML(int fd, std::string indexHTML)
 	clean();
 }
 
-void	Response::sendResponseImage(int fd, std::string image)
+void	Response::sendImage(int fd, std::string image)
 {
 	std::ifstream		file(image.c_str());
 	std::stringstream	bImage, status, lengh;
@@ -101,11 +99,12 @@ void	Response::sendResponseImage(int fd, std::string image)
 	}
 	this->setStatus(status.str(), " Ok");
 	this->setType("image/png");
-	this->setConnection("");
+	this->setConnection("MeuServidor/1.0 (Linux)");
 	lengh << bImage.str().length();
 	this->setLength(lengh.str());
-	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
-	send(fd, bImage.str().c_str(), bImage.str().length(), 0);
+	setBody(bImage.str());
+	if (send(fd, this->getHttp().c_str(),this->getHttp().length(), 0) == -1)
+		std::cerr << "DEU MERDA\n";
 	clean();
 }
 
@@ -117,12 +116,25 @@ void Response::clean(){
 	this->_fillHttp[TYPE][HEADER] = "Content-Type: ";
 	this->_fillHttp[TYPE][HEADER_TYPE] = "";
 	this->_fillHttp[TYPE][ENDL] = "\r\n";
-	this->_fillHttp[CONNECTION][HEADER] = "Connection: ";
+	this->_fillHttp[CONNECTION][HEADER] = "Server: ";
 	this->_fillHttp[CONNECTION][HEADER_TYPE] = "";
 	this->_fillHttp[CONNECTION][ENDL] = "\r\n";
 	this->_fillHttp[LENGTH][HEADER] = "Content-Length: ";
 	this->_fillHttp[LENGTH][HEADER_TYPE] = "";
 	this->_fillHttp[LENGTH][ENDL] = "\r\n\r\n";
 	this->_body = "";
-	this->_http = "";
+	this->_htpp = "";
+}
+
+std::string Response::getPathImage() const{
+	return _pathImage;
+}
+std::string Response::getPathIndex() const{
+	return _pathIndex;
+}
+void Response::setPathImage(std::string pathImage){
+	_pathImage = pathImage;
+}
+void Response::setPathIndex(std::string pathIndex){
+	_pathIndex = pathIndex;
 }

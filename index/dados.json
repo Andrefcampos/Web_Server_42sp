@@ -1,0 +1,23 @@
+{
+    "nome": "João Silva",
+    "idade": 30,
+    "email": "joao.silva@example.com",
+    "enderecos": [
+        {
+            "tipo": "Residencial",
+            "rua": "Rua das Flores",
+            "numero": 123,
+            "cidade": "São Paulo",
+            "estado": "SP"
+        },
+        {
+            "tipo": "Comercial",
+            "rua": "Avenida Central",
+            "numero": 456,
+            "cidade": "Rio de Janeiro",
+            "estado": "RJ"
+        }
+    ],
+    "habilidades": ["Programação", "Design Gráfico", "Gestão de Projetos"],
+    "ativo": true
+}
