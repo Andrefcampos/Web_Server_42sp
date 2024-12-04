@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 17:46:00 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:06:03 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ Socket::Socket(){
 
 int		Socket::initTCP(const in_port_t &port, int events, const in_addr_t &ip) {
 	int socketFd = 0;
+	std::cout << port << " " << events << " " << ip << std::endl;
 	try{
 		initSocket(socketFd);
 		setSocketReusable(socketFd);
 		setPortReusable(socketFd);
-		setAddr(socketFd, port, ip);
+		setAddr(port, ip);
 		setAddrToSocket(socketFd);
 		putSocketListeningLimit(socketFd, events);
 		return (socketFd);
@@ -62,13 +63,17 @@ void	Socket::setPortReusable(int &socketFd){
 		throw std::runtime_error("error: setsockopt()");
 }
 
-void	Socket::setAddr(int socketFd, const in_port_t &port, const in_addr_t &ip){
+void	Socket::setAddr(const in_port_t &port, const in_addr_t &ip) {
+	(void) ip;
+	(void) port;
 	_addr.sin_family = AF_INET;
-	_addr.sin_port = port;
-	_addr.sin_addr.s_addr = ip;
+	_addr.sin_port = htons(8080);
+	inet_pton(AF_INET, "127.0.0.1", &_addr.sin_addr);
+	// _addr.sin_addr.s_addr = IANY_ADDR;
 }
 
 void	Socket::setAddrToSocket(int &socketFd){
+	std::cout << socketFd << std::endl;
 	if (bind(socketFd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
 		throw std::runtime_error("error: failed to bind socket");
 }

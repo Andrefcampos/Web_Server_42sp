@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ParseRequest.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 11:28:56 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/04 18:53:33 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "Request.hpp"
 #include <map>
-#define BUFFER_SIZE 4012
+#include "defines.hpp"
 
 struct ctrlFD{
 	Request		*request;

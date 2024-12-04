@@ -14,44 +14,39 @@
 
 #include "Server.hpp"
 #include <sys/epoll.h>
+#include <string>
+#include <iterator>
 #include <map>
 #include <iostream>
-#include "ParserRequest.hpp"
+#include "ParseRequest.hpp"
 
-class Handler;
-
-// class Webserv: public ParserRequest {
+// class Webserv : public ParseRequest {
 // 	private:
-// 		std::map<std::string, Directive *>	_conf;
-// 		// std::map<std::string, Server *>::iterator	_it, _ite;
-// 		// int				_nfds, _epollfd, _maxEvents;
-// 		// char			_buffer[8000];
-// 		// epoll_event		_ev, _events[80];
-// 		// int				isNewClient(int index);
-// 		// int				responseClient(int fd, std::string resp);
-// 		// void			createEpoll();
-// 		// void			initServicesAddSocket();
-
+// 		std::map<std::string, Server>			_services;
+// 		std::map<std::string, Server>::iterator _it, _ite;
+// 		int				_nfds, _epollfd, _maxEvents;
+// 		epoll_event		_ev, _events[80];
+// 		int				isNewClient(int index);
+// 		int				responseClient(int fd);
 // 	public:
 // 		~Webserv();
 // 		Webserv();
-// 		// Webserv(std::map<std::string, Server> services);
-// 		// void	loopingEvent();
-
-// 		friend class Handler;
+// 		void	loopingEvent();
 // };
 
-class Webserv : ParserRequest {
+class Webserv : public ParseRequest {
 	private:
 		std::map<std::string, Directive *>	_conf;
-		int									_epollFd;
+		int									_nfds, _epollFd;
 		epoll_event							_ev, _events[80];
-		int		responseClient(int fd, std::string resp);
-		void	loopingEvent(void);
+		int		responseClient(int fd);
+
 	public:
 		~Webserv();
 		Webserv();
 
+		void	setting(void);
+		void	loopingEvent(void);
 		friend class ServerHandler;
 };
 

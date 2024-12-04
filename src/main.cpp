@@ -13,13 +13,12 @@
 /* ************************************************************************** */
 
 #include <iostream>
-#include "Server.hpp"
 #include "Webserv.hpp"
+#include "Server.hpp"
 #include "Parser.hpp"
 #include "Conf.hpp"
-#include "defines.hpp"
 #include "Handler.hpp"
-#include <map>
+#include "defines.hpp"
 
 using namespace std;
 
@@ -29,6 +28,7 @@ int main(int ac, char **av)
 		try {
 			Conf cf;
 			Parser::parser(cf, (ac == 1 ? "conf/default.conf": av[1]));
+			manager.setting();
 			manager.loopingEvent();
 		} catch (const exception &e) {
 			cerr << e.what() << endl;

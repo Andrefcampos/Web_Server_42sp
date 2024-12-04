@@ -37,8 +37,11 @@ class ServerDirective : public Directive {
 		ServerDirective();
 		~ServerDirective();
 
+		int				isNewClient(int fd, int epoll_fd);
+		void			addSocketsToEpoll(int epoll_fd);
 		void			initServers(void);
 		void			appendServer(Server *server);
+		int				size(void) const;
 		Server			*back(void) const;
 		const Server	&getServer(const std::string &host);
 };

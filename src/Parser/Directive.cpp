@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <netinet/in.h>
-# include <inttypes.h>
+#include <cstring>
+#include <netinet/in.h>
+#include <inttypes.h>
+#include <sys/epoll.h>
 #include "Location.hpp"
 #include "Logger.hpp"
 #include "Directive.hpp"
@@ -44,6 +46,38 @@ void	ServerDirective::initServers(void) {
 	}
 }
 
+int		ServerDirective::size(void) const {
+	return (this->_servers.size());
+}
+
+int	ServerDirective::isNewClient(int fd, int epoll_fd) {
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev));
+	for(vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
+		if (fd == (*it)->getSocketFd()) {
+			ev.data.fd = accept((*it)->getSocketFd(), 0, 0);
+			if (ev.data.fd == -1)
+				throw (runtime_error("error: accept()"));
+			ev.events = EPOLLIN;
+			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, ev.data.fd, &ev) == -1)
+				throw (runtime_error("error: epoll_ctl()"));
+			return (true);
+		}
+	}
+	return (false);
+}
+
+void	ServerDirective::addSocketsToEpoll(int epoll_fd) {
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev));
+	ev.events = EPOLLIN;
+	for (vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
+		ev.data.fd = (*it)->getSocketFd();
+		if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, ev.data.fd, &ev) == -1)
+			throw (runtime_error("error: epoll_ctl()"));
+	}
+}
+
 ListenDirective::ListenDirective() : _default_conf(true), _ip(0), _port_value(htons(8080)), _host("0.0.0.0"), _port("8080") {}
 
 ListenDirective::~ListenDirective() {}
@@ -61,11 +95,11 @@ void	ListenDirective::setPort(const string &port) {
 }
 
 void	ListenDirective::setIP(in_addr_t ip) {
-	this->_ip = htonl(ip);
+	this->_ip = ip;
 }
 
 void	ListenDirective::setPortValue(in_port_t port_value) {
-	this->_port_value = htons(port_value);
+	this->_port_value = port_value;
 }
 
 bool	ListenDirective::getDefaultConfBool(void) const {

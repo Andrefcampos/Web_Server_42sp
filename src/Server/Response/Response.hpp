@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 17:45:47 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:56:05 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ class Response
 		void setBody(std::string body);
 		std::string	getHttp();
 		//virtual void	sendResponse(int fd, httpRequest http) = 0;
-		void	sendIndex(int fd, std::string indexHTML);
-		void	sendImage(int fd, std::string image);
+		void		sendIndex(int fd, std::string indexHTML);
+		void		sendImage(int fd, std::string image);
 		std::string getPathImage() const;
 		std::string getPathIndex() const;
 		void		setPathImage(std::string pathImage);

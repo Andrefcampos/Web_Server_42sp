@@ -19,7 +19,7 @@ SRC_DIR				:= src/ src/utils src/Server \
 					src/Webserv src/ParserRequest \
 					src/Parser src/Logger src/Server/Location \
 					src/Server/ErrorPage src/ParseRequest/Request \
-					src/ParseRequest/Request/AHeaders \
+					src/ParseRequest  src/ParseRequest/Request/AHeaders \
 					src/ParseRequest/Request/ARequestLine \
 					src/ParseRequest/Request/ABody \
 					src/ParseRequest/Request/ABody/DataBody \
@@ -34,7 +34,7 @@ INCLUDE				:= -I src/Server -I src/Server/Socket \
 					-I src/Webserv -I src/ParserRequest \
 					-I src/Parser -I src/Logger -I include \
 					-I src/Server/Location -I src/Server/ErrorPage \
-					-I src/ParseRequest/Request \
+					-I src/ParseRequest -I src/ParseRequest/Request \
 					-I src/ParseRequest/Request/AHeaders \
 					-I src/ParseRequest/Request/ARequestLine \
 					-I src/ParseRequest/Request/ABody \
