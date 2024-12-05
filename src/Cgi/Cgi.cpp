@@ -6,7 +6,7 @@
 /*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 17:09:53 by andrefil          #+#    #+#             */
-/*   Updated: 2024/12/05 13:32:11 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:47:50 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include <sys/wait.h>
 #include <cstring>
 #include <sys/stat.h>
-
+#include <cstdlib>
+#include <cstdio>
 
 Cgi::Cgi(void) {}
 
@@ -155,8 +156,8 @@ void	Cgi::validateRequestBody(void) {
 		throw std::invalid_argument("O corpo da requisição é muito grande.");
 	}
 
-	for (char c : _body) {
-		if (c < 32 && c != '\n' && c != '\r') {
+	for (std::string::const_iterator it = _body.begin(); it != _body.end(); ++it) {
+		if (*it < 32 && *it != '\n' && *it != '\r') {
 			throw std::invalid_argument("O corpo da requisição contém caracteres inválidos.");
 		}
 	}
@@ -168,7 +169,7 @@ void	Cgi::validateInput(void) {
 }
 
 std::string Cgi::handleRequest(void) {
-	validateInput();
+	// validateInput();
 	initEnvp();
 	return (executeCgi());
 }
