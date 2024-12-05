@@ -49,8 +49,7 @@ class ServerDirective : public Directive {
 class ListenDirective : public Directive {
 	private:
 		bool		_default_conf;
-		in_addr_t	_ip;
-		in_port_t	_port_value;
+		std::string _ip;
 		std::string	_host;
 		std::string	_port;
 	public:
@@ -60,13 +59,11 @@ class ListenDirective : public Directive {
 		void				setDefaultConfBool(bool state);
 		void				setHost(const std::string &host);
 		void				setPort(const std::string &port);
-		void				setIP(in_addr_t ip);
-		void				setPortValue(in_port_t port);
+		void				setIP(const std::string &ip);
 		bool				getDefaultConfBool(void) const;
 		const std::string	&getHost(void) const;
 		const std::string	&getPort(void) const;
-		const in_addr_t		&getIP(void) const;
-		const in_port_t		&getPortValue(void) const;
+		const std::string	&getIP(void) const;
 };
 
 class ServerNameDirective : public Directive {

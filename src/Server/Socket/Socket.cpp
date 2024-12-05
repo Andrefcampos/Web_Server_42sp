@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 19:06:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:06:49 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <cstring>
 #include <stdexcept>
 #include <unistd.h>
+#include <cstdlib>
 
 Socket::~Socket(){}
 
@@ -26,7 +27,7 @@ Socket::Socket(){
 	std::memset(&_addr, 0, sizeof(_addr));
 }
 
-int		Socket::initTCP(const in_port_t &port, int events, const in_addr_t &ip) {
+int		Socket::initTCP(const char *port, int events, const char *ip) {
 	int socketFd = 0;
 	std::cout << port << " " << events << " " << ip << std::endl;
 	try{
@@ -63,17 +64,17 @@ void	Socket::setPortReusable(int &socketFd){
 		throw std::runtime_error("error: setsockopt()");
 }
 
-void	Socket::setAddr(const in_port_t &port, const in_addr_t &ip) {
-	(void) ip;
-	(void) port;
+void	Socket::setAddr(const char *port, const char *ip) {
 	_addr.sin_family = AF_INET;
-	_addr.sin_port = htons(8080);
-	inet_pton(AF_INET, "127.0.0.1", &_addr.sin_addr);
-	// _addr.sin_addr.s_addr = IANY_ADDR;
+	_addr.sin_port = htons(strtol(port, 0, 10));
+	(void)ip;
+	inet_pton(AF_INET, "127.0.0.7", &_addr.sin_addr);
 }
 
 void	Socket::setAddrToSocket(int &socketFd){
 	std::cout << socketFd << std::endl;
+	if (bind(socketFd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
+		throw std::runtime_error("error: failed to bind socket");
 	if (bind(socketFd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
 		throw std::runtime_error("error: failed to bind socket");
 }

@@ -81,7 +81,7 @@ run:
 	./$(NAME)
 
 re_run: re
-	./$(NAME)
+	./$(NAME) conf/conf.conf
 
 debug: re
 	./$(NAME) "DEBUG"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handler.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/04 18:57:46 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:03:25 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,15 @@ void	ListenHandler::process(Conf &cf) {
 	ss.str(cf.args.back());
 	ss >> value;
 	found = value.find(':');
-	// cout << "Defaul conf listen" << endl;
-	// cout << "ip: "<< listen_obj->getIP() << endl;
-	// cout << "host: " << listen_obj->getHost() << endl;
-	// cout << "port: " << listen_obj->getPort() << endl;
+	cout << "Defaul conf listen" << endl;
+	cout << "ip: "<< listen_obj->getIP() << endl;
+	cout << "host: " << listen_obj->getHost() << endl;
+	cout << "port: " << listen_obj->getPort() << endl;
 	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;
 	if (found != string::npos) {
 		struct addrinfo hints;
 		struct addrinfo *res;
-		struct in_addr	inp;
+		// struct in_addr	inp;
 		int rc;
 		long n;
 		string host = value.substr(0, found);
@@ -103,18 +103,17 @@ void	ListenHandler::process(Conf &cf) {
 		rc = getaddrinfo(host.c_str(), port.c_str(), &hints, &res);
 		if (rc != 0)
 			throw (runtime_error(Logger::log_error(cf, "getaddrinfo: \"%s\"", gai_strerror(rc))));
-		rc = inet_aton(res->ai_addr->sa_data, &inp);
+		// rc = inet_aton(res->ai_addr->sa_data, &inp);
 		if (rc != 0)
 			throw (runtime_error(Logger::log_error(cf, "inet_aton: \"%s\"", gai_strerror(rc))));
 		listen_obj->setHost(host);
 		listen_obj->setPort(port);
-		listen_obj->setIP(inp.s_addr);
-		listen_obj->setPortValue(static_cast<in_port_t>(n));
+		listen_obj->setIP(string(res->ai_addr->sa_data));
 		freeaddrinfo(res);
 	} else if (value.find('.') != string::npos) {
 		struct addrinfo hints;
 		struct addrinfo *res;
-		struct in_addr	inp;
+		// struct in_addr	inp;
 		int rc;
 		string host = value.substr(0, value.find(';'));
 		if (host.length() == 0)
@@ -125,11 +124,11 @@ void	ListenHandler::process(Conf &cf) {
 		rc = getaddrinfo(host.c_str(), NULL, &hints, &res);
 		if (rc != 0)
 			throw (runtime_error(Logger::log_error(cf, "getaddrinfo: \"%s\"", gai_strerror(rc))));
-		rc = inet_aton(res->ai_addr->sa_data, &inp);
+		// rc = inet_aton(res->ai_addr->sa_data, &inp);
 		if (rc != 0)
 			throw (runtime_error(Logger::log_error(cf, "inet_aton: \"%s\"", gai_strerror(rc))));
 		listen_obj->setHost(host);
-		listen_obj->setIP(inp.s_addr);
+		listen_obj->setIP(string(res->ai_addr->sa_data));
 		freeaddrinfo(res);
 	} else {
 		string port = value.substr(0, value.find(';'));
@@ -142,12 +141,11 @@ void	ListenHandler::process(Conf &cf) {
 		if (errno == ERANGE || n < 1 || n > 65535)
 			throw (runtime_error(Logger::log_error(cf, "invalid port \"%s\" in directive \"listen\"")), port.c_str());
 		listen_obj->setPort(port);
-		listen_obj->setPortValue(static_cast<in_port_t>(n));
 	}
-	// cout << "After parser listen directive" << endl;
-	// cout << "ip: "<< listen_obj->getIP() << endl;
-	// cout << "host: " << listen_obj->getHost() << endl;
-	// cout << "port: " << listen_obj->getPort() << endl;
+	cout << "After parser listen directive" << endl;
+	cout << "ip: "<< listen_obj->getIP() << endl;
+	cout << "host: " << listen_obj->getHost() << endl;
+	cout << "port: " << listen_obj->getPort() << endl;
 	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;;
 	listen_obj->setDefaultConfBool(false);
 	cf.args.clear();

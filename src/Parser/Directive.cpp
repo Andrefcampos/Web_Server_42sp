@@ -42,7 +42,7 @@ void	ServerDirective::initServers(void) {
 	ListenDirective *listen_obj;
 	for (vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
 		listen_obj = static_cast<ListenDirective *>((*it)->getDirective("listen"));
-		(*it)->setSocketFd((*it)->initTCP(listen_obj->getPortValue(), 5, listen_obj->getIP()));
+		(*it)->setSocketFd((*it)->initTCP(listen_obj->getPort().c_str(), 5, listen_obj->getIP().c_str()));
 	}
 }
 
@@ -78,7 +78,7 @@ void	ServerDirective::addSocketsToEpoll(int epoll_fd) {
 	}
 }
 
-ListenDirective::ListenDirective() : _default_conf(true), _ip(0), _port_value(htons(8080)), _host("0.0.0.0"), _port("8080") {}
+ListenDirective::ListenDirective() : _default_conf(true), _ip("127.0.0.1"), _host("127.0.0.1"), _port("8080") {}
 
 ListenDirective::~ListenDirective() {}
 
@@ -94,12 +94,8 @@ void	ListenDirective::setPort(const string &port) {
 	this->_port = port;
 }
 
-void	ListenDirective::setIP(in_addr_t ip) {
+void	ListenDirective::setIP(const std::string &ip) {
 	this->_ip = ip;
-}
-
-void	ListenDirective::setPortValue(in_port_t port_value) {
-	this->_port_value = port_value;
 }
 
 bool	ListenDirective::getDefaultConfBool(void) const {
@@ -114,12 +110,8 @@ const string &ListenDirective::getPort(void) const {
 	return (this->_port);
 }
 
-const in_addr_t &ListenDirective::getIP(void) const {
+const std::string &ListenDirective::getIP(void) const {
 	return (this->_ip);
-}
-
-const in_port_t &ListenDirective::getPortValue(void) const {
-	return (this->_port_value);
 }
 
 ServerNameDirective::ServerNameDirective() {}
