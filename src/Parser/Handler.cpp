@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/05 16:03:25 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/05 17:23:14 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ unsigned int Handler::getType(void) {
 void	ServerHandler::process(Conf &cf) {
 	static_cast<ServerDirective *>(manager._conf["server"])->appendServer(new Server());
 	cf.current_server = static_cast<ServerDirective *>(manager._conf["server"])->back();
-	cf.current_server->setPathIndex("index/index2.html");
-	cf.current_server->setPathImage("image/img.png");
+	cf.current_server->setPathIndex("html/index.html");
+	cf.current_server->setPathImage("html/css/styles.css");
 	cf.ctx = SRV_CONF;
 	cf.args.clear();
 	Parser::parser(cf, NULL);

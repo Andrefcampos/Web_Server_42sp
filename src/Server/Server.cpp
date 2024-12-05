@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 18:57:34 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:25:51 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,12 @@ Directive	*Server::getDirective(const string &directive) {
 }
 
 void	Server::sendResponse(int fd, Request *request){
+
+	std::cout << "Path: " << request->getPath() << "\n\n\n";
 	if (request->getPath() == "/")
 		sendIndex(fd, this->getPathIndex());
+	else if (request->getPath() == "/css/styles.css")
+		sendIndex(fd, this->getPathImage());
 	else
 		sendImage(fd, this->getPathImage());
 }

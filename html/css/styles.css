@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.output {
+    margin-top: 2em;
+}
+
+.get {
+    background-color: #4CAF50; /* Verde */
+}
+
+.post {
+    background-color: #2196F3; /* Azul */
+}
+
+.put {
+    background-color: #FFC107; /* Amarelo */
+}
+
+.delete {
+    background-color: #F44336; /* Vermelho */
+}
+
+.patch {
+    background-color: #9C27B0; /* Roxo */
+}
+

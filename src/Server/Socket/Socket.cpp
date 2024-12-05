@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/05 16:06:49 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/05 17:18:14 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ void	Socket::setAddr(const char *port, const char *ip) {
 
 void	Socket::setAddrToSocket(int &socketFd){
 	std::cout << socketFd << std::endl;
-	if (bind(socketFd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
-		throw std::runtime_error("error: failed to bind socket");
 	if (bind(socketFd, (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
 		throw std::runtime_error("error: failed to bind socket");
 }
