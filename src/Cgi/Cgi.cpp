@@ -6,7 +6,7 @@
 /*   By: andrefil <andrefil@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 17:09:53 by andrefil          #+#    #+#             */
-/*   Updated: 2024/12/05 13:29:50 by andrefil         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:32:11 by andrefil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ const std::map<std::string, std::string> &Cgi::getHeader(void) const {
 }
 
 std::string Cgi::executeCgi(void) {
-    int inPipe[2];  // Pipe para enviar dados para o script
-    int outPipe[2]; // Pipe para receber a saída do script
+    int inPipe[2];
+    int outPipe[2];
 
     if (pipe(inPipe) == -1 || pipe(outPipe) == -1) {
         throw std::runtime_error("Failed pipe.");
@@ -65,36 +65,27 @@ std::string Cgi::executeCgi(void) {
     if (pid < 0) {
         throw std::runtime_error("Failed Fork");
     } else if (pid == 0) {
-        // Redireciona a entrada padrão para o pipe de entrada
         dup2(inPipe[0], STDIN_FILENO);
         close(inPipe[1]);
 
-        // Redireciona a saída padrão para o pipe de saída
         dup2(outPipe[1], STDOUT_FILENO);
         close(outPipe[0]);
 
-        // Monta os argumentos para o execv
         char *args[] = {const_cast<char *>(_scriptPath.c_str()), NULL};
 
-        // Executa o script CGI
         execv(_scriptPath.c_str(), args);
 
         perror("execv fail");
         _exit(EXIT_FAILURE);
     } else {
-        // Fecha a extremidade de leitura do pipe de entrada
         close(inPipe[0]);
 
-        // Envia o corpo da requisição para o script pelo pipe
         if (!_body.empty()) {
             write(inPipe[1], _body.c_str(), _body.size());
         }
-        close(inPipe[1]); // Fecha a extremidade de escrita após enviar os dados
-
-        // Fecha a extremidade de escrita do pipe de saída
+        close(inPipe[1]);
         close(outPipe[1]);
 
-        // Lê a saída do script pelo pipe
         std::string result;
         char buffer[128];
         ssize_t bytesRead;
@@ -177,10 +168,7 @@ void	Cgi::validateInput(void) {
 }
 
 std::string Cgi::handleRequest(void) {
-	// Valida o caminho do script e os dados recebidos
 	validateInput();
-
-	// Configura as variáveis de ambiente e executa o script
 	initEnvp();
 	return (executeCgi());
 }
