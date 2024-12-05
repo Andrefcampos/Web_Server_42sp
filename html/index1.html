@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Serv</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Métodos REST</h1>
+        <div class="button-group">
+            <!-- Botão para chamar o CGI via GET -->
+            <form action="/cgi-bin/script_cgi.py" method="GET">
+                <button type="submit" class="btn get">GET</button>
+            </form>
+
+            <!-- Botão para chamar o CGI via POST -->
+            <form action="/cgi-bin/script_cgi.py" method="POST">
+                <button type="submit" class="btn post">POST</button>
+            </form>
+
+            <!-- Outros botões permanecem interativos via JavaScript -->
+            <button class="btn put" onclick="openUpdatePage()">PUT</button>
+            <button class="btn delete" onclick="deleteImage()">DELETE</button>
+            <button class="btn patch" onclick="updateEmail()">PATCH</button>
+        </div>
+        <div id="output" class="output">
+            <h2>Resultado</h2>
+            <div id="dataDisplay"></div>
+            <img id="imageDisplay" style="display: none;" alt="Imagem Atualizada">
+        </div>
+    </div>
+    <script src="scripts/script.js" defer></script>
+</body>
+</html>
