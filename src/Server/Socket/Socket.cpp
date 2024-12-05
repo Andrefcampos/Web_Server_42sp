@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:48:07 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/05 17:18:14 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/05 18:42:32 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void	Socket::setPortReusable(int &socketFd){
 void	Socket::setAddr(const char *port, const char *ip) {
 	_addr.sin_family = AF_INET;
 	_addr.sin_port = htons(strtol(port, 0, 10));
-	(void)ip;
-	inet_pton(AF_INET, "127.0.0.7", &_addr.sin_addr);
+	inet_pton(AF_INET, ip, &_addr.sin_addr);
 }
 
 void	Socket::setAddrToSocket(int &socketFd){
