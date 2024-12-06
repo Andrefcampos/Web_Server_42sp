@@ -58,6 +58,7 @@ int		Parser::read_conf_token(Conf &cf) {
 			cf.curr = 0;
 		}
 		ch = cf.content[cf.curr++];
+
 		if (ch == '\n') {
 			cf.line++;
 			if (sharp_comment)

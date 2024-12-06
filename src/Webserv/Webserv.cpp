@@ -24,6 +24,7 @@
 #include "ABody.hpp"
 #include "DataBody.hpp"
 #include "defines.hpp"
+#include "Server.hpp"
 
 using namespace std;
 
@@ -59,21 +60,23 @@ void	Webserv::loopingEvent() {
 			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd))
 				continue ;
 			if (setBufferSocketFd(_events[index_epoll].data.fd)){
-				responseClient(_events[index_epoll].data.fd);
+				responseClient(_events[index_epoll]);
 				if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, _events[index_epoll].data.fd, &_ev) == -1)
-					throw (runtime_error("error: epoll_ctl()"));
+					throw (runtime_error("error: epoll_ctl() è aqui"));
 				close(_events[index_epoll].data.fd);
 			}
 		}
 	}
 }
 
-int	Webserv::responseClient(int fd){
-	Request *request = _socket[fd].request;
+int	Webserv::responseClient(epoll_event &ev){
+	Request *request = _socket[ev.data.fd].request;
 
+	cout << "Method: " << request->getMethod() << "\n";
 	cout << "Host: " << request->getHost() << "\n";
 	cout << "Path: " << request->getPath() << "\n";
 	cout << "Version: " << request->getVersion() << "\n";
+
 	putMapList(request->getAllHeader());
 	cout << "\n";
  	ABody *ptr = request->getBody();
@@ -97,8 +100,8 @@ int	Webserv::responseClient(int fd){
 			}
 		}
 	}
-	static_cast<ServerDirective *>(_conf["server"])->back()->sendResponse(fd, request);
+	reinterpret_cast<Server *>(ev.data.ptr)->sendResponse(ev.data.fd, request);
 	delete request;
-	_socket.erase(fd);
+	_socket.erase(ev.data.fd);
 	return (0);
 }

@@ -31,5 +31,4 @@ class Location {
 		friend class IndexHandler;
 		friend class CgiHandler;
 		friend class UploadDirHandler;
-		friend class ErrorPageHandler; 
 };

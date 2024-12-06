@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/05 17:25:51 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/06 18:58:54 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ Directive	*Server::getDirective(const string &directive) {
 }
 
 void	Server::sendResponse(int fd, Request *request){
-
-	std::cout << "Path: " << request->getPath() << "\n\n\n";
 	if (request->getPath() == "/")
 		sendIndex(fd, this->getPathIndex());
 	else if (request->getPath() == "/css/styles.css")

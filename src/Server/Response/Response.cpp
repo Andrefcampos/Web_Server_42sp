@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 18:46:42 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:11:45 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,15 @@ void Response::clean(){
 std::string Response::getPathImage() const{
 	return _pathImage;
 }
+
 std::string Response::getPathIndex() const{
 	return _pathIndex;
 }
+
 void Response::setPathImage(std::string pathImage){
 	_pathImage = pathImage;
 }
+
 void Response::setPathIndex(std::string pathIndex){
 	_pathIndex = pathIndex;
 }

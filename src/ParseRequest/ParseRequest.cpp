@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/02 14:39:28 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/06 16:18:58 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int	ParseRequest::setBufferSocketFd(int fd){
 		return 0;
 	isNewSocket(fd);
 	setBuffer(fd);
-	if (setBody(fd))
-		cout << "HAVE BODY \n\n";
 	if (parseRequest(fd))
 		return (1);
 	return 0;
@@ -52,7 +50,7 @@ int		ParseRequest::setBody(int fd){
 
 int		ParseRequest::parseRequest(int fd){
 	try{
-		cout << _socket[fd].buffer << "\n\n\n\n";
+		std::cout << _socket[fd].buffer << "\n";
 		_socket[fd].request->setRequestLine(_socket[fd].buffer);
 		_socket[fd].request->setHeader(_socket[fd].buffer);
 		_socket[fd].request->setBody(_socket[fd].buffer);

@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 10:35:27 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/06 17:14:37 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 using namespace std;
 
-class Request:public ARequestLine, public AHeaders{
+class Request : public ARequestLine, public AHeaders{
 	private:
 		ABody	*body;
 		bool	_parsedRequestLine;

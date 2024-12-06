@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 22:20:47 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/11/11 23:15:11 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:38:38 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define SRV_CONF		0x04000000
 # define LOC_CONF 		0x08000000
 # define CONF_BLOCK		0x00000100
-# define CONF_NOARGS		0x00000001
+# define CONF_NOARGS	0x00000001
 # define CONF_TAKE1		0x00000002
 # define CONF_TAKE2		0x00000004
 # define CONF_TAKE3		0x00000008

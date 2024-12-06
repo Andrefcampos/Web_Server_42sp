@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// A classe Directive comtempla os métodos para processar a requisição
+// A classe Directive contempla os métodos para processar a requisição
 
 #pragma once
 
@@ -33,10 +33,10 @@ class Directive {
 class ServerDirective : public Directive {
 	private:
 		std::vector<Server *> _servers;
+
 	public:
 		ServerDirective();
 		~ServerDirective();
-
 		int				isNewClient(int fd, int epoll_fd);
 		void			addSocketsToEpoll(int epoll_fd);
 		void			initServers(void);
@@ -52,6 +52,7 @@ class ListenDirective : public Directive {
 		std::string _ip;
 		std::string	_host;
 		std::string	_port;
+
 	public:
 		ListenDirective();
 		~ListenDirective();
@@ -69,6 +70,7 @@ class ListenDirective : public Directive {
 class ServerNameDirective : public Directive {
 	private:
 		std::string _server_name;
+
 	public:
 		ServerNameDirective();
 		~ServerNameDirective();
@@ -81,6 +83,7 @@ class ClientMaxBodySizeDirective : public Directive {
 	private:
 		bool			_default_conf;
 		long long int	_size_max;
+
 	public:
 		ClientMaxBodySizeDirective();
 		~ClientMaxBodySizeDirective();
@@ -94,6 +97,7 @@ class ClientMaxBodySizeDirective : public Directive {
 class LocationDirective : public Directive {
 	private:
 		std::vector<Location *> _locations;
+
 	public:
 		LocationDirective();
 		~LocationDirective();
@@ -108,6 +112,7 @@ class AllowMethodsDirective : public Directive {
 		bool	_GET;
 		bool	_POST;
 		bool	_DELETE;
+
 	public:
 		AllowMethodsDirective();
 		~AllowMethodsDirective();
@@ -201,6 +206,7 @@ class UploadDirDirective : public Directive {
 class ErrorPageDirective : public Directive {
 	private:
 		std::vector<ErrorPage *>	_error_pages;
+
 	public:
 		ErrorPageDirective();
 		~ErrorPageDirective();

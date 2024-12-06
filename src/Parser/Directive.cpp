@@ -56,6 +56,7 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd) {
 	for(vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
 		if (fd == (*it)->getSocketFd()) {
 			ev.data.fd = accept((*it)->getSocketFd(), 0, 0);
+			ev.data.ptr = reinterpret_cast<void *>(*it);
 			if (ev.data.fd == -1)
 				throw (runtime_error("error: accept()"));
 			ev.events = EPOLLIN;

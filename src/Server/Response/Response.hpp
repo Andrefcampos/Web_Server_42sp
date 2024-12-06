@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 18:56:05 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:35:59 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@
 #include <fstream>
 #include <sys/socket.h>
 
-
-class Response
-{
+class Response {
 	private:
 		std::string	_fillHttp[4][4];
 		std::string	_http;
@@ -50,6 +48,18 @@ class Response
 		std::string getPathIndex() const;
 		void		setPathImage(std::string pathImage);
 		void		setPathIndex(std::string pathIndex);
+};
+
+class Get : public Response {
+	
+};
+
+class Post : public Response {
+	
+};
+
+class Delete : public Response {
+	
 };
 
 enum e_response

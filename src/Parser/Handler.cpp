@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/05 18:42:13 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/06 16:03:11 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ unsigned int Handler::getType(void) {
 void	ServerHandler::process(Conf &cf) {
 	static_cast<ServerDirective *>(manager._conf["server"])->appendServer(new Server());
 	cf.current_server = static_cast<ServerDirective *>(manager._conf["server"])->back();
-	cf.current_server->setPathIndex("html/index.html");
-	cf.current_server->setPathImage("html/css/styles.css");
+	cf.current_server->setPathIndex("index/index.html");
+	cf.current_server->setPathImage("image/img.png");
 	cf.ctx = SRV_CONF;
 	cf.args.clear();
 	Parser::parser(cf, NULL);
@@ -76,11 +76,11 @@ void	ListenHandler::process(Conf &cf) {
 	ss.str(cf.args.back());
 	ss >> value;
 	found = value.find(':');
-	// cout << "Defaul conf listen" << endl;
-	// cout << "ip: "<< listen_obj->getIP() << endl;
-	// cout << "host: " << listen_obj->getHost() << endl;
-	// cout << "port: " << listen_obj->getPort() << endl;
-	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;
+/* 	cout << "Defaul conf listen" << endl;
+	cout << "ip: "<< listen_obj->getIP() << endl;
+	cout << "host: " << listen_obj->getHost() << endl;
+	cout << "port: " << listen_obj->getPort() << endl; */
+
 	if (found != string::npos) {
 		struct addrinfo hints;
 		struct addrinfo *res;
@@ -142,10 +142,10 @@ void	ListenHandler::process(Conf &cf) {
 			throw (runtime_error(Logger::log_error(cf, "invalid port \"%s\" in directive \"listen\"")), port.c_str());
 		listen_obj->setPort(port);
 	}
-	cout << "After parser listen directive" << endl;
+/* 	cout << "After parser listen directive" << endl;
 	cout << "ip: "<< listen_obj->getIP() << endl;
 	cout << "host: " << listen_obj->getHost() << endl;
-	cout << "port: " << listen_obj->getPort() << endl;
+	cout << "port: " << listen_obj->getPort() << endl; */
 	// cout << "port value: " << listen_obj->getPortValue() << endl << endl;;
 	listen_obj->setDefaultConfBool(false);
 	cf.args.clear();
@@ -250,7 +250,7 @@ void	RedirectHandler::process(Conf &cf) {
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	redirect_obj = new RedirectDirective();
 	redirect_obj->setRedirectRoute(cf.args.back().substr(0, cf.args.back().find(';')));
-	cout << redirect_obj->getRedirectRoute() << endl;
+	/* cout << redirect_obj->getRedirectRoute() << endl; */
 	cf.current_location->_directives["redirect"] = redirect_obj;
 	cf.args.clear();
 }
@@ -261,7 +261,7 @@ void	RootHandler::process(Conf &cf) {
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	root_obj = new RootDirective();
 	root_obj->setRoot(cf.args.back().substr(0, cf.args.back().find(';')));
-	cout << root_obj->getRoot() << endl;
+	/* cout << root_obj->getRoot() << endl; */
 	cf.current_location->_directives["root"] = root_obj;
 	cf.args.clear();
 }
@@ -287,7 +287,7 @@ void	IndexHandler::process(Conf &cf) {
 	if (index_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back().substr(0, cf.args.back().find(';'));
-	cout << "index: " << value << endl;
+/* 	cout << "index: " << value << endl; */
 	index_obj->setIndex(value);
 	index_obj->setDefaultConfBool(false);
 	cf.args.clear();
@@ -304,7 +304,7 @@ void	CgiHandler::process(Conf &cf) {
 		ss >> token;
 		if (token.find(';') != string::npos)
 			token = token.substr(0, token.find(';'));
-		cout << token << endl;
+		/* cout << token << endl; */
 		cgi_obj->appendExt(token);
 		token.clear();
 		ss.clear();

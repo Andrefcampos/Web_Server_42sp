@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 10:36:12 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 09:06:18 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/06 14:30:21 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	Chunked::parseBody(string &buffer){
 		bytes = popNbrBytes(buffer);
 	}
 	setDataBody(data);
-	cout << data.getContent() << '\n';
 }
 
 void	Chunked::removeDelimiter(string &buffer){

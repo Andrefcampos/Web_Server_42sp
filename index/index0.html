@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Formulário de Cadastro</h2>
+
+    <form enctype="multipart/form-data" method="post">
+        <table>
+            <tr>
+                <th>Nome</th>
+                <td><input type="text" name="nome" placeholder="Digite seu nome"></td>
+            </tr>
+            <tr>
+                <th>Sobrenome</th>
+                <td><input type="text" name="sobrenome" placeholder="Digite seu sobrenome"></td>
+            </tr>
+            <tr>
+                <th>Foto</th>
+                <td><input type="file" name="foto" accept="image/*"></td>
+            </tr>
+        </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit">Enviar</button>
+        </div>
+    </form>
+
+</body>
+</html>
