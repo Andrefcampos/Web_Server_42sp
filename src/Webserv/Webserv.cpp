@@ -59,18 +59,20 @@ void	Webserv::loopingEvent() {
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
 			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd))
 				continue ;
-			if (setBufferSocketFd(_events[index_epoll].data.fd)){
+			Server *ptr = (Server *)_events[index_epoll].data.ptr;
+			if (setBufferSocketFd(ptr->getSocketClient())){
 				responseClient(_events[index_epoll]);
-				if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, _events[index_epoll].data.fd, &_ev) == -1)
+				if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, ptr->getSocketClient(), &_ev) == -1)
 					throw (runtime_error("error: epoll_ctl() è aqui"));
-				close(_events[index_epoll].data.fd);
+				close(ptr->getSocketClient());
 			}
 		}
 	}
 }
 
 int	Webserv::responseClient(epoll_event &ev){
-	Request *request = _socket[ev.data.fd].request;
+	Server *ptr2 = (Server *)ev.data.ptr;
+	Request *request = _socket[ptr2->getSocketClient()].request;
 
 	cout << "Method: " << request->getMethod() << "\n";
 	cout << "Host: " << request->getHost() << "\n";
@@ -100,8 +102,8 @@ int	Webserv::responseClient(epoll_event &ev){
 			}
 		}
 	}
-	reinterpret_cast<Server *>(ev.data.ptr)->sendResponse(ev.data.fd, request);
+	reinterpret_cast<Server *>(ev.data.ptr)->sendResponse(ptr2->getSocketClient(), request);
 	delete request;
-	_socket.erase(ev.data.fd);
+	_socket.erase(ptr2->getSocketClient());
 	return (0);
 }

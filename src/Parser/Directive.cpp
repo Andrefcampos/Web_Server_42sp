@@ -55,12 +55,10 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd) {
 	memset(&ev, 0, sizeof(ev));
 	for(vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
 		if (fd == (*it)->getSocketFd()) {
-			ev.data.fd = accept((*it)->getSocketFd(), 0, 0);
+			(*it)->setSocketClient(accept((*it)->getSocketFd(), 0, 0));
 			ev.data.ptr = reinterpret_cast<void *>(*it);
-			if (ev.data.fd == -1)
-				throw (runtime_error("error: accept()"));
 			ev.events = EPOLLIN;
-			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, ev.data.fd, &ev) == -1)
+			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, (*it)->getSocketClient(), &ev) == -1)
 				throw (runtime_error("error: epoll_ctl()"));
 			return (true);
 		}

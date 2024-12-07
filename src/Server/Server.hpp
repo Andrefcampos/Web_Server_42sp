@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/06 18:59:06 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/07 15:24:41 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Request;
 class Server : public Socket, public Response {
 	private:
 		int									_socketFd;
+		int									_socketClient;
 		std::map<std::string, Directive *>	_directives;
 
 	public:
@@ -34,6 +35,8 @@ class Server : public Socket, public Response {
 		int			getSocketFd(void) const;
 		void		setSocketFd(const int socketFd);
 		void		sendResponse(int fd, Request *request);
+		void		setSocketClient(int fd);
+		int			getSocketClient() const;
 
 		friend class ServerNameHandler;
 		friend class ClientMaxBodySizeHandler;
