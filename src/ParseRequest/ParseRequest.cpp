@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/06 16:18:58 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/07 17:32:31 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 #include <sys/socket.h>
 #include "utils.hpp"
 
-int	ParseRequest::setBufferSocketFd(int fd){
+Request *ParseRequest::setBufferSocketFd(int fd){
 	if (fd == -1)
 		return 0;
 	isNewSocket(fd);
 	setBuffer(fd);
 	if (parseRequest(fd))
-		return (1);
-	return 0;
+		return (_socket[fd].request);
+	return NULL;
 }
 
 int		ParseRequest::findBody(int fd){
@@ -58,7 +58,6 @@ int		ParseRequest::parseRequest(int fd){
 		cout << e.what();
 		return 0;
 	}
-	
 	return 1;
 }
 

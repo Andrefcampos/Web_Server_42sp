@@ -29,7 +29,7 @@ int main(int ac, char **av)
 			Conf cf;
 			Parser::parser(cf, (ac == 1 ? "conf/default.conf": av[1]));
 
-			cout << cf.handlers["listen"]->getName() << "\n";
+			cout << cf.handlers["listen"] << "\n";
 
 			manager.setting();
 			manager.loopingEvent();

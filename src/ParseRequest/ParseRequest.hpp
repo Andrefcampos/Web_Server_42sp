@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseRequest.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 18:53:33 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:56:34 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ class ParseRequest{
 		std::map<int, ctrlFD> _socket;
 
 	public:
-		int		setBufferSocketFd(int fd);
+		Request *setBufferSocketFd(int fd);
 };

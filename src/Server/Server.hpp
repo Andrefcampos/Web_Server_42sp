@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/07 15:24:41 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/07 17:35:01 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Request;
 
 class Server : public Socket, public Response {
 	private:
+		std::map<int, Request *>			fdClient;
 		int									_socketFd;
 		int									_socketClient;
 		std::map<std::string, Directive *>	_directives;
