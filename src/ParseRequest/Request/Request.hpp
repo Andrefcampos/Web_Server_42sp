@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/06 17:14:37 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/07 18:26:20 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "ARequestLine.hpp"
 #include "AHeaders.hpp"
 #include "ABody.hpp"
+#include "Server.hpp"
 
 #define CLENGTH "Content-Length"
 #define CTYPE "Content-Type"
@@ -24,11 +25,13 @@
 #define TENCODING "Transfer-Encoding"
 #define CHUNKED "chunked"
 
+
 using namespace std;
 
 class Request : public ARequestLine, public AHeaders{
 	private:
 		ABody	*body;
+		Server	*_server;
 		bool	_parsedRequestLine;
 		bool	_parsedHeaders;
 		bool	_parsedBody;
@@ -53,6 +56,8 @@ class Request : public ARequestLine, public AHeaders{
 		void	setRequestLine(string &buffer);
 		void	setHeader(string &buffer);
 		void	setBody(std::string &buffer);
+		void	setServer(Server *server);
+		Server	*getServer() const;
 
 		class RequestException:public exception{
 			private:

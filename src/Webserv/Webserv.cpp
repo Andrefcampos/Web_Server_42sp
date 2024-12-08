@@ -59,32 +59,25 @@ void	Webserv::loopingEvent() {
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
 			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd))
 				continue ;
-			Server *ptr = (Server *)_events[index_epoll].data.ptr;
-			Request *request = setBufferSocketFd(ptr->getSocketClient());
-			if (request){
-				ptr->sendResponse(ptr->getSocketClient(), request);
-				delete request;
-				_socket.erase(ptr->getSocketClient());
-				if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, ptr->getSocketClient(), &_ev) == -1)
-					throw (runtime_error("error: epoll_ctl() è aqui"));
-				close(ptr->getSocketClient());
-			}
+			Client *client = (Client *)_events[index_epoll].data.ptr;
+			Request *request = setBufferSocketFd(client->getSocketFdClient());
+			if (request)
+				responseClient(request, client);
 		}
 	}
 }
 
 void exemploRequestParseado(Request *request);
 
-int	Webserv::responseClient(epoll_event &ev){
-	Server *ptr = reinterpret_cast<Server *>(ev.data.ptr);
-	Request *request = _socket[ptr->getSocketClient()].request;
-
-	//exemploRequestParseado(request);
-
-	ptr->sendResponse(ptr->getSocketClient(), request);
-
+int	Webserv::responseClient(Request *request, Client *client){
+	Server *server = client->getServer();
+	server->sendResponse(client->getSocketFdClient(), request);
 	delete request;
-	_socket.erase(ptr->getSocketClient());
+	_socket.erase(client->getSocketFdClient());
+	if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, client->getSocketFdClient(), &_ev) == -1)
+		throw (runtime_error("error: epoll_ctl() è aqui"));
+	close(client->getSocketFdClient());
+	delete client;
 	return (0);
 }
 

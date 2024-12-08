@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:25:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/19 10:58:57 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/07 18:26:39 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,4 +178,12 @@ Request::Request(){
 
 ABody	*Request::getBody(){
 	return body;
+}
+
+void	Request::setServer(Server *server){
+	this->_server = server;
+}
+
+Server	*Request::getServer() const{
+	return _server;
 }

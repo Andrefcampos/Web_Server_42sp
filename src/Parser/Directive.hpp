@@ -24,6 +24,18 @@
 class Server;
 class ErrorPage;
 
+struct Client{
+	private:
+		Server *_server;
+		int		_socketFdClient;
+
+	public:
+		Client(Server *server, int fdClient):_server(server), _socketFdClient(fdClient){};
+		~Client(){};
+		Server *getServer() const {return _server;};
+		int		getSocketFdClient() const {return _socketFdClient;};
+};
+
 class Directive {
 	public:
 		Directive() {};
