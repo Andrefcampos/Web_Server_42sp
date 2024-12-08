@@ -61,16 +61,11 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd) {
 	for(itServer = _servers.begin(); itServer != _servers.end(); ++itServer) {
 		if (fd == (*itServer)->getSocketFd()) {
 			fdClient = accept((*itServer)->getSocketFd(), 0, 0);
-
 			if (fdClient == -1)
 				throw (runtime_error("error: epoll_ctl()"));
-
 			Client *client = new Client(*itServer, fdClient);
-			std::cout << "Poiter to Server: " << client->getServer() <<  "Fd cliente: " << client->getSocketFdClient() << "\n";
-
 			ev.data.ptr = reinterpret_cast<void *>(client);
 			ev.events = EPOLLIN;
-
 			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fdClient, &ev) == -1)
 				throw (runtime_error("error: epoll_ctl()"));
 

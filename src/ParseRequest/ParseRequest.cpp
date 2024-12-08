@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 13:14:35 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:08:53 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,14 @@
 Request *ParseRequest::setBufferSocketFd(int fd){
 	if (fd == -1)
 		return 0;
-	isNewSocket(fd);
+	isNewClient(fd);
 	setBuffer(fd);
 	if (parseRequest(fd))
 		return (_socket[fd].request);
 	return NULL;
 }
 
-int		ParseRequest::findBody(int fd){
-	if (_socket[fd].buffer.find(""))
-		return 1;
-	return 0;
-}
-
-void	ParseRequest::isNewSocket(int fd){
+void	ParseRequest::isNewClient(int fd){
 	if (not _socket.count(fd)){
 		_socket[fd].lentgh = 0;
 		_socket[fd].request = new Request();

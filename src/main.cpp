@@ -28,9 +28,6 @@ int main(int ac, char **av)
 		try {
 			Conf cf;
 			Parser::parser(cf, (ac == 1 ? "conf/default.conf": av[1]));
-
-			cout << cf.handlers["listen"] << "\n";
-
 			manager.setting();
 			manager.loopingEvent();
 		} catch (const exception &e) {

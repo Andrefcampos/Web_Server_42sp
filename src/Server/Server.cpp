@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/07 15:24:45 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/08 15:34:28 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,4 @@ void	Server::sendResponse(int fd, Request *request){
 		sendIndex(fd, this->getPathImage());
 	else
 		sendImage(fd, this->getPathImage());
-}
-
-void		Server::setSocketClient(int fd){
-	this->_socketClient = fd;
-}
-
-int			Server::getSocketClient() const{
-	return this->_socketClient;
 }

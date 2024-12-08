@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 13:14:28 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:08:58 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ struct ctrlFD{
 
 class ParseRequest{
 	private:
-		void	isNewSocket(int fd);
+		void	isNewClient(int fd);
 		void	setBuffer(int fd);
 		int		setBody(int fd);
-		int		findBody(int fd);
 		int		setRequestLine(int fd);
 		int		setHeaders(int fd);
 		int		parseRequest(int fd);
