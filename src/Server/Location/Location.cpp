@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 02:19:28 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/03 11:09:30 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:55:13 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,10 @@ Location::~Location() {
     _directives.clear();
 }
 
+void    Location::setDirective(const Directive *directive) {
+    this->_directives[directive->getName()] = const_cast<Directive *>(directive);
+}
+
+const Directive *Location::getDirective(const std::string &directive) {
+    return (this->_directives[directive]);
+}
