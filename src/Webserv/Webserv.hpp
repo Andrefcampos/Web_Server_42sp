@@ -37,10 +37,12 @@
 class Webserv : public ParseRequest {
 	private:
 		std::map<std::string, Directive *>	_conf;
+		std::list<Client *>					_client;
 		int									_nfds, _epollFd;
 		epoll_event							_ev, _events[80];
 		int		responseClient(Request *request, Client *client);
 		void	epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr);
+		void	checkTimeOut();
 
 	public:
 		~Webserv();

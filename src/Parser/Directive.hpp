@@ -20,27 +20,32 @@
 # include <map>
 # include <vector>
 # include "Conf.hpp"
-
+# include <ctime>
+# include <list>
 class Server;
 class ErrorPage;
 
 
 struct Client{
 	private:
-		Server	*_server;
-		void *_request;
-		int		_socketFdClient;
+		Server		*_server;
+		void 		*_request;
+		std::time_t	_startTime;
+		int			_socketFdClient;
 
 
 	public:
-		Client(Server *server, int fdClient):_server(server), _socketFdClient(fdClient){
+		Client(Server *server, int fdClient)
+		:_server(server), _socketFdClient(fdClient){
 			_request = NULL;
+			_startTime = std::time(0);
 		};
 		~Client(){};
 		Server *getServer() const {return _server;};
 		int		getFdClient() const {return _socketFdClient;};
 		void	setRequest(void *request) {_request = request;};
 		void	*getRequest() const {return _request;};
+		int		timeOutRequest(){return ((time(0) - _startTime) > 10) ? 408 : 0;}
 };
 
 class Directive {
@@ -56,7 +61,7 @@ class ServerDirective : public Directive {
 	public:
 		ServerDirective();
 		~ServerDirective();
-		int				isNewClient(int fd, int epoll_fd);
+		int				isNewClient(int fd, int epoll_fd, std::list<Client *> &_client);
 		void			addSocketsToEpoll(int epoll_fd);
 		void			initServers(void);
 		void			appendServer(Server *server);

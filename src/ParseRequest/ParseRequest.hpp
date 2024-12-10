@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:16:03 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 19:21:06 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ class ParseRequest{
 
 	public:
 		Request *setBufferSocketFd(int fd);
+		void	removeFD(int fd);
 };

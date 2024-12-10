@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:26:08 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 19:21:33 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,8 @@ int		ParseRequest::timeOutRequest(std::time_t timeStart){
 	if ((time(0) - timeStart) > maxTime)
 		return 408;
 	return 0;
+}
+
+void	ParseRequest::removeFD(int fd){
+	_socket.erase(fd);
 }

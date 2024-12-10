@@ -55,9 +55,12 @@ void	Webserv::setting(void) {
 
 void	Webserv::loopingEvent() {
 	while(true) {
-		_nfds = epoll_wait(_epollFd, _events, MAX_EVENTS, -1);
+		_nfds = epoll_wait(_epollFd, _events, MAX_EVENTS, 1000);
+		if (_nfds == 0){
+			checkTimeOut();
+		}
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
-			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd))
+			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd, _client))
 				continue ;
 			Client *client = (Client *)_events[index_epoll].data.ptr;
 			if (not client->getRequest()){
@@ -66,8 +69,9 @@ void	Webserv::loopingEvent() {
 					client->setRequest((void*)request);
 					epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_MOD, (void*)(client));
 				}
-			}else
+			}else{
 				responseClient((Request*)client->getRequest(), client);
+			}
 		}
 	}
 }
@@ -77,6 +81,7 @@ void exemploRequestParseado(Request *request);
 int	Webserv::responseClient(Request *request, Client *client){
 	int	error = request->getParserError();
 	if (error){
+		cout << "Number Error: " << error << "\n";
 		delete request;
 		_socket.erase(client->getFdClient());
 		epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
@@ -133,4 +138,23 @@ void	Webserv::epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr){
 	ev.events = event;
 	if (epoll_ctl(_epollFd, flagCTLR, clientFd, &ev) == -1)
 		throw (runtime_error("error: epoll_ctl()"));
+}
+
+void	Webserv::checkTimeOut(){
+	std::list<Client*>::iterator it = _client.begin();;
+
+	while (it != _client.end()){
+		if ((*it)->timeOutRequest()){
+			Request *request = (Request *)(*it)->getRequest();
+			Server *server = (Server *)(*it)->getServer();
+			removeFD((*it)->getFdClient());
+			close((*it)->getFdClient());
+			if (request)
+				delete request;
+			if (server)
+				delete server;
+			it = _client.erase(it);
+		}else
+			it++;
+	}
 }
