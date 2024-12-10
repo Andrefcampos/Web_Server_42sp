@@ -36,7 +36,7 @@
 
 class Webserv : public ParseRequest {
 	private:
-		std::map<std::string, Directive *>	_conf;
+		ServerDirective						*_server_directive;
 		int									_nfds, _epollFd;
 		epoll_event							_ev, _events[80];
 		int		responseClient(Request *request, Client *client);
