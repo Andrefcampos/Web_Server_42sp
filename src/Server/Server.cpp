@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 15:34:28 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:59:57 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,6 @@
 #include <iostream>
 
 using namespace std;
-
-// Server::~Server(){};
-
-// Server::Server(int port, int events, string hostName, string ip)
-// :Socket(), _port(port), _maxEvents(events), _ip(ip){
-// 	if (hostName.empty())
-// 		_hostName = "";
-// 	else
-// 		_hostName = hostName;
-// 	initTCP(_socketFd, _port, _maxEvents, _ip.c_str());
-// };
 
 void	Server::setSocketFd(const int socketFd) {
 	this->_socketFd = socketFd;
@@ -50,8 +39,8 @@ Server::~Server() {
 	_directives.clear();
 }
 
-Directive	*Server::getDirective(const string &directive) {
-	return (_directives[directive]);
+const Directive	*Server::getDirective(const string &directive) {
+	return (this->_directives[directive]);
 }
 
 void	Server::sendResponse(int fd, Request *request){
@@ -61,4 +50,9 @@ void	Server::sendResponse(int fd, Request *request){
 		sendIndex(fd, this->getPathImage());
 	else
 		sendImage(fd, this->getPathImage());
+}
+
+
+void	Server::setDirective(const Directive *directive) {
+	this->_directives[directive->getName()] = const_cast<Directive *>(directive);
 }
