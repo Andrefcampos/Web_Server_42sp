@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handler.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/06 16:03:11 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:55:29 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ unsigned int Handler::getType(void) {
 }
 
 void	ServerHandler::process(Conf &cf) {
-	static_cast<ServerDirective *>(manager._conf["server"])->appendServer(new Server());
-	cf.current_server = static_cast<ServerDirective *>(manager._conf["server"])->back();
+	manager._server_directive->appendServer(new Server());
+	cf.current_server = manager._server_directive->back();
 	cf.current_server->setPathIndex("index/index.html");
 	cf.current_server->setPathImage("image/img.png");
 	cf.ctx = SRV_CONF;
@@ -70,7 +70,7 @@ void	ListenHandler::process(Conf &cf) {
 	string value;
 	string::size_type found;
 	stringstream ss;
-	ListenDirective *listen_obj = static_cast<ListenDirective *>(cf.current_server->_directives["listen"]);
+	ListenDirective *listen_obj = const_cast<ListenDirective *>(static_cast<const ListenDirective *>((cf.current_server->getDirective("listen"))));
 	if (listen_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	ss.str(cf.args.back());
@@ -152,13 +152,13 @@ void	ListenHandler::process(Conf &cf) {
 }
 
 void	ServerNameHandler::process(Conf &cf) {
-	ServerNameDirective *server_name_obj = static_cast<ServerNameDirective *>(cf.current_server->_directives["server_name"]);
+	ServerNameDirective *server_name_obj = const_cast<ServerNameDirective *>(static_cast<const ServerNameDirective *>(cf.current_server->getDirective("server_name")));
 	if (server_name_obj)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	server_name_obj = new ServerNameDirective();
 	server_name_obj->setServerName(cf.args.back().substr(0, cf.args.back().length() - 1));
 	// cout << server_name_obj->getServerName() << endl;
-	cf.current_server->_directives["server_name"] = server_name_obj;
+	cf.current_server->setDirective(server_name_obj);
 	cf.args.clear();
 }
 
@@ -172,7 +172,7 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 	char *unit;
 	string value;
 	string::size_type found;
-	ClientMaxBodySizeDirective *client_max_body_size_obj = static_cast<ClientMaxBodySizeDirective *>(cf.current_server->_directives["client_max_body_size"]);
+	ClientMaxBodySizeDirective *client_max_body_size_obj = const_cast<ClientMaxBodySizeDirective *>(static_cast<const ClientMaxBodySizeDirective *>(cf.current_server->getDirective("client_max_body_size")));
 	if (client_max_body_size_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back();
@@ -191,7 +191,7 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 		throw (runtime_error(Logger::log_error(cf, "invalid size \"%s\" in directive \"%s\"", value.c_str(), cf.args.front().c_str())));
 	client_max_body_size_obj->setSizeMax(size_max);
 	// cout << client_max_body_size_obj->getSizeMax() << endl;
-	cf.current_server->_directives["client_max_body_size"] = client_max_body_size_obj;
+	cf.current_server->setDirective(client_max_body_size_obj);
 	cf.args.clear();
 }
 
@@ -202,14 +202,14 @@ void	LocationHandler::process(Conf &cf) {
 		cf.args.clear();
 		Parser::parser(cf, NULL);
 		cf.ctx = SRV_CONF;
-		static_cast<LocationDirective *>(cf.current_server->_directives["location"])->appendLocation(cf.current_location);
+		const_cast<LocationDirective *>(static_cast<const LocationDirective *>(cf.current_server->getDirective("location")))->appendLocation(cf.current_location);
 	} else
 		throw (runtime_error(Logger::log_error(cf, "invalid route \"%s\" for directive \"%s\"", cf.args.back().c_str(), cf.args.front().c_str())));
 	return ;
 }
 
 void	AllowMethodsHandler::process(Conf &cf) {
-	AllowMethodsDirective *allow_methods_obj = static_cast<AllowMethodsDirective *>(cf.current_location->_directives["allow_methods"]);
+	AllowMethodsDirective *allow_methods_obj = const_cast<AllowMethodsDirective *>(static_cast<const AllowMethodsDirective *>(cf.current_location->getDirective("allow_methods")));
 	// cout << "DEFAULT CONF " << allow_methods_obj->getDefaultConfBool() << endl;
 	// cout << "GET " <<allow_methods_obj->getGetBool() << endl;
 	// cout << "POST " << allow_methods_obj->getPostBool() << endl;
@@ -245,30 +245,30 @@ void	AllowMethodsHandler::process(Conf &cf) {
 }
 
 void	RedirectHandler::process(Conf &cf) {
-	RedirectDirective *redirect_obj = static_cast<RedirectDirective *>(cf.current_location->_directives["redirect"]);
+	RedirectDirective *redirect_obj = const_cast<RedirectDirective *>(static_cast<const RedirectDirective *>(cf.current_location->getDirective("redirect")));
 	if (redirect_obj)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	redirect_obj = new RedirectDirective();
 	redirect_obj->setRedirectRoute(cf.args.back().substr(0, cf.args.back().find(';')));
 	/* cout << redirect_obj->getRedirectRoute() << endl; */
-	cf.current_location->_directives["redirect"] = redirect_obj;
+	cf.current_location->setDirective(redirect_obj);
 	cf.args.clear();
 }
 
 void	RootHandler::process(Conf &cf) {
-	RootDirective *root_obj = static_cast<RootDirective *>(cf.current_location->_directives["root"]);
+	RootDirective *root_obj = const_cast<RootDirective *>(static_cast<const RootDirective *>(cf.current_location->getDirective("root")));
 	if (root_obj)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	root_obj = new RootDirective();
 	root_obj->setRoot(cf.args.back().substr(0, cf.args.back().find(';')));
 	/* cout << root_obj->getRoot() << endl; */
-	cf.current_location->_directives["root"] = root_obj;
+	cf.current_location->setDirective(root_obj);
 	cf.args.clear();
 }
 
 void	AutoIndexHandler::process(Conf &cf) {
 	string value;
-	AutoIndexDirective *auto_index_obj = static_cast<AutoIndexDirective *>(cf.current_location->_directives["autoindex"]);
+	AutoIndexDirective *auto_index_obj = const_cast<AutoIndexDirective *>(static_cast<const AutoIndexDirective *>(cf.current_location->getDirective("autoindex")));
 	if (auto_index_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back().substr(0, cf.args.back().find(';'));
@@ -283,7 +283,7 @@ void	AutoIndexHandler::process(Conf &cf) {
 
 void	IndexHandler::process(Conf &cf) {
 	string value;
-	IndexDirective *index_obj = static_cast<IndexDirective *>(cf.current_location->_directives["index"]);
+	IndexDirective *index_obj = const_cast<IndexDirective *>(static_cast<const IndexDirective *>(cf.current_location->getDirective("index")));
 	if (index_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back().substr(0, cf.args.back().find(';'));
@@ -296,7 +296,7 @@ void	IndexHandler::process(Conf &cf) {
 void	CgiHandler::process(Conf &cf) {
 	stringstream ss;
 	string token;
-	CgiDirective *cgi_obj = static_cast<CgiDirective *>(cf.current_location->_directives["cgi"]);
+	CgiDirective *cgi_obj = const_cast<CgiDirective *>(static_cast<const CgiDirective *>(cf.current_location->getDirective("cgi")));
 	if (cgi_obj->getDefaultConfBool() == false)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	for (vector<string>::iterator it= ++cf.args.begin(); it != cf.args.end(); ++it) {
@@ -316,7 +316,7 @@ void	CgiHandler::process(Conf &cf) {
 void	UploadDirHandler::process(Conf &cf) {
 	struct stat info;
 	string value;
-	UploadDirDirective *upload_dir_obj = static_cast<UploadDirDirective *>(cf.current_location->_directives["upload_dir"]);
+	UploadDirDirective *upload_dir_obj = const_cast<UploadDirDirective *>(static_cast<const UploadDirDirective *>(cf.current_location->getDirective("upload_dir")));
 	if (upload_dir_obj)
 		throw (runtime_error(Logger::log_error(cf, "directive \"%s\" is already set", cf.args.front().c_str())));
 	value = cf.args.back().substr(0, cf.args.back().find(';'));
@@ -349,6 +349,6 @@ void	ErrorPageHandler::process(Conf &cf) {
 		token.clear();
 		ss.clear();
 	}
-	static_cast<ErrorPageDirective *>(cf.current_server->_directives["error_page"])->appendErrorPage(error_page_obj);
+	const_cast<ErrorPageDirective *>(static_cast<const ErrorPageDirective *>(cf.current_server->getDirective("error_page")))->appendErrorPage(error_page_obj);
 	cf.args.clear();
 } 
