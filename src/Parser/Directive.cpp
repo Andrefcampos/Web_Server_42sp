@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iostream>
 #include <cstring>
 #include <netinet/in.h>
 #include <inttypes.h>
@@ -28,7 +29,7 @@ const std::string &Directive::getName(void) const {
 	return (this->_name);
 }
 
-ServerDirective::ServerDirective() : _servers() {}
+ServerDirective::ServerDirective() : Directive("server"), _servers() {}
 
 ServerDirective::~ServerDirective() {
 	for (vector<Server *>::iterator it=_servers.begin(); it != _servers.end(); ++it)
@@ -47,7 +48,7 @@ Server  *ServerDirective::back(void) const {
 void	ServerDirective::initServers(void) {
 	ListenDirective *listen_obj;
 	for (vector<Server *>::iterator it = _servers.begin(); it != _servers.end(); ++it) {
-		listen_obj = static_cast<ListenDirective *>((*it)->getDirective("listen"));
+		listen_obj = const_cast<ListenDirective *>(static_cast<const ListenDirective *>((*it)->getDirective("listen")));
 		(*it)->setSocketFd((*it)->initTCP(listen_obj->getPort().c_str(), 5, listen_obj->getIP().c_str()));
 	}
 }
@@ -56,7 +57,6 @@ int		ServerDirective::size(void) const {
 	return (this->_servers.size());
 }
 
-#include <iostream>
 int	ServerDirective::isNewClient(int fd, int epoll_fd) {
 	struct epoll_event			ev;
 	int							fdClient;
@@ -92,7 +92,7 @@ void	ServerDirective::addSocketsToEpoll(int epoll_fd) {
 	}
 }
 
-ListenDirective::ListenDirective() : _default_conf(true), _ip("127.0.0.1"), _host("127.0.0.1"), _port("8080") {}
+ListenDirective::ListenDirective() : Directive("listen"), _default_conf(true), _ip("0.0.0.0"), _host("0.0.0.0"), _port("8080") {}
 
 ListenDirective::~ListenDirective() {}
 
@@ -128,7 +128,7 @@ const std::string &ListenDirective::getIP(void) const {
 	return (this->_ip);
 }
 
-ServerNameDirective::ServerNameDirective() {}
+ServerNameDirective::ServerNameDirective() : Directive("server_name") {}
 
 ServerNameDirective::~ServerNameDirective() {}
 
@@ -140,7 +140,7 @@ const string &ServerNameDirective::getServerName(void) const {
 	return (this->_server_name);
 }
 
-ClientMaxBodySizeDirective::ClientMaxBodySizeDirective() : _default_conf(true), _size_max(1 * (1 << 20)) {}
+ClientMaxBodySizeDirective::ClientMaxBodySizeDirective() : Directive("client_max_body_size"), _default_conf(true), _size_max(1 * (1 << 20)) {}
 
 ClientMaxBodySizeDirective::~ClientMaxBodySizeDirective() {}
 
@@ -160,7 +160,7 @@ bool	ClientMaxBodySizeDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
 }
 
-LocationDirective::LocationDirective() : _locations() {}
+LocationDirective::LocationDirective() : Directive("location"), _locations() {}
 
 LocationDirective::~LocationDirective() {
 	for (vector<Location *>::iterator it = _locations.begin(); it != _locations.end(); ++it)
@@ -176,51 +176,7 @@ Location  *LocationDirective::back(void) const {
 	return(_locations.back());
 }
 
-// void	LocationDirective::setRoute(const string &route) {
-// 	this->_route = route;
-// }
-
-// void	LocationDirective::setDirective(Conf &cf) {
-// 	const string	directive = *cf.args.begin();
-//     Directive *directive_obj = _directives[directive];
-// 	if (not directive_obj) {
-// 		if (directive.compare("allow_methods") != 0) {
-// 			_directives[directive] = new AllowMethodsDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("redirect") != 0) {
-// 			_directives[directive] = new RedirectDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("root") != 0) {
-// 			_directives[directive] = new RootDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("autoindex") != 0) {
-// 			_directives[directive] = new AutoIndexDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("index") != 0) {
-// 			_directives[directive] = new IndexDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("cgi") != 0) {
-// 			_directives[directive] = new CgiDirective(cf.args.back());
-// 			return ;
-// 		}
-// 		else if (directive.compare("upload_dir") != 0) {
-// 			_directives[directive] = new UploadDirDirective(cf.args.back());
-// 			return ;
-// 		}
-// 	}
-// 	if (directive.compare("allow_methods") != 0 || directive.compare("redirect") != 0
-// 	|| directive.compare("root") != 0 || directive.compare("autoindex") != 0
-// 	|| directive.compare("index") != 0 || directive.compare("cgi") != 0
-// 	|| directive.compare("upload_dir") != 0)
-// 		throw (runtime_error(Logger::log_error(cf, "duplicated directive %s not allowed", directive.c_str())));
-// }
-
-AllowMethodsDirective::AllowMethodsDirective() : _default_conf(true), _GET(true), _POST(false), _DELETE(false) {}
+AllowMethodsDirective::AllowMethodsDirective() : Directive("allow_methods"), _default_conf(true), _GET(true), _POST(false), _DELETE(false) {}
 
 AllowMethodsDirective::~AllowMethodsDirective() {}
 
@@ -267,7 +223,7 @@ bool AllowMethodsDirective::isAllowed(const string &method) const {
 	return (false);
 }
 
-RedirectDirective::RedirectDirective() {}
+RedirectDirective::RedirectDirective() : Directive("redirect") {}
 
 RedirectDirective::~RedirectDirective() {}
 
@@ -279,7 +235,7 @@ const string &RedirectDirective::getRedirectRoute(void) const {
 	return (this->_redirect_route);
 }
 
-RootDirective::RootDirective() {}
+RootDirective::RootDirective() : Directive("root") {}
 
 RootDirective::~RootDirective() {}
 
@@ -291,7 +247,7 @@ const string &RootDirective::getRoot(void) const {
 	return (this->_root);
 }
 
-AutoIndexDirective::AutoIndexDirective() : _default_conf(true), _autoindex(false) {}
+AutoIndexDirective::AutoIndexDirective() : Directive("autoindex"), _default_conf(true), _autoindex(false) {}
 
 AutoIndexDirective::~AutoIndexDirective() {}
 
@@ -311,7 +267,7 @@ bool	AutoIndexDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
 }
 
-IndexDirective::IndexDirective() : _default_conf(true), _index("/index.html") {}
+IndexDirective::IndexDirective() : Directive("index"), _default_conf(true), _index("/index.html") {}
 
 IndexDirective::~IndexDirective() {}
 
@@ -331,7 +287,7 @@ const string	&IndexDirective::getIndex(void) const {
 	return (this->_index);
 }
 
-CgiDirective::CgiDirective() : _default_conf(true), _exts() {}
+CgiDirective::CgiDirective() : Directive("cgi"), _default_conf(true), _exts() {}
 
 CgiDirective::~CgiDirective() {}
 
@@ -355,7 +311,7 @@ bool	CgiDirective::isAllowed(const string &ext) const {
 	return (false);
 }
 
-UploadDirDirective::UploadDirDirective() {}
+UploadDirDirective::UploadDirDirective() : Directive("upload_dir") {}
 
 UploadDirDirective::~UploadDirDirective() {}
 
@@ -367,7 +323,7 @@ const string	&UploadDirDirective::getUploadDir(void) const {
 	return (this->_upload_dir);
 } 
 
-ErrorPageDirective::ErrorPageDirective() : _error_pages() {}
+ErrorPageDirective::ErrorPageDirective() : Directive("error_page"), _error_pages() {}
 
 ErrorPageDirective::~ErrorPageDirective() {
 	for (vector<ErrorPage *>::iterator it = _error_pages.begin(); it != _error_pages.end(); ++it)

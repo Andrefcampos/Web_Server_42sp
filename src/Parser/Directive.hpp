@@ -38,7 +38,7 @@ struct Client{
 
 class Directive {
 	private:
-		const std::string &_name;
+		const std::string _name;
 	public:
 		Directive(const std::string &name);
 		virtual ~Directive() {};
