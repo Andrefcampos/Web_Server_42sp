@@ -68,7 +68,6 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd) {
 			ev.events = EPOLLIN;
 			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fdClient, &ev) == -1)
 				throw (runtime_error("error: epoll_ctl()"));
-
 			return (true);
 		}
 	}

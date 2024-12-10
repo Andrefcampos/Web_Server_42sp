@@ -40,6 +40,7 @@ class Webserv : public ParseRequest {
 		int									_nfds, _epollFd;
 		epoll_event							_ev, _events[80];
 		int		responseClient(Request *request, Client *client);
+		void	epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr);
 
 	public:
 		~Webserv();

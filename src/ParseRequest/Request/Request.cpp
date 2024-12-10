@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:25:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/07 18:26:39 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:04:11 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,34 @@
 #include "Chunked.hpp"
 #include "SimpleBody.hpp"
 
-void	Request::setRequestLine(string &buffer){
+int	Request::setRequestLine(string &buffer){
 	string	requestLine;
+	int		error;
 
 	if (_parsedRequestLine == true)
-		return ;
+		return 0;
 	requestLine = getLineErase<string, string>(buffer, "\r\n", true);
 	if (requestLine.empty())
 		throw Request::RequestException("");
-	this->parseRequestLine(requestLine);
 	_parsedRequestLine = true;
+	error = this->parseRequestLine(requestLine);
+	if (not error)
+		return 0;
+	return error;
 }
 
-void	Request::setHeader(string &buffer){
+int	Request::setHeader(string &buffer){
 	string	headers;
 
 	if (_parsedHeaders == true)
-		return ;
+		return 0;
 	headers = getLineErase<string, string>(buffer, "\r\n\r\n", true);
 	if (headers.empty())
 		throw Request::RequestException("");
 	this->parseHeaders(headers);
 	checkBodyFormatting();
 	_parsedHeaders = true;
+	return 0;
 }
 
 void	Request::setBody(string &buffer){
@@ -172,6 +177,7 @@ Request::Request(){
 	_isSimpleBody = false;
 	_isChunkedBody = false;
 	_haveBody = false;
+	_parserError = 0;
 	body = NULL;
 }
 
@@ -186,4 +192,13 @@ void	Request::setServer(Server *server){
 
 Server	*Request::getServer() const{
 	return _server;
+}
+
+
+void	Request::setParserError(int error){
+	_parserError = error;
+}
+
+int		Request::getParserError() const{
+	return _parserError;
 }

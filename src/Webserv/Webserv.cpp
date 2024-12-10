@@ -60,9 +60,14 @@ void	Webserv::loopingEvent() {
 			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd))
 				continue ;
 			Client *client = (Client *)_events[index_epoll].data.ptr;
-			Request *request = setBufferSocketFd(client->getSocketFdClient());
-			if (request)
-				responseClient(request, client);
+			if (not client->getRequest()){
+				Request *request = setBufferSocketFd(client->getFdClient());
+				if (request){
+					client->setRequest((void*)request);
+					epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_MOD, (void*)(client));
+				}
+			}else
+				responseClient((Request*)client->getRequest(), client);
 		}
 	}
 }
@@ -70,13 +75,22 @@ void	Webserv::loopingEvent() {
 void exemploRequestParseado(Request *request);
 
 int	Webserv::responseClient(Request *request, Client *client){
+	int	error = request->getParserError();
+	if (error){
+		delete request;
+		_socket.erase(client->getFdClient());
+		epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
+		close(client->getFdClient());
+		delete client;
+		return (0);
+	}
 	Server *server = client->getServer();
-	server->sendResponse(client->getSocketFdClient(), request);
+	server->sendResponse(client->getFdClient(), request);
+	exemploRequestParseado(request);
 	delete request;
-	_socket.erase(client->getSocketFdClient());
-	if (epoll_ctl(_epollFd, EPOLL_CTL_DEL, client->getSocketFdClient(), &_ev) == -1)
-		throw (runtime_error("error: epoll_ctl() è aqui"));
-	close(client->getSocketFdClient());
+	_socket.erase(client->getFdClient());
+	epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
+	close(client->getFdClient());
 	delete client;
 	return (0);
 }
@@ -110,4 +124,13 @@ void exemploRequestParseado(Request *request){
 			}
 		}
 	}
+}
+
+void	Webserv::epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr){
+	struct epoll_event ev;
+
+	ev.data.ptr = ptr;
+	ev.events = event;
+	if (epoll_ctl(_epollFd, flagCTLR, clientFd, &ev) == -1)
+		throw (runtime_error("error: epoll_ctl()"));
 }

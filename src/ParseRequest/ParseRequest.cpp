@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 16:08:53 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:26:08 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ Request *ParseRequest::setBufferSocketFd(int fd){
 		return 0;
 	isNewClient(fd);
 	setBuffer(fd);
-	if (parseRequest(fd))
-		return (_socket[fd].request);
+	if (parseRequest(fd)){
+		Request *request = _socket[fd].request;
+		_socket.erase(fd);
+		return request;
+	}
 	return NULL;
 }
 
@@ -33,19 +36,22 @@ void	ParseRequest::isNewClient(int fd){
 	if (not _socket.count(fd)){
 		_socket[fd].lentgh = 0;
 		_socket[fd].request = new Request();
+		_socket[fd].startTime = time(0);
 	}
 }
 
-int		ParseRequest::setBody(int fd){
-	if (_socket[fd].parsedBody == false)
-		return false;
-	return true;
-}
-
 int		ParseRequest::parseRequest(int fd){
+	int	error = 0;
+
 	try{
-		std::cout << _socket[fd].buffer << "\n";
-		_socket[fd].request->setRequestLine(_socket[fd].buffer);
+		if ((error = timeOutRequest(_socket[fd].startTime))){
+			_socket[fd].request->setParserError(error);
+			return 1;
+		}
+		if ((error = _socket[fd].request->setRequestLine(_socket[fd].buffer))){
+			_socket[fd].request->setParserError(error);
+			return 1;
+		}
 		_socket[fd].request->setHeader(_socket[fd].buffer);
 		_socket[fd].request->setBody(_socket[fd].buffer);
 	}catch( Request::RequestException &e){
@@ -56,10 +62,18 @@ int		ParseRequest::parseRequest(int fd){
 }
 
 void	ParseRequest::setBuffer(int fd){
-	char	buffer[BUFFER_SIZE +1];
+	char	buffer[20 +1];
 	int		bytesRead;
 
-	memset(buffer, 0, BUFFER_SIZE+1);
-	bytesRead = recv(fd, buffer, BUFFER_SIZE, MSG_DONTWAIT);
+	memset(buffer, 0, 20+1);
+	bytesRead = recv(fd, buffer, 20, MSG_DONTWAIT);
 	_socket[fd].buffer.append(buffer, bytesRead);
+}
+
+int		ParseRequest::timeOutRequest(std::time_t timeStart){
+	time_t maxTime = 10;
+
+	if ((time(0) - timeStart) > maxTime)
+		return 408;
+	return 0;
 }

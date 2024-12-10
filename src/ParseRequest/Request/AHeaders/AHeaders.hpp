@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AHeaders.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:05:48 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/04 17:40:30 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:06:03 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ class AHeaders{
 		
 	protected:
 		map<string, list<string> >	_header;
-		virtual void	setHeader(string &buffer) = 0;
+		virtual int		setHeader(string &buffer) = 0;
 		virtual 		~AHeaders(){};
 		void			parseHeaders(string	&headers);
+		int				validHeaders();
 
 	public:
 		string						getHost() const;

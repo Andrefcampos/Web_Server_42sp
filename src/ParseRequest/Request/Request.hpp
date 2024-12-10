@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 15:28:43 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:03:38 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Request : public ARequestLine, public AHeaders{
 	private:
 		ABody	*body;
 		Server	*_server;
+		int		_parserError;
 		bool	_parsedRequestLine;
 		bool	_parsedHeaders;
 		bool	_parsedBody;
@@ -53,11 +54,13 @@ class Request : public ARequestLine, public AHeaders{
 		Request();
 		~Request();
 		ABody	*getBody();
-		void	setRequestLine(string &buffer);
-		void	setHeader(string &buffer);
+		int		setRequestLine(string &buffer);
+		int		setHeader(string &buffer);
 		void	setBody(std::string &buffer);
 		void	setServer(Server *server);
 		Server	*getServer() const;
+		void	setParserError(int error);
+		int		getParserError() const;
 
 		class RequestException:public exception{
 			private:

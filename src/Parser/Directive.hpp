@@ -24,16 +24,23 @@
 class Server;
 class ErrorPage;
 
+
 struct Client{
 	private:
-		Server *_server;
+		Server	*_server;
+		void *_request;
 		int		_socketFdClient;
 
+
 	public:
-		Client(Server *server, int fdClient):_server(server), _socketFdClient(fdClient){};
+		Client(Server *server, int fdClient):_server(server), _socketFdClient(fdClient){
+			_request = NULL;
+		};
 		~Client(){};
 		Server *getServer() const {return _server;};
-		int		getSocketFdClient() const {return _socketFdClient;};
+		int		getFdClient() const {return _socketFdClient;};
+		void	setRequest(void *request) {_request = request;};
+		void	*getRequest() const {return _request;};
 };
 
 class Directive {

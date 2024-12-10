@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:03:53 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/18 10:39:00 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:27:33 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,3 +85,14 @@ void trim(String &str){
     }
 }
 
+template<typename String>
+std::string toUpper(String &str){
+    typename String::iterator it, ite;
+    std::string toUpper;
+    ite = str.end();
+    
+    for(it = str.begin(); it != ite; ++it){
+        toUpper += static_cast<unsigned char>(std::toupper(*it));
+    }
+    return toUpper;
+}
