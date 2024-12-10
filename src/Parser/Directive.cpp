@@ -22,6 +22,12 @@
 
 using namespace std;
 
+Directive::Directive(const std::string &name) : _name(name) {}
+
+const std::string &Directive::getName(void) const {
+	return (this->_name);
+}
+
 ServerDirective::ServerDirective() : _servers() {}
 
 ServerDirective::~ServerDirective() {

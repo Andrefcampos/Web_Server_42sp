@@ -37,9 +37,13 @@ struct Client{
 };
 
 class Directive {
+	private:
+		const std::string &_name;
 	public:
-		Directive() {};
+		Directive(const std::string &name);
 		virtual ~Directive() {};
+
+		const std::string &getName(void) const;
 };
 
 class ServerDirective : public Directive {
