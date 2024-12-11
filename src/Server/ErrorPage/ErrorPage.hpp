@@ -27,4 +27,5 @@ class ErrorPage {
 		void				setUri(const std::string &uri);
 		bool				hasCode(const std::string &code) const;
 		const std::string	&getUri(void) const;
+		void				print(void) const;
 };

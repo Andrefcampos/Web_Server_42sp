@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ErrorPage.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -36,4 +37,13 @@ bool	ErrorPage::hasCode(const string &code) const {
 
 const string &ErrorPage::getUri(void) const {
 	return (this->_uri);
+}
+
+void		ErrorPage::print(void) const {
+	cout << "Error Page URI: " << _uri << endl;
+	cout << "Codes covered:";
+	for (vector<string>::const_iterator it = _codes.begin(); it != _codes.end(); ++it) {
+		cout << "	" << *it;
+	}
+	return ;
 }
