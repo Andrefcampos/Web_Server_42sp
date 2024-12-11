@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/10 16:55:29 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:15:47 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ void	ClientMaxBodySizeHandler::process(Conf &cf) {
 void	LocationHandler::process(Conf &cf) {
 	if (strchr(cf.args.back().c_str(), '/')) {
 		cf.current_location = new Location();
+		cf.current_location->setRoute(cf.args.back());
 		cf.ctx = LOC_CONF;
 		cf.args.clear();
 		Parser::parser(cf, NULL);
