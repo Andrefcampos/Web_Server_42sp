@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:59:57 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 23:24:03 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "Logger.hpp"
 #include "Server.hpp"
 #include "Request.hpp"
+#include "Directive.hpp"
+#include "Location.hpp"
 #include <iostream>
 
 using namespace std;
@@ -40,19 +42,30 @@ Server::~Server() {
 }
 
 const Directive	*Server::getDirective(const string &directive) {
+	
 	return (this->_directives[directive]);
 }
 
-void	Server::sendResponse(int fd, Request *request){
-	if (request->getPath() == "/")
-		sendIndex(fd, this->getPathIndex());
-	else if (request->getPath() == "/css/styles.css")
-		sendIndex(fd, this->getPathImage());
-	else
-		sendImage(fd, this->getPathImage());
+void	Server::setDirective(Directive *directive) {
+	this->_directives[directive->getName()] = directive;
 }
 
+void	Server::sendResponse(int fd, Request *request) {
+	Location *location = static_cast<LocationDirective *>(_directives["location"])->getLocation(request->getPath());
 
-void	Server::setDirective(const Directive *directive) {
-	this->_directives[directive->getName()] = const_cast<Directive *>(directive);
+	cout << "URI: " << request->getPath() << endl;
+	cout << "Location give: " << location->getRoute() << endl;
+	cout << "Root defined in location: " << static_cast<RootDirective *>(location->getDirective("root"))->getRoot() << endl;
+	if (request->getPath().compare("/") == 0)
+		sendIndex(fd, (static_cast<const IndexDirective *>(location->getDirective("index")))->getIndex());
+	else if (request->getPath().find(".ico") != string::npos || request->getPath().find(".png") != string::npos)
+		sendImage(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
+	else
+		sendIndex(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
+}
+
+void	Server::print(void) const {
+	for (map<string, Directive *>::const_iterator it = _directives.begin(); it != _directives.end(); ++it) {
+		it->second->print();
+	}
 }
