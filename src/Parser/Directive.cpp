@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <algorithm>
 #include <iostream>
 #include <cstring>
+#include <cstddef>
 #include <netinet/in.h>
 #include <inttypes.h>
 #include <sys/epoll.h>
@@ -20,6 +22,7 @@
 #include "Directive.hpp"
 #include "Server.hpp"
 #include "ErrorPage.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
@@ -92,6 +95,13 @@ void	ServerDirective::addSocketsToEpoll(int epoll_fd) {
 	}
 }
 
+void	ServerDirective::print(void) const {
+	for (vector<Server *>::const_iterator it = _servers.begin(); it != _servers.end(); ++it) {
+		cout << endl << "Server Directive: " << endl;
+		(*it)->print();
+	}
+}
+
 ListenDirective::ListenDirective() : Directive("listen"), _default_conf(true), _ip("0.0.0.0"), _host("0.0.0.0"), _port("8080") {}
 
 ListenDirective::~ListenDirective() {}
@@ -124,8 +134,12 @@ const string &ListenDirective::getPort(void) const {
 	return (this->_port);
 }
 
-const std::string &ListenDirective::getIP(void) const {
+const string &ListenDirective::getIP(void) const {
 	return (this->_ip);
+}
+
+void	ListenDirective::print(void) const {
+	cout << "Listen Directive: IP: " << _ip << "	PORT: " << _port << "	HOST:" << _host << endl;
 }
 
 ServerNameDirective::ServerNameDirective() : Directive("server_name") {}
@@ -138,6 +152,10 @@ void	ServerNameDirective::setServerName(const string &server_name) {
 
 const string &ServerNameDirective::getServerName(void) const {
 	return (this->_server_name);
+}
+
+void	ServerNameDirective::print(void) const {
+	cout << "ServerName Directive: " << _server_name << endl;
 }
 
 ClientMaxBodySizeDirective::ClientMaxBodySizeDirective() : Directive("client_max_body_size"), _default_conf(true), _size_max(1 * (1 << 20)) {}
@@ -160,6 +178,10 @@ bool	ClientMaxBodySizeDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
 }
 
+void	ClientMaxBodySizeDirective::print(void) const {
+	cout << "ClientMaxBodySize Directive: " << _size_max << endl;
+}
+
 LocationDirective::LocationDirective() : Directive("location"), _locations() {}
 
 LocationDirective::~LocationDirective() {
@@ -174,6 +196,40 @@ void    LocationDirective::appendLocation(Location *location) {
 
 Location  *LocationDirective::back(void) const {
 	return(_locations.back());
+}
+
+Location	*LocationDirective::getLocation(const string &uri) {
+	size_t				prev_span(0), span(0);
+	string				cur_loc;
+	string				prefix(uri.substr(0, uri.rfind('/')));
+	Location			*location = NULL;
+	string::iterator	it_pre, it_cur;
+
+	if (prefix.empty())
+		return (_locations.front());
+	for (vector<Location *>::iterator it = _locations.begin(); it != _locations.end(); ++it) {
+		cur_loc = (*it)->getRoute();
+		it_cur = cur_loc.begin();
+		it_pre = prefix.begin();
+		span = 0;
+		while (it_pre != prefix.end() && it_cur != cur_loc.end() && *it_pre == *it_cur) {
+			span++;
+			it_pre++;
+			it_cur++;
+		}
+		if (prev_span < span) {
+			prev_span = span;
+			location = *it;
+		}
+	}
+	return (location);
+}
+
+void	LocationDirective::print(void) const {
+	for (vector<Location *>::const_iterator it = _locations.begin(); it != _locations.end(); ++it) {
+		cout << endl << "Location Directive: " << (*it)->getRoute() << endl;
+		(*it)->print();
+	}
 }
 
 AllowMethodsDirective::AllowMethodsDirective() : Directive("allow_methods"), _default_conf(true), _GET(true), _POST(false), _DELETE(false) {}
@@ -223,6 +279,11 @@ bool AllowMethodsDirective::isAllowed(const string &method) const {
 	return (false);
 }
 
+void	AllowMethodsDirective::print(void) const {
+	cout << "Allow Methods Directive: GET: " << ((_GET == true) ? "true" : "false") << "	POST: " <<
+	((_POST == true) ? "true" : "false") << "	DELETE: " << ((_DELETE == true) ? "true" : "false") << "	" << endl; 
+}
+
 RedirectDirective::RedirectDirective() : Directive("redirect") {}
 
 RedirectDirective::~RedirectDirective() {}
@@ -235,6 +296,10 @@ const string &RedirectDirective::getRedirectRoute(void) const {
 	return (this->_redirect_route);
 }
 
+void	RedirectDirective::print(void) const {
+	cout << "Redirect Directive: " << _redirect_route << endl;
+}
+
 RootDirective::RootDirective() : Directive("root") {}
 
 RootDirective::~RootDirective() {}
@@ -245,6 +310,10 @@ void	RootDirective::setRoot(const string &root) {
 
 const string &RootDirective::getRoot(void) const {
 	return (this->_root);
+}
+
+void	RootDirective::print(void) const {
+	cout << "Root Directive: " << _root << endl;
 }
 
 AutoIndexDirective::AutoIndexDirective() : Directive("autoindex"), _default_conf(true), _autoindex(false) {}
@@ -267,6 +336,10 @@ bool	AutoIndexDirective::getDefaultConfBool(void) const {
 	return (this->_default_conf);
 }
 
+void	AutoIndexDirective::print(void) const {
+	cout << "AutoIndex Directive: " << ((_autoindex == true) ? "true" : "false") << endl;
+}
+
 IndexDirective::IndexDirective() : Directive("index"), _default_conf(true), _index("/index.html") {}
 
 IndexDirective::~IndexDirective() {}
@@ -285,6 +358,10 @@ bool	IndexDirective::getDefaultConfBool(void) const {
 
 const string	&IndexDirective::getIndex(void) const {
 	return (this->_index);
+}
+
+void	IndexDirective::print(void) const {
+	cout << "Index Directive: " << _index << endl;
 }
 
 CgiDirective::CgiDirective() : Directive("cgi"), _default_conf(true), _exts() {}
@@ -311,6 +388,14 @@ bool	CgiDirective::isAllowed(const string &ext) const {
 	return (false);
 }
 
+void	CgiDirective::print(void) const {
+	cout << "CGI directives extensions:";
+	for (vector<string>::const_iterator it = _exts.begin(); it != _exts.end(); ++it) {
+		cout << "	" << *it;
+	}
+	cout << endl;
+}
+
 UploadDirDirective::UploadDirDirective() : Directive("upload_dir") {}
 
 UploadDirDirective::~UploadDirDirective() {}
@@ -321,7 +406,12 @@ void	UploadDirDirective::setUploadDir(const string &upload_dir) {
 
 const string	&UploadDirDirective::getUploadDir(void) const {
 	return (this->_upload_dir);
-} 
+}
+
+void	UploadDirDirective::print(void) const {
+	cout << "Upload Dir Directive value: " << endl;
+	cout << this->_upload_dir << endl;
+};
 
 ErrorPageDirective::ErrorPageDirective() : Directive("error_page"), _error_pages() {}
 
@@ -337,4 +427,11 @@ void	ErrorPageDirective::appendErrorPage(ErrorPage *error_page) {
 
 ErrorPage *ErrorPageDirective::back(void) const {
 	return (this->_error_pages.back());
+}
+
+void	ErrorPageDirective::print(void) const {
+	for (vector<ErrorPage *>::const_iterator it = _error_pages.begin(); it != _error_pages.end(); ++it) {
+		(*it)->print();
+	}
+	return ;
 }
