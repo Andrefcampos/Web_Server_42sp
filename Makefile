@@ -26,6 +26,7 @@ SRC_DIR				:= src/ src/utils src/Server \
 					src/ParseRequest/Request/ABody/MultPart \
 					src/ParseRequest/Request/ABody/Chunked \
 					src/ParseRequest/Request/ABody/SimpleBody \
+					src/Client
 
 #-----------------------------------------------------------------------------------------
 # Header file
@@ -42,6 +43,7 @@ INCLUDE				:= -I src/Server -I src/Server/Socket \
 					-I src/ParseRequest/Request/ABody/MultPart \
 					-I src/ParseRequest/Request/ABody/Chunked \
 					-I src/ParseRequest/Request/ABody/SimpleBody \
+					-I src/Client
 
 #-----------------------------------------------------------------------------------------
 # Source files

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ParseRequest.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 19:21:33 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/11 12:26:53 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "ParseRequest.hpp"
 #include <iostream>

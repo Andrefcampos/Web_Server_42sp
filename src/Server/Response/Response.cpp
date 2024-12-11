@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/06 17:11:45 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 22:35:23 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Response.hpp"
 #include "Response.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,7 +22,8 @@
 #include <bitset>
 #include <sstream>
 #include <error.h>
-#include <cstring>
+
+using namespace std;
 
 Response::~Response(){}
 
@@ -31,27 +31,27 @@ Response::Response(){
 	clean();
 }
 
-void	Response::setStatus(std::string value, std::string reason){
+void	Response::setStatus(string value, string reason){
 	this->_fillHttp[STATUS][VALUE] = value;
 	this->_fillHttp[STATUS][REASON] = reason;
 }
-void	Response::setType(std::string type){
+void	Response::setType(string type){
 	this->_fillHttp[TYPE][HEADER_TYPE] = type;
 }
 
-void	Response::setConnection(std::string connection){
+void	Response::setConnection(string connection){
 	this->_fillHttp[CONNECTION][HEADER_TYPE] = connection;
 }
 
-void	Response::setLength(std::string length){
+void	Response::setLength(string length){
 	this->_fillHttp[LENGTH][HEADER_TYPE] = length;
 }
 
-void	Response::setBody(std::string body){
+void	Response::setBody(string body){
 	this->_body = body;
 }
 
-std::string	Response::getHttp(){
+string	Response::getHttp(){
 	this->_http += this->_fillHttp[STATUS][HTTP_VERSION];
 	this->_http += this->_fillHttp[STATUS][VALUE];
 	this->_http += this->_fillHttp[STATUS][REASON];
@@ -69,15 +69,16 @@ std::string	Response::getHttp(){
 	return (this->_http);
 }
 
-void	Response::sendIndex(int fd, std::string indexHTML){
-	std::ifstream		file(indexHTML.c_str());
-	std::stringstream	status, lengh;
-	std::string			html;
+void	Response::sendIndex(int fd, string indexHTML){
+	ifstream		file(indexHTML.c_str());
+	stringstream	status, lengh;
+	string			html;
 
-	std::getline(file, html, '\0');
+	cout << "File path: " << indexHTML << endl << endl;
+	getline(file, html, '\0');
 	status << 200;
 	this->setStatus(status.str(), " Ok");
-	this->setType("text/html");
+	this->setType("text/" + indexHTML.substr(indexHTML.rfind('.') + 1, indexHTML.length() - indexHTML.rfind('.')));
 	this->setConnection("MeuServidor/1.0 (Linux) ");
 	lengh << html.length();
 	this->setLength(lengh.str());
@@ -86,16 +87,17 @@ void	Response::sendIndex(int fd, std::string indexHTML){
 	clean();
 }
 
-void	Response::sendImage(int fd, std::string image)
+void	Response::sendImage(int fd, string image)
 {
-	std::ifstream		file(image.c_str());
-	std::stringstream	bImage, status, lengh;
+	ifstream		file(image.c_str());
+	stringstream	bImage, status, lengh;
 
+	cout << "File path: " << image << endl << endl;
 	status << 200;
 	try{
 		bImage << file.rdbuf();
-	}catch(std::exception &e){
-		std::cerr << e.what();
+	}catch(exception &e){
+		cerr << e.what();
 	}
 	this->setStatus(status.str(), " Ok");
 	this->setType("image/png");
@@ -104,7 +106,7 @@ void	Response::sendImage(int fd, std::string image)
 	this->setLength(lengh.str());
 	setBody(bImage.str());
 	if (send(fd, this->getHttp().c_str(),this->getHttp().length(), 0) == -1)
-		std::cerr << "DEU MERDA\n";
+		cerr << "DEU MERDA\n";
 	clean();
 }
 
@@ -126,18 +128,18 @@ void Response::clean(){
 	this->_http = "";
 }
 
-std::string Response::getPathImage() const{
+string Response::getPathImage() const{
 	return _pathImage;
 }
 
-std::string Response::getPathIndex() const{
+string Response::getPathIndex() const{
 	return _pathIndex;
 }
 
-void Response::setPathImage(std::string pathImage){
+void Response::setPathImage(string pathImage){
 	_pathImage = pathImage;
 }
 
-void Response::setPathIndex(std::string pathIndex){
+void Response::setPathIndex(string pathIndex){
 	_pathIndex = pathIndex;
 }

@@ -16,19 +16,19 @@
 # include <string>
 # include "Directive.hpp"
 
+class Directive;
+
 class Location {
 	private:
-		std::string _route;
+		std::string	_route;
 		std::map<std::string, Directive *> _directives;
 	public:
 		Location();
 		~Location();
 
-		friend class AllowMethodsHandler;
-		friend class RedirectHandler;
-		friend class RootHandler;
-		friend class AutoIndexHandler;
-		friend class IndexHandler;
-		friend class CgiHandler;
-		friend class UploadDirHandler;
+		const std::string	&getRoute(void) const;
+		void				setRoute(const std::string &route);
+		void				setDirective(Directive *directive);
+		Directive			*getDirective(const std::string &directive);
+		void				print(void) const;
 };

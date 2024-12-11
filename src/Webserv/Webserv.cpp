@@ -25,6 +25,7 @@
 #include "DataBody.hpp"
 #include "defines.hpp"
 #include "Server.hpp"
+#include "Client.hpp"
 
 using namespace std;
 
@@ -36,34 +37,31 @@ Webserv::Webserv() : ParseRequest(), _nfds(0) {
 	memset(&_ev, 0, sizeof(_ev));
 	if ((_epollFd = epoll_create1(EPOLL_CLOEXEC)) == -1)
 		throw (runtime_error("error: epoll_create1()"));
-	_conf["server"] = new ServerDirective();
+	_server_directive = new ServerDirective();
 };
 
 Webserv::~Webserv() {
-	for (map<string, Directive *>::iterator it = _conf.begin(); it != _conf.end(); ++it)
-		delete it->second;
-	_conf.clear();
+	delete _server_directive;
 };
 
 void	Webserv::setting(void) {
-	ServerDirective *server_directive = static_cast<ServerDirective *>(_conf["server"]);
-	if (server_directive->size() < 1)
+	if (_server_directive->size() < 1)
 		throw (runtime_error("webserv: no server configured"));
-	server_directive->initServers();
-	server_directive->addSocketsToEpoll(_epollFd);
+	_server_directive->initServers();
+	_server_directive->addSocketsToEpoll(_epollFd);
 }
 
 void	Webserv::loopingEvent() {
 	while(true) {
 		_nfds = epoll_wait(_epollFd, _events, MAX_EVENTS, 1000);
-		if (_nfds == 0){
+		if (_nfds == 0) {
 			checkTimeOut();
 		}
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
-			if (static_cast<ServerDirective *>(_conf["server"])->isNewClient(_events[index_epoll].data.fd, _epollFd, _client))
+			if (_server_directive->isNewClient(_events[index_epoll].data.fd, _epollFd, _client))
 				continue ;
 			Client *client = (Client *)_events[index_epoll].data.ptr;
-			if (not client->getRequest()){
+			if (not client->getRequest()) {
 				Request *request = setBufferSocketFd(client->getFdClient());
 				if (request){
 					client->setRequest((void*)request);
