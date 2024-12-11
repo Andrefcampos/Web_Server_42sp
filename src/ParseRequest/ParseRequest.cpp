@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseRequest.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/08 16:08:53 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/10 21:22:27 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		ParseRequest::setBody(int fd){
 
 int		ParseRequest::parseRequest(int fd){
 	try{
-		std::cout << _socket[fd].buffer << "\n";
+		// std::cout << _socket[fd].buffer << "\n";
 		_socket[fd].request->setRequestLine(_socket[fd].buffer);
 		_socket[fd].request->setHeader(_socket[fd].buffer);
 		_socket[fd].request->setBody(_socket[fd].buffer);
