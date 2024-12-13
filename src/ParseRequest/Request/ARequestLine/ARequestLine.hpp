@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:58:09 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 15:59:06 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 12:31:49 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class ARequestLine{
 		int				validMethod(std::string method);
 		int				validVersion(std::string version);
 		int				validSize(list<string> tokens);
+		int				validRequestLine();
 	
 		map<string, string> _requestLine;
 		int					_requestLineError;

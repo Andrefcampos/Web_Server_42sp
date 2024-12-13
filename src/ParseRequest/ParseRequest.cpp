@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/12 16:33:25 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:27:12 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int		ParseRequest::parseRequest(int fd, Client *client){
 			_socket[fd].request->setParserError(error);
 			return 1;
 		}
-		_socket[fd].request->setBody(_socket[fd].buffer);
+		if ((error = _socket[fd].request->setBody(_socket[fd].buffer))){
+			_socket[fd].request->setParserError(error);
+			return 1;
+		}
 	}catch( Request::RequestException &e){
 		cout << e.what();
 		return 0;

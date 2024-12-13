@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:05:48 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/12 17:57:34 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 12:27:08 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,17 @@
 #include <string>
 #include <map>
 #include <list>
-#include "KeyHeaders.hpp"
-#include "ValueHeaders.hpp"
 #include "Client.hpp"
+
+// Headers Keys
+#define TENCODING "Transfer-Encoding"
+#define CLENGTH "Content-Length"
+#define CTYPE "Content-Type"
+#define HOST "Host"
+
+// Headers value
+#define MPART "multipart"
+#define CHUNKED "chunked"
 
 using namespace std;
 
@@ -27,6 +35,8 @@ class AHeaders{
 		void	addNewElement(string key, string value);
 		int		validContentLength(Client *client);
 		int		validAmbiguityHeaders();
+		int		validTransferEnconding();
+		int		validHost();
 
 	protected:
 		map<string, list<string> >	_header;
@@ -41,7 +51,3 @@ class AHeaders{
 		map<string, list<string> >	getAllHeader() const;
 	
 };
-
-namespace ValidHeaders{
-	
-}

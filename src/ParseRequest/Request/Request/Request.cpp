@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:25:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/12 19:26:47 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:19:23 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,37 +47,45 @@ int	Request::setHeader(string &buffer, Client *client){
 		throw Request::RequestException("");
 	if ((error = this->parseHeaders(headers, client)))
 		return error;
+	if ((error = validHeadersMethods()))
+		return error;
 	checkBodyFormatting();
 	_parsedHeaders = true;
 	return 0;
 }
 
-void	Request::setBody(string &buffer){
+int		Request::setBody(string &buffer){
+	int error = 0;
+	
 	if (not _haveBody)
-		return ;
+		return 0;
 	if (_isMultPartBody == true){
-		string	boundary = static_cast<MultPart *>(body)->getEndBoundary();
-		if (buffer.find(boundary) == string::npos)
+		string	endBoundary = static_cast<MultPart *>(body)->getEndBoundary();
+		if (buffer.find(endBoundary) == string::npos)
 			throw Request::RequestException("");
+		if ((error = validBodySize(buffer)))
+			return error;
 		body->parseBody(buffer);
 		_parsedBody = true;
-		return ;
+		return 0;
 	}
 	if (_isChunkedBody == true){
 		if (buffer.find("0\r\n\r\n") == string::npos)
 			throw Request::RequestException("");
 		body->parseBody(buffer);
 		_parsedBody = true;
-		return ;
+		return 0;
 	}
 	if (_isSimpleBody == true){
 		if (buffer.length() < body->getLengthBody())
 			throw Request::RequestException("");
+		if ((error = validBodySize(buffer)))
+			return error;
 		body->parseBody(buffer);
 		_parsedBody = true;
-		return ;
+		return 0;
 	}
-	return ;
+	return 0;
 }
 
 void	Request::instanceBody(){

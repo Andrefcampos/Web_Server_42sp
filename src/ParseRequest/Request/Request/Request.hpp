@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/12 19:28:54 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:17:58 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ class Request : public ARequestLine, public AHeaders{
 		void	initMultPart();
 		void	initChunked();
 		void	initSimpleBody();
+		int		validHeadersMethods();
+		int		validBodySize(std::string buffer);
 
 	public:
 		Request();
@@ -51,7 +53,7 @@ class Request : public ARequestLine, public AHeaders{
 		ABody	*getBody();
 		int		setRequestLine(string &buffer);
 		int		setHeader(string &buffer, Client *client);
-		void	setBody(std::string &buffer);
+		int		setBody(std::string &buffer);
 		void	setParserError(int error);
 		int		getParserError() const;
 
