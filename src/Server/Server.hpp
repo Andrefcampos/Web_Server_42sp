@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:37:59 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 21:03:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:19:14 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+# include "DirectiveAdapter.hpp"
 # include "Socket.hpp"
 # include "Response.hpp"
 # include <string>
@@ -20,11 +21,10 @@
 class Request;
 class Directive;
 
-class Server : public Socket, public Response {
+class Server : public Socket, public Response, public DirectiveAdapter {
 	private:
 		std::map<int, Request *>			fdClient;
 		int									_socketFd;
-		std::map<std::string, Directive *>	_directives;
 
 	public:
 		Server();

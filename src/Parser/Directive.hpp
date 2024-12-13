@@ -29,10 +29,10 @@ class Client;
 class Directive {
 	private:
 		const std::string _name;
+
 	public:
 		Directive(const std::string &name);
 		virtual ~Directive() {};
-
 		virtual void		print(void) const = 0;
 		const std::string	&getName(void) const;
 };
@@ -235,5 +235,3 @@ class ErrorPageDirective : public Directive {
 		ErrorPage	*back(void) const;
 		void		print(void) const;
 };
-
-void	initConf(void);

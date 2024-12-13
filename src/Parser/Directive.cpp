@@ -75,6 +75,14 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_clie
 				throw (runtime_error("error: epoll_ctl()"));
 			Client *client = new Client(*itServer, fdClient);
 			const ClientMaxBodySizeDirective *ptr = (ClientMaxBodySizeDirective *)((*itServer)->getDirective("client_max_body_size"));
+			std::cout << "getHost: "<< (*itServer)->getHost() << "\n";
+			std::cout << "getIP: "<< (*itServer)->getIP() << "\n";
+			std::cout << "getPort: "<< (*itServer)->getPort() << "\n";
+			std::cout << "getServerName: "<< (*itServer)->getServerName() << "\n";
+			std::cout << "getSizeMax: "<< (*itServer)->getSizeMax() << "\n";
+			
+
+			
 			client->setMaxSize(ptr->getSizeMax());
 			_client.push_back(client);
 			ev.data.ptr = reinterpret_cast<void *>(client);
@@ -270,7 +278,6 @@ bool	AllowMethodsDirective::getPostBool(void) const {
 bool	AllowMethodsDirective::getDeleteBool(void) const {
 	return (this->_DELETE);
 }
-
 
 bool AllowMethodsDirective::isAllowed(const string &method) const {
 	if (method.compare("GET") == 0 && _GET == true)
