@@ -63,7 +63,6 @@ int		ServerDirective::size(void) const {
 
 int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_client) {
 	struct epoll_event			ev;
-
 	int							fdClient;
 	vector<Server *>::iterator	itServer;
 	
@@ -75,6 +74,8 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_clie
 			if (fdClient == -1)
 				throw (runtime_error("error: epoll_ctl()"));
 			Client *client = new Client(*itServer, fdClient);
+			const ClientMaxBodySizeDirective *ptr = (ClientMaxBodySizeDirective *)((*itServer)->getDirective("client_max_body_size"));
+			client->setMaxSize(ptr->getSizeMax());
 			_client.push_back(client);
 			ev.data.ptr = reinterpret_cast<void *>(client);
 			ev.events = EPOLLIN;

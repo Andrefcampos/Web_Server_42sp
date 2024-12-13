@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:49:42 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:03:38 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:28:54 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,13 @@
 #include "ABody.hpp"
 #include "Server.hpp"
 
-#define CLENGTH "Content-Length"
-#define CTYPE "Content-Type"
-#define MPART "multipart"
-#define TENCODING "Transfer-Encoding"
-#define CHUNKED "chunked"
-
+class Client;
 
 using namespace std;
 
 class Request : public ARequestLine, public AHeaders{
 	private:
 		ABody	*body;
-		Server	*_server;
 		int		_parserError;
 		bool	_parsedRequestLine;
 		bool	_parsedHeaders;
@@ -41,6 +35,7 @@ class Request : public ARequestLine, public AHeaders{
 		bool	_isChunkedBody;
 		bool	_haveBody;
 		size_t	_bodyLength;
+
 		void	checkBodyFormatting();
 		void	isMultPartBody();
 		void	isSimpleBody();
@@ -55,10 +50,8 @@ class Request : public ARequestLine, public AHeaders{
 		~Request();
 		ABody	*getBody();
 		int		setRequestLine(string &buffer);
-		int		setHeader(string &buffer);
+		int		setHeader(string &buffer, Client *client);
 		void	setBody(std::string &buffer);
-		void	setServer(Server *server);
-		Server	*getServer() const;
 		void	setParserError(int error);
 		int		getParserError() const;
 

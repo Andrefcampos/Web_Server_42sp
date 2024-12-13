@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:00:02 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 19:21:06 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:18:45 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "Request.hpp"
 #include <map>
 #include "defines.hpp"
-#include <ctime>
+
+class Client;
 
 struct ctrlFD{
 	Request		*request;
 	bool		parsedBody;
 	int			lentgh;
 	std::string	buffer;
-	std::time_t	 startTime;
 };
 
 class ParseRequest{
@@ -30,13 +30,13 @@ class ParseRequest{
 		void	setBuffer(int fd);
 		int		setRequestLine(int fd);
 		int		setHeaders(int fd);
-		int		parseRequest(int fd);
-		int		timeOutRequest(std::time_t timeStart);
+		int		parseRequest(int fd, Client *client);
+
 	
 	protected:
 		std::map<int, ctrlFD> _socket;
 
 	public:
-		Request *setBufferSocketFd(int fd);
+		Request *setBufferSocketFd(Client *client);
 		void	removeFD(int fd);
 };

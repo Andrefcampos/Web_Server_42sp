@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:25:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:04:11 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:26:47 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,17 @@ int	Request::setRequestLine(string &buffer){
 	return error;
 }
 
-int	Request::setHeader(string &buffer){
+int	Request::setHeader(string &buffer, Client *client){
 	string	headers;
+	int		error = 0;
 
 	if (_parsedHeaders == true)
 		return 0;
 	headers = getLineErase<string, string>(buffer, "\r\n\r\n", true);
 	if (headers.empty())
 		throw Request::RequestException("");
-	this->parseHeaders(headers);
+	if ((error = this->parseHeaders(headers, client)))
+		return error;
 	checkBodyFormatting();
 	_parsedHeaders = true;
 	return 0;
@@ -181,19 +183,9 @@ Request::Request(){
 	body = NULL;
 }
 
-
 ABody	*Request::getBody(){
 	return body;
 }
-
-void	Request::setServer(Server *server){
-	this->_server = server;
-}
-
-Server	*Request::getServer() const{
-	return _server;
-}
-
 
 void	Request::setParserError(int error){
 	_parserError = error;

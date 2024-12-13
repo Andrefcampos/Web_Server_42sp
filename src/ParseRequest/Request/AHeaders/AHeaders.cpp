@@ -6,15 +6,17 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:06:54 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/11/17 12:07:51 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/12 17:11:15 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AHeaders.hpp"
 #include <iostream>
+#include <cctype>
+#include "AHeaders.hpp"
 #include "utils.hpp"
+#include "Client.hpp"
 
-void	AHeaders::parseHeaders(string &headers){
+int	AHeaders::parseHeaders(string &headers, Client *client){
 	string	line;
 
 	while (!headers.empty()){
@@ -25,6 +27,7 @@ void	AHeaders::parseHeaders(string &headers){
 		}
 		setHeaders(line);
 	}
+	return validHeaders(client);
 }
 
 void AHeaders::setLastHeader(string &headers){
@@ -76,4 +79,29 @@ string	AHeaders::getHost() const{
 	if(_header.empty())
 		return "";
 	return *_header.at(HOST).begin();;
+}
+
+int		AHeaders::validHeaders(Client *client){
+	int error = 0;
+
+	if ((error = validContentLength(client)))
+		return error;
+	if ((error = validAmbiguityHeaders()))
+		return error;
+	return 0;
+}
+
+int		AHeaders::validContentLength(Client *client){
+	if (not _header.count(CLENGTH))
+		return 0;
+	long long int length = strtol(_header[CLENGTH].front().c_str(), 0, 10);
+	if (client->getMaxSize() < length)
+		return 413;
+	return 0;
+};
+
+int		AHeaders::validAmbiguityHeaders(){
+	if (_header.count(CLENGTH) && _header.count(TENCODING))
+		return 400;
+	return 0;
 }

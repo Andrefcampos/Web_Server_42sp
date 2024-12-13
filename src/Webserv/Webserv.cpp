@@ -62,9 +62,9 @@ void	Webserv::loopingEvent() {
 				continue ;
 			Client *client = (Client *)_events[index_epoll].data.ptr;
 			if (not client->getRequest()) {
-				Request *request = setBufferSocketFd(client->getFdClient());
+				Request *request = setBufferSocketFd(client);
 				if (request){
-					client->setRequest((void*)request);
+					client->setRequest(request);
 					epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_MOD, (void*)(client));
 				}
 			}else{
@@ -84,9 +84,11 @@ int	Webserv::responseClient(Request *request, Client *client){
 		_socket.erase(client->getFdClient());
 		epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
 		close(client->getFdClient());
+		ereaseClient(client);
 		delete client;
 		return (0);
 	}
+
 	Server *server = client->getServer();
 	server->sendResponse(client->getFdClient(), request);
 	exemploRequestParseado(request);
@@ -94,6 +96,7 @@ int	Webserv::responseClient(Request *request, Client *client){
 	_socket.erase(client->getFdClient());
 	epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
 	close(client->getFdClient());
+	ereaseClient(client);
 	delete client;
 	return (0);
 }
@@ -139,20 +142,29 @@ void	Webserv::epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr){
 }
 
 void	Webserv::checkTimeOut(){
-	std::list<Client*>::iterator it = _client.begin();;
+	std::list<Client*>::iterator it = _client.begin();
+
+	if(it == _client.end())
+		return ;
 
 	while (it != _client.end()){
-		if ((*it)->timeOutRequest()){
+		if ((*it)->timeOut()){
 			Request *request = (Request *)(*it)->getRequest();
-			Server *server = (Server *)(*it)->getServer();
 			removeFD((*it)->getFdClient());
 			close((*it)->getFdClient());
 			if (request)
 				delete request;
-			if (server)
-				delete server;
 			it = _client.erase(it);
 		}else
 			it++;
 	}
+}
+
+void	Webserv::ereaseClient(Client *client){
+	std::list<Client*>::iterator it;
+
+	it = find(_client.begin(), _client.end(), client);
+	if (it == _client.end())
+		return ;
+	_client.erase(it);
 }

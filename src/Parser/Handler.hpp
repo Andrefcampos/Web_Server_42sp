@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handler.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 22:12:48 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/03 17:45:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:29:06 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #pragma once
 
 # include <string>
+#include <cctype>
 struct Conf;
 
 class Handler {

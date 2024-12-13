@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:05:48 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 16:06:03 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/12 17:57:34 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,26 @@
 #include <string>
 #include <map>
 #include <list>
-#include <cstring>
-#include <cctype>
+#include "KeyHeaders.hpp"
+#include "ValueHeaders.hpp"
+#include "Client.hpp"
 
 using namespace std;
-
-#define HOST "Host"
 
 class AHeaders{
 	private:
 		void	setLastHeader(string &headers);
 		void	setHeaders(string &line);
 		void	addNewElement(string key, string value);
-		
+		int		validContentLength(Client *client);
+		int		validAmbiguityHeaders();
+
 	protected:
 		map<string, list<string> >	_header;
-		virtual int		setHeader(string &buffer) = 0;
+		virtual int		setHeader(string &buffer, Client *client) = 0;
 		virtual 		~AHeaders(){};
-		void			parseHeaders(string	&headers);
-		int				validHeaders();
+		int				parseHeaders(string	&headers, Client *client);
+		int				validHeaders(Client *client);
 
 	public:
 		string						getHost() const;
@@ -40,3 +41,7 @@ class AHeaders{
 		map<string, list<string> >	getAllHeader() const;
 	
 };
+
+namespace ValidHeaders{
+	
+}

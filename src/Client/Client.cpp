@@ -19,7 +19,7 @@ Client::Client(Server *server, int fdClient) : _server(server), _socketFdClient(
 };
 
 Client::~Client() {
-	close(this->_socketFdClient);
+	/* close(this->_socketFdClient); */
 }
 
 Server *Client::getServer(void) const {
@@ -30,14 +30,22 @@ int		Client::getFdClient(void) const {
 	return (this->_socketFdClient);
 }
 
-void	Client::setRequest(void *request) {
+void	Client::setRequest(Request *request) {
 	this->_request = request;
 }
 
-void	*Client::getRequest(void) const {
+Request	*Client::getRequest(void) const {
 	return (this->_request);
 }
 
-int		Client::timeOutRequest(void) {
+void			Client::setMaxSize(long long int maxSize){
+	this->_maxSize = maxSize;
+}
+
+long long int	Client::getMaxSize() const{
+	return _maxSize;
+}
+
+int		Client::timeOut(void) {
 	return ((time(0) - _startTime) > 10) ? 408 : 0;
 }
