@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:07:34 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/06 18:35:59 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/15 14:31:30 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 #include <sstream>
 #include <fstream>
 #include <sys/socket.h>
+#include "include.hpp"
+#include <map>
+#include "HTTP.hpp"
+
+class Request;
 
 class Response {
 	private:
-		std::string	_fillHttp[4][4];
-		std::string	_http;
-		std::string	_status[4];
-		std::string	_type[3];
-		std::string	_connection[3];
-		std::string	_length[3];
-		std::string	_body;
-		void 		clean();
+		HTTP						*_response;	
+		std::map<std::string, std::string>	_statusLine;
+		std::map<std::string, std::string>	_headers;
 	
 	protected:
 		std::string _pathIndex;
@@ -41,7 +41,7 @@ class Response {
 		void setLength(std::string length);
 		void setBody(std::string body);
 		std::string	getHttp();
-		//virtual void	sendResponse(int fd, httpRequest http) = 0;
+		virtual void	sendResponse(int fd, Request *request) = 0;
 		void		sendIndex(int fd, std::string indexHTML);
 		void		sendImage(int fd, std::string image);
 		std::string getPathImage() const;

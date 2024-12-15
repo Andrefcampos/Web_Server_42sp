@@ -16,6 +16,10 @@ CMD_CLEAN	:= rm -Rf
 # DIRECTORY
 SRC_DIR				:= src/ src/utils src/Server \
 					src/Server/Socket src/Server/Response \
+					src/Server/Response/HTTP \
+					src/Server/Response/HTTP/StatusLine \
+					src/Server/Response/HTTP/Headers \
+					src/Server/Response/HTTP/Body \
 					src/Webserv src/ParserRequest \
 					src/Parser src/Logger src/Server/Location \
 					src/Server/ErrorPage src/ParseRequest/Request \
@@ -33,6 +37,10 @@ SRC_DIR				:= src/ src/utils src/Server \
 # Header file
 INCLUDE				:= -I src/Server -I src/Server/Socket \
 					-I src/utils -I src/Server/Response \
+					-I src/Server/Response/HTTP \
+					-I src/Server/Response/HTTP/StatusLine \
+					-I src/Server/Response/HTTP/Headers \
+					-I src/Server/Response/HTTP/Body \
 					-I src/Webserv -I src/ParserRequest \
 					-I src/Parser -I src/Logger -I include \
 					-I src/Server/Location -I src/Server/ErrorPage \

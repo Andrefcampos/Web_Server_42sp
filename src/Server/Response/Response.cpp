@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 22:35:23 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/15 14:33:35 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,110 +22,58 @@
 #include <bitset>
 #include <sstream>
 #include <error.h>
+#include <string>
+#include "utils.hpp"
+
 
 using namespace std;
 
 Response::~Response(){}
 
-Response::Response(){
-	clean();
-}
-
-void	Response::setStatus(string value, string reason){
-	this->_fillHttp[STATUS][VALUE] = value;
-	this->_fillHttp[STATUS][REASON] = reason;
-}
-void	Response::setType(string type){
-	this->_fillHttp[TYPE][HEADER_TYPE] = type;
-}
-
-void	Response::setConnection(string connection){
-	this->_fillHttp[CONNECTION][HEADER_TYPE] = connection;
-}
-
-void	Response::setLength(string length){
-	this->_fillHttp[LENGTH][HEADER_TYPE] = length;
-}
-
-void	Response::setBody(string body){
-	this->_body = body;
-}
-
-string	Response::getHttp(){
-	this->_http += this->_fillHttp[STATUS][HTTP_VERSION];
-	this->_http += this->_fillHttp[STATUS][VALUE];
-	this->_http += this->_fillHttp[STATUS][REASON];
-	this->_http += this->_fillHttp[STATUS][END_LINE];
-	this->_http += this->_fillHttp[TYPE][HEADER];
-	this->_http += this->_fillHttp[TYPE][HEADER_TYPE];
-	this->_http += this->_fillHttp[TYPE][ENDL];
-	this->_http += this->_fillHttp[CONNECTION][HEADER];
-	this->_http += this->_fillHttp[CONNECTION][HEADER_TYPE];
-	this->_http += this->_fillHttp[CONNECTION][ENDL];
-	this->_http += this->_fillHttp[LENGTH][HEADER];
-	this->_http += this->_fillHttp[LENGTH][HEADER_TYPE];
-	this->_http += this->_fillHttp[LENGTH][ENDL];
-	this->_http += this->_body;
-	return (this->_http);
-}
+Response::Response(){}
 
 void	Response::sendIndex(int fd, string indexHTML){
 	ifstream		file(indexHTML.c_str());
-	stringstream	status, lengh;
 	string			html;
+	std::time_t		time = 0;
 
-	cout << "File path: " << indexHTML << endl << endl;
+	_response = new HTTP();
+	_response->setStatusResponse("200", "OK");
+	_response->setHeaders("Server", "MyServer");
+	_response->setHeaders("Date", getCurrentDateTime(time));
+	_response->setHeaders("Content-Type", "text/" + indexHTML.substr(indexHTML.rfind('.') + 1, indexHTML.length() - indexHTML.rfind('.')));
+	_response->setHeaders("Connection", "close");
 	getline(file, html, '\0');
-	status << 200;
-	this->setStatus(status.str(), " Ok");
-	this->setType("text/" + indexHTML.substr(indexHTML.rfind('.') + 1, indexHTML.length() - indexHTML.rfind('.')));
-	this->setConnection("MeuServidor/1.0 (Linux) ");
-	lengh << html.length();
-	this->setLength(lengh.str());
-	this->setBody(html);
-	send(fd, this->getHttp().c_str(),this->getHttp().length(), 0);
-	clean();
+	_response->setBody(html);
+
+	cout << _response->getHTTP() << "\n";
+	send(fd, _response->getHTTP().c_str(),_response->getHTTP().length(), 0);
+
+	delete _response;
 }
 
-void	Response::sendImage(int fd, string image)
-{
+void	Response::sendImage(int fd, string image) {
 	ifstream		file(image.c_str());
-	stringstream	bImage, status, lengh;
+	stringstream	bImage;
+	std::time_t		time = 0;
 
-	cout << "File path: " << image << endl << endl;
-	status << 200;
 	try{
 		bImage << file.rdbuf();
 	}catch(exception &e){
 		cerr << e.what();
 	}
-	this->setStatus(status.str(), " Ok");
-	this->setType("image/png");
-	this->setConnection("MeuServidor/1.0 (Linux)");
-	lengh << bImage.str().length();
-	this->setLength(lengh.str());
-	setBody(bImage.str());
-	if (send(fd, this->getHttp().c_str(),this->getHttp().length(), 0) == -1)
-		cerr << "DEU MERDA\n";
-	clean();
-}
+	_response = new HTTP();
+	_response->setStatusResponse("200", "OK");
+	_response->setHeaders("Server", "MyServer");
+	_response->setHeaders("Date", getCurrentDateTime(time));
+	_response->setHeaders("Content-Type", "image/png");
+	_response->setHeaders("Connection", "close");
+	_response->setBody(bImage.str());
+	_response->setHeaders("Content-Length", bImage.str().length());
+	cout << _response->getHTTP() << "\n";
+	send(fd, _response->getHTTP().c_str(),_response->getHTTP().length(), 0);
+	delete _response;
 
-void Response::clean(){
-	this->_fillHttp[STATUS][HTTP_VERSION] = "HTTP/1.1 ";
-	this->_fillHttp[STATUS][VALUE] = "";
-	this->_fillHttp[STATUS][REASON] = "";
-	this->_fillHttp[STATUS][END_LINE] = "\r\n";
-	this->_fillHttp[TYPE][HEADER] = "Content-Type: ";
-	this->_fillHttp[TYPE][HEADER_TYPE] = "";
-	this->_fillHttp[TYPE][ENDL] = "\r\n";
-	this->_fillHttp[CONNECTION][HEADER] = "Server: ";
-	this->_fillHttp[CONNECTION][HEADER_TYPE] = "";
-	this->_fillHttp[CONNECTION][ENDL] = "\r\n";
-	this->_fillHttp[LENGTH][HEADER] = "Content-Length: ";
-	this->_fillHttp[LENGTH][HEADER_TYPE] = "";
-	this->_fillHttp[LENGTH][ENDL] = "\r\n\r\n";
-	this->_body = "";
-	this->_http = "";
 }
 
 string Response::getPathImage() const{

@@ -16,6 +16,9 @@
 #include <list>
 #include <iostream>
 #include <algorithm>
+#include <ctime>
+#include <string>
+#include <iomanip>
 
 template<typename StringType, typename CharType, typename ContainerType>
 ContainerType split(const StringType& s, CharType delimiter) {
@@ -82,4 +85,13 @@ void trim(String &str){
 	while(str.size() > 0 && std::isspace(static_cast<unsigned char>(str[str.size() -1]))){
 		str.erase(str.size() - 1, 1);
     }
+}
+
+template<typename T>
+std::string getCurrentDateTime(T l) {
+    l = std::time(0);
+    std::tm* localTime = std::localtime(&l);
+    char buffer[100];
+    std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S GMT", localTime);
+    return std::string(buffer);
 }

@@ -33,6 +33,7 @@ class Webserv : public ParseRequest {
 		void	epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr);
 		void	checkTimeOut();
 		void	ereaseClient(Client *client);
+		int		removeCliente(Request *request, Client *client);
 
 	public:
 		~Webserv();

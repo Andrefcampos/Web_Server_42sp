@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 23:24:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/15 14:42:31 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,10 @@ void	Server::setDirective(Directive *directive) {
 void	Server::sendResponse(int fd, Request *request) {
 	Location *location = static_cast<LocationDirective *>(_directives["location"])->getLocation(request->getPath());
 
-	cout << "URI: " << request->getPath() << endl;
-	cout << "Location give: " << location->getRoute() << endl;
-	cout << "Root defined in location: " << static_cast<RootDirective *>(location->getDirective("root"))->getRoot() << endl;
 	if (request->getPath().compare("/") == 0)
 		sendIndex(fd, (static_cast<const IndexDirective *>(location->getDirective("index")))->getIndex());
 	else if (request->getPath().find(".ico") != string::npos || request->getPath().find(".png") != string::npos)
-		sendImage(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
+		sendImage(fd, "image/img.png");
 	else
 		sendIndex(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
 }

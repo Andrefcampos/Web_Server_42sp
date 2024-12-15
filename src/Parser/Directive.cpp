@@ -74,16 +74,7 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_clie
 			if (fdClient == -1)
 				throw (runtime_error("error: epoll_ctl()"));
 			Client *client = new Client(*itServer, fdClient);
-			const ClientMaxBodySizeDirective *ptr = (ClientMaxBodySizeDirective *)((*itServer)->getDirective("client_max_body_size"));
-			std::cout << "getHost: "<< (*itServer)->getHost() << "\n";
-			std::cout << "getIP: "<< (*itServer)->getIP() << "\n";
-			std::cout << "getPort: "<< (*itServer)->getPort() << "\n";
-			std::cout << "getServerName: "<< (*itServer)->getServerName() << "\n";
-			std::cout << "getSizeMax: "<< (*itServer)->getSizeMax() << "\n";
-			
-
-			
-			client->setMaxSize(ptr->getSizeMax());
+			client->setMaxSize((*itServer)->getSizeMax());
 			_client.push_back(client);
 			ev.data.ptr = reinterpret_cast<void *>(client);
 			ev.events = EPOLLIN;

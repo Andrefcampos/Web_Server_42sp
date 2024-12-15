@@ -6,7 +6,7 @@
 /*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 18:06:41 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/13 13:27:12 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/14 17:21:18 by rbutzke          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int		ParseRequest::parseRequest(int fd, Client *client){
 	int	error = 0;
 
 	try{
+		cout << _socket[fd].buffer << "\n";
 		if ((error = _socket[fd].request->setRequestLine(_socket[fd].buffer))){
 			_socket[fd].request->setParserError(error);
 			return 1;
@@ -65,11 +66,11 @@ int		ParseRequest::parseRequest(int fd, Client *client){
 }
 
 void	ParseRequest::setBuffer(int fd){
-	char	buffer[20 +1];
+	char	buffer[4012 +1];
 	int		bytesRead;
 
-	memset(buffer, 0, 20+1);
-	bytesRead = recv(fd, buffer, 20, MSG_DONTWAIT);
+	memset(buffer, 0, 4012 +1);
+	bytesRead = recv(fd, buffer, 4012, MSG_DONTWAIT);
 	_socket[fd].buffer.append(buffer, bytesRead);
 }
 

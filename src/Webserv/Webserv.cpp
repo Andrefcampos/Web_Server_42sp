@@ -27,6 +27,8 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
+void exemploRequestParseado(Request *request);
+
 using namespace std;
 
 Webserv manager;
@@ -54,9 +56,8 @@ void	Webserv::setting(void) {
 void	Webserv::loopingEvent() {
 	while(true) {
 		_nfds = epoll_wait(_epollFd, _events, MAX_EVENTS, 1000);
-		if (_nfds == 0) {
+		if (_nfds == 0)
 			checkTimeOut();
-		}
 		for(int index_epoll = 0; index_epoll < _nfds; index_epoll++){
 			if (_server_directive->isNewClient(_events[index_epoll].data.fd, _epollFd, _client))
 				continue ;
@@ -74,31 +75,60 @@ void	Webserv::loopingEvent() {
 	}
 }
 
-void exemploRequestParseado(Request *request);
-
 int	Webserv::responseClient(Request *request, Client *client){
 	int	error = request->getParserError();
-	if (error){
-		cout << "Number Error: " << error << "\n";
-		delete request;
-		_socket.erase(client->getFdClient());
-		epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
-		close(client->getFdClient());
-		ereaseClient(client);
-		delete client;
-		return (0);
-	}
 
+	if (error)
+		return removeCliente(request, client);
 	Server *server = client->getServer();
 	server->sendResponse(client->getFdClient(), request);
-	exemploRequestParseado(request);
+	return removeCliente(request, client);
+}
+
+void	Webserv::epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr){
+	struct epoll_event ev;
+
+	ev.data.ptr = ptr;
+	ev.events = event;
+	if (epoll_ctl(_epollFd, flagCTLR, clientFd, &ev) == -1)
+		throw (runtime_error("error: epoll_ctl()"));
+}
+
+void	Webserv::checkTimeOut(){
+	std::list<Client*>::iterator it = _client.begin();
+
+	if(it == _client.end())
+		return ;
+	while (it != _client.end()){
+		if ((*it)->timeOut()){
+			Request *request = (Request *)(*it)->getRequest();
+			removeFD((*it)->getFdClient());
+			close((*it)->getFdClient());
+			if (request)
+				delete request;
+			it = _client.erase(it);
+		}else
+			it++;
+	}
+}
+
+void	Webserv::ereaseClient(Client *client){
+	std::list<Client*>::iterator it;
+
+	it = find(_client.begin(), _client.end(), client);
+	if (it == _client.end())
+		return ;
+	_client.erase(it);
+}
+
+int		Webserv::removeCliente(Request *request, Client *client){
 	delete request;
 	_socket.erase(client->getFdClient());
 	epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
 	close(client->getFdClient());
 	ereaseClient(client);
 	delete client;
-	return (0);
+	return 0;
 }
 
 void exemploRequestParseado(Request *request){
@@ -130,41 +160,4 @@ void exemploRequestParseado(Request *request){
 			}
 		}
 	}
-}
-
-void	Webserv::epoll_CTRL(int clientFd, int event, int flagCTLR, void *ptr){
-	struct epoll_event ev;
-
-	ev.data.ptr = ptr;
-	ev.events = event;
-	if (epoll_ctl(_epollFd, flagCTLR, clientFd, &ev) == -1)
-		throw (runtime_error("error: epoll_ctl()"));
-}
-
-void	Webserv::checkTimeOut(){
-	std::list<Client*>::iterator it = _client.begin();
-
-	if(it == _client.end())
-		return ;
-
-	while (it != _client.end()){
-		if ((*it)->timeOut()){
-			Request *request = (Request *)(*it)->getRequest();
-			removeFD((*it)->getFdClient());
-			close((*it)->getFdClient());
-			if (request)
-				delete request;
-			it = _client.erase(it);
-		}else
-			it++;
-	}
-}
-
-void	Webserv::ereaseClient(Client *client){
-	std::list<Client*>::iterator it;
-
-	it = find(_client.begin(), _client.end(), client);
-	if (it == _client.end())
-		return ;
-	_client.erase(it);
 }
