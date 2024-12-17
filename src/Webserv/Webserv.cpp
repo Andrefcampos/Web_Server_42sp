@@ -91,7 +91,7 @@ int	Webserv::responseClient(Request *request, Client *client){
 
 	Server *server = client->getServer();
 	server->sendResponse(client->getFdClient(), request);
-	exemploRequestParseado(request);
+	// exemploRequestParseado(request);
 	delete request;
 	_socket.erase(client->getFdClient());
 	epoll_CTRL(client->getFdClient(), EPOLLOUT, EPOLL_CTL_DEL, NULL);
