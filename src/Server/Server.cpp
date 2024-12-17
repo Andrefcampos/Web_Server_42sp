@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:38:03 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/10 23:24:03 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/16 20:55:52 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		Server::getSocketFd() const {
 	return (this->_socketFd);
 }
 
-Server::Server() : Socket(), Response() {
+Server::Server() : Socket() {
 	this->_directives["listen"] = new ListenDirective();
 	this->_directives["location"] = new LocationDirective();
 	this->_directives["client_max_body_size"] = new ClientMaxBodySizeDirective();
@@ -51,17 +51,10 @@ void	Server::setDirective(Directive *directive) {
 }
 
 void	Server::sendResponse(int fd, Request *request) {
-	Location *location = static_cast<LocationDirective *>(_directives["location"])->getLocation(request->getPath());
+	Response response(request, getLocation(), getErrorPage());
 
-	cout << "URI: " << request->getPath() << endl;
-	cout << "Location give: " << location->getRoute() << endl;
-	cout << "Root defined in location: " << static_cast<RootDirective *>(location->getDirective("root"))->getRoot() << endl;
-	if (request->getPath().compare("/") == 0)
-		sendIndex(fd, (static_cast<const IndexDirective *>(location->getDirective("index")))->getIndex());
-	else if (request->getPath().find(".ico") != string::npos || request->getPath().find(".png") != string::npos)
-		sendImage(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
-	else
-		sendIndex(fd, static_cast<RootDirective *>(location->getDirective("root"))->getRoot() + request->getPath());
+	cout << endl << response.getResponseMsg() << endl;
+	send(fd, response.getResponseMsg().c_str(),  response.getMsgSize(), 0);
 }
 
 void	Server::print(void) const {
