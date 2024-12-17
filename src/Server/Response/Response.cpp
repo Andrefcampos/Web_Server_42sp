@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/17 15:18:08 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:20:52 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,7 @@ void	Response::getBody(const string &uri) {
 	file.open(resolved_uri.c_str());
 	if (file.is_open() == false)
 		setStatusLine(404);
+	setStatusLine(200);
 	getline(file, _body, '\0');
 	content_length << _body.length();
 	_header_fields.push_back(new FieldLine("Content-Type", mime_types.getMimeType(resolved_uri)));
