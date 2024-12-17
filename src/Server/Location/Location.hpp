@@ -14,14 +14,14 @@
 
 # include <map>
 # include <string>
+# include "LocationAdapter.hpp"
 # include "Directive.hpp"
 
 class Directive;
 
-class Location {
+class Location : public LocationAdapter {
 	private:
 		std::string	_route;
-		std::map<std::string, Directive *> _directives;
 	public:
 		Location();
 		~Location();
