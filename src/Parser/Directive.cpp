@@ -27,9 +27,9 @@
 
 using namespace std;
 
-Directive::Directive(const std::string &name) : _name(name) {}
+Directive::Directive(const string &name) : _name(name) {}
 
-const std::string &Directive::getName(void) const {
+const string &Directive::getName(void) const {
 	return (this->_name);
 }
 
@@ -61,7 +61,7 @@ int		ServerDirective::size(void) const {
 	return (this->_servers.size());
 }
 
-int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_client) {
+int	ServerDirective::isNewClient(int fd, int epoll_fd, list<Client*> &_client) {
 	struct epoll_event			ev;
 	int							fdClient;
 	vector<Server *>::iterator	itServer;
@@ -75,11 +75,11 @@ int	ServerDirective::isNewClient(int fd, int epoll_fd, std::list<Client*> &_clie
 				throw (runtime_error("error: epoll_ctl()"));
 			Client *client = new Client(*itServer, fdClient);
 			const ClientMaxBodySizeDirective *ptr = (ClientMaxBodySizeDirective *)((*itServer)->getDirective("client_max_body_size"));
-			std::cout << "getHost: "<< (*itServer)->getHost() << "\n";
-			std::cout << "getIP: "<< (*itServer)->getIP() << "\n";
-			std::cout << "getPort: "<< (*itServer)->getPort() << "\n";
-			std::cout << "getServerName: "<< (*itServer)->getServerName() << "\n";
-			std::cout << "getSizeMax: "<< (*itServer)->getSizeMax() << "\n";
+			// cout << "getHost: "<< (*itServer)->getHost() << "\n";
+			// cout << "getIP: "<< (*itServer)->getIP() << "\n";
+			// cout << "getPort: "<< (*itServer)->getPort() << "\n";
+			// cout << "getServerName: "<< (*itServer)->getServerName() << "\n";
+			// cout << "getSizeMax: "<< (*itServer)->getSizeMax() << "\n";
 			
 
 			
@@ -129,7 +129,7 @@ void	ListenDirective::setPort(const string &port) {
 	this->_port = port;
 }
 
-void	ListenDirective::setIP(const std::string &ip) {
+void	ListenDirective::setIP(const string &ip) {
 	this->_ip = ip;
 }
 
@@ -209,7 +209,7 @@ Location  *LocationDirective::back(void) const {
 	return(_locations.back());
 }
 
-Location	*LocationDirective::getLocation(const string &uri) {
+Location	*LocationDirective::resolveLocation(const string &uri) {
 	size_t				prev_span(0), span(0);
 	string				cur_loc;
 	string				prefix(uri.substr(0, uri.rfind('/')));
@@ -444,4 +444,12 @@ void	ErrorPageDirective::print(void) const {
 		(*it)->print();
 	}
 	return ;
+}
+
+const string	ErrorPageDirective::getErrorPageURI(const string &code) {
+	for (vector<ErrorPage *>::iterator it = _error_pages.begin(); it != _error_pages.end(); ++it) {
+		if ((*it)->hasCode(code) == true)
+			return ((*it)->getUri());
+	}
+	return ("");
 }
