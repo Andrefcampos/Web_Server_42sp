@@ -6,7 +6,7 @@
 /*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:09:58 by rbutzke           #+#    #+#             */
-/*   Updated: 2024/12/17 14:59:04 by myokogaw         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:18:08 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ const string MimeTypes::getMimeType(const string &filename) {
 	string extension = filename.substr(filename.rfind('.') + 1, filename.length());
 	string content_type_value = this->mime_types[extension];
 
-	if (filename.compare("/") == 0)
-		return ("text/html; charset=utf-8");
 	if (content_type_value.empty() == true)
 		return ("application/octet-stream; charset=utf-8");
 	return (content_type_value + "; charset=utf-8"); 
