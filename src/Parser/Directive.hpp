@@ -115,7 +115,7 @@ class LocationDirective : public Directive {
 
 		void			appendLocation(Location *location);
 		Location		*back(void) const;
-		Location		*getLocation(const std::string &uri);
+		Location		*resolveLocation(const std::string &uri);
 		void			print(void) const;
 };
 
@@ -231,7 +231,8 @@ class ErrorPageDirective : public Directive {
 		ErrorPageDirective();
 		~ErrorPageDirective();
 
-		void		appendErrorPage(ErrorPage *error_page);
-		ErrorPage	*back(void) const;
-		void		print(void) const;
+		void				appendErrorPage(ErrorPage *error_page);
+		const std::string	getErrorPageURI(const std::string &code);
+		ErrorPage			*back(void) const;
+		void				print(void) const;
 };
