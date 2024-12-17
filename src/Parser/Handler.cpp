@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handler.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbutzke <rbutzke@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: myokogaw <myokogaw@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:14:15 by myokogaw          #+#    #+#             */
-/*   Updated: 2024/12/12 14:31:19 by rbutzke          ###   ########.fr       */
+/*   Updated: 2024/12/13 20:02:39 by myokogaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ unsigned int Handler::getType(void) {
 void	ServerHandler::process(Conf &cf) {
 	manager._server_directive->appendServer(new Server());
 	cf.current_server = manager._server_directive->back();
-	cf.current_server->setPathIndex("index/index.html");
-	cf.current_server->setPathImage("image/img.png");
 	cf.ctx = SRV_CONF;
 	cf.args.clear();
 	Parser::parser(cf, NULL);
